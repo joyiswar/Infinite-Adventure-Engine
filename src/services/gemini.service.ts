@@ -77,17 +77,24 @@ export class GeminiService {
     Your goal is to create a rich, engaging, and ever-evolving fantasy narrative. The story should be immersive and adapt dynamically to the player's choices.
     The current game difficulty is ${difficulty}. Adjust the challenge accordingly. For 'Hard', create tougher challenges. For 'Easy', be more forgiving.
     
+    ENEMY BESTIARY: To make combat varied, create enemies with distinct characteristics. You are not limited to this list, but use it as inspiration. Describe the enemy's actions vividly. The player's choices should reflect tactical options against that enemy type.
+    - Brutes (e.g., Ogres, Minotaurs): Slow but powerful. Their attacks are devastating but might be telegraphed. Choices could involve dodging, parrying, or finding a weak point.
+    - Skirmishers (e.g., Goblin scouts, Harpies): Fast and evasive. Hard to hit with direct attacks. Choices might involve area-of-effect attacks, traps, or predicting their movement.
+    - Casters (e.g., Rogue Mages, Imps): Use magical attacks from a distance. Often have low health. Choices could involve interrupting their spells, closing the distance quickly, or using magical resistance.
+    - Tanks (e.g., Iron Golems, heavily armored knights): Extremely durable. Choices should focus on finding chinks in their armor, using powerful magic, or wearing them down over time.
+    - Swarms (e.g., Giant Rats, Kobold packs): Individually weak, but dangerous in numbers. Choices might involve crowd control or targeting a leader.
+    
     COMBAT: You must manage a structured combat system.
     - When a fight begins, set 'inCombat' to true.
-    - While 'inCombat' is true, the choices MUST be combat-oriented (e.g., 'Attack with sword', 'Defend with shield', 'Use healing potion'). Be creative and context-aware. Use the player's inventory to generate 'Use Item' choices.
-    - Narrate the outcome of each combat action with vivid, descriptive text. Describe the impact of attacks, the feel of blocking a blow, or the effect of a spell.
+    - While 'inCombat' is true, the choices MUST be combat-oriented and tactically relevant to the enemy type. Use the player's inventory to generate 'Use Item' choices.
+    - Narrate the outcome of each combat action with vivid, descriptive text.
     - When the combat ends (player wins or loses), you MUST set 'inCombat' back to false and provide normal narrative choices.
     - Crucially, when combat ends, you MUST set the 'combatResult' field: 'victory' if the player won, 'defeat' if they lost.
     
-    COMBAT ESCALATION: The difficulty of combat should increase as the player wins more battles. The player has completed ${combatEncounters} combat encounters so far.
-    - Encounters 0-2: Keep fights simple, against a single, standard enemy.
-    - Encounters 3-5: Introduce slightly tougher enemies or pairs of weaker enemies.
-    - Encounters 6+: You can now create multi-stage boss battles or fights against multiple dangerous foes.
+    COMBAT ESCALATION: The difficulty and complexity of combat should increase as the player completes more battles. The player has completed ${combatEncounters} combat encounters so far.
+    - Encounters 0-2: Keep fights simple, against a single Skirmisher or a small Swarm.
+    - Encounters 3-5: Introduce a Brute, a Caster with a couple of Swarm minions, or a pair of Skirmishers.
+    - Encounters 6+: You can now create multi-stage boss battles (e.g., against a powerful Tank or Caster), or fights against multiple dangerous foes (e.g., a Brute backed up by two Skirmishers).
 
     MULTI-STAGE COMBAT: For a boss battle, use the 'combatStage' field.
     - When a multi-stage fight begins, set 'inCombat' to true and define the stages, e.g., { "current": 1, "total": 3 }.
@@ -143,7 +150,7 @@ export class GeminiService {
     }
   }
 
-  async generateImage(prompt: string): Promise<string> {
+  async generateImage(prompt: string): Promise<string | null> {
     try {
       const response = await this.ai.models.generateImages({
         model: 'imagen-4.0-generate-001',
@@ -159,7 +166,7 @@ export class GeminiService {
       return `data:image/jpeg;base64,${base64ImageBytes}`;
     } catch (error) {
       console.error('Error generating image:', error);
-      return 'https://picsum.photos/1024/576'; // Fallback image
+      return null;
     }
   }
 }

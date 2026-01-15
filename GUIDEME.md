@@ -27,7 +27,8 @@ On the right side of the screen, you'll find your adventure status:
 ### Engaging in Combat
 Sometimes, your path will lead to conflict. When a battle begins:
 - The game will enter a **Combat Mode**.
-- Your choices will change to specific combat actions like "Attack", "Defend", or "Use Item". Expect vivid descriptions of your actions and their consequences.
+- Your choices will change to specific combat actions like "Attack", "Defend", or "Use Item".
+- You will face a wide variety of enemies with unique abilities. Pay close attention to how they are described—a slow but powerful Ogre requires different tactics than a nimble Goblin Skirmisher or a spell-slinging Mage.
 - The icon `⚔️` will appear next to your choices to indicate you are in combat.
 - Choose your actions wisely to defeat your foes. Once the battle is over, the story and choices will return to normal. Celebrate your victories with a special visual flourish when you win a tough battle! If you are defeated, a somber screen will mark the end of the battle.
 - As you become a more seasoned warrior, expect the challenges to grow. You may face tougher foes, groups of enemies, or even epic multi-stage boss battles that will test your strategic thinking.

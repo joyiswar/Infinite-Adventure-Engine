@@ -26,6 +26,7 @@ export class AdventureComponent implements OnInit {
   showVictoryBanner = signal(false);
   showDefeatBanner = signal(false);
   showCombatTutorial = signal(false);
+  imageError = signal<boolean>(false);
   
   difficulty = signal<Difficulty>('Normal');
   combatEncounters = signal<number>(0);
@@ -71,7 +72,11 @@ export class AdventureComponent implements OnInit {
     const initialState = await this.geminiService.generateStorySegment(undefined, this.difficulty(), this.combatEncounters());
     this.gameState.set(initialState);
     const initialImage = await this.geminiService.generateImage(initialState.imagePrompt);
-    this.currentImage.set(initialImage);
+    if (initialImage) {
+      this.currentImage.set(initialImage);
+    } else {
+      this.imageError.set(true);
+    }
     this.achievementService.unlock('first-step');
     this.isLoading.set(false);
   }
@@ -83,6 +88,7 @@ export class AdventureComponent implements OnInit {
     this.isLoading.set(true);
     this.updateLoadingMessage();
     this.currentImage.set('');
+    this.imageError.set(false);
     
     const oldInventorySize = this.gameState()?.inventory.length ?? 0;
     const newState = await this.geminiService.generateStorySegment(choice.text, this.difficulty(), this.combatEncounters());
@@ -115,7 +121,11 @@ export class AdventureComponent implements OnInit {
 
     this.gameState.set(newState);
     const newImage = await this.geminiService.generateImage(newState.imagePrompt);
-    this.currentImage.set(newImage);
+    if (newImage) {
+      this.currentImage.set(newImage);
+    } else {
+      this.imageError.set(true);
+    }
 
     this.isLoading.set(false);
     
@@ -201,6 +211,7 @@ export class AdventureComponent implements OnInit {
     if (saveData) {
       this.isLoading.set(true);
       this.updateLoadingMessage();
+      this.imageError.set(false);
       
       this.gameState.set(saveData.gameState);
       this.currentImage.set(saveData.currentImage);
