@@ -1,0 +1,47 @@
+
+<div class="bg-slate-800/50 rounded-lg p-6 space-y-8 sticky top-8">
+  <!-- Current Quest -->
+  <div>
+    <h2 class="text-2xl font-bold font-serif-story text-amber-300 border-b-2 border-amber-500/30 pb-2 mb-4">Current Quest</h2>
+    <p class="text-slate-300 italic">{{ quest() }}</p>
+  </div>
+
+  <!-- Inventory -->
+  <div>
+    <h2 class="text-2xl font-bold font-serif-story text-amber-300 border-b-2 border-amber-500/30 pb-2 mb-4">Inventory</h2>
+    @if (inventory().length > 0) {
+      <ul class="space-y-3">
+        @for (item of inventory(); track item) {
+          <li class="flex items-center space-x-3">
+            <span class="flex-shrink-0 h-2 w-2 rounded-full bg-amber-400"></span>
+            <span class="text-slate-200">{{ item }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="text-slate-400 italic">Your pockets are empty.</p>
+    }
+  </div>
+
+  <!-- Achievements -->
+  <div>
+    <h2 class="text-2xl font-bold font-serif-story text-amber-300 border-b-2 border-amber-500/30 pb-2 mb-4" [class.glow-animation]="newAchievement()">Achievements</h2>
+    @if (achievements().length > 0) {
+      <ul class="space-y-3">
+        @for (achievement of achievements(); track achievement.id) {
+          <li 
+            class="flex items-start space-x-3" 
+            [class.achievement-pop-in]="newAchievement() && lastUnlockedId() === achievement.id"
+            title="{{ achievement.description }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-amber-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-slate-200">{{ achievement.name }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="text-slate-400 italic">No achievements unlocked yet.</p>
+    }
+  </div>
+</div>

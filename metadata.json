@@ -1,0 +1,5 @@
+{
+  "name": "Infinite Adventure Engine",
+  "description": "A text-based, AI-powered choose-your-own-adventure game where your choices genuinely alter the plot. Features real-time generated images with a consistent art style and a dynamic sidebar tracking your inventory and quests.",
+  "requestFramePermissions": []
+}
