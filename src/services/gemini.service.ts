@@ -47,6 +47,7 @@ export class GeminiService {
         description: 'A list of all items the player currently possesses. This should be a complete list, including previously held items.'
       },
       imagePrompt: { type: Type.STRING, description: 'A detailed, descriptive prompt for an image generation model to visualize the current scene. It MUST include the style: "cinematic fantasy digital painting, epic lighting, detailed environment". Maintain character and object consistency from the story. Describe the main character and the scene vividly.' },
+      shouldGenerateNewImage: { type: Type.BOOLEAN, description: 'Set to true if the scene has changed significantly enough to require a new image. Set to false for minor actions or dialogue updates where the previous image is still relevant.' },
       unlockedAchievementId: { type: Type.STRING, description: 'The ID of an achievement unlocked in this turn, if any. Only award achievements from the provided list. Return null if no achievement is unlocked.'},
       outcome: { type: Type.STRING, description: 'The outcome for the player from this story segment. Must be one of: "success", "neutral", or "failure". This reflects whether the choice led to a positive, neutral, or negative result.'},
       inCombat: { type: Type.BOOLEAN, description: 'Set to true if the player is in a combat encounter, false otherwise. This is critical.'},
@@ -60,7 +61,7 @@ export class GeminiService {
         description: 'For multi-stage boss battles, this object indicates the current and total stages. Return null for normal combat.'
       }
     },
-    required: ['story', 'choices', 'quest', 'inventory', 'imagePrompt', 'outcome', 'inCombat']
+    required: ['story', 'choices', 'quest', 'inventory', 'imagePrompt', 'shouldGenerateNewImage', 'outcome', 'inCombat']
   };
 
   getStoryHistory(): string[] {
@@ -105,6 +106,9 @@ export class GeminiService {
     ACHIEVEMENTS: You can award achievements. When the player's actions meet the criteria, set the 'unlockedAchievementId' in your response. Only award an achievement once.
     Available achievements to award:
     ${achievementsString}
+
+    RESOURCE MANAGEMENT: To ensure a smooth experience, you must manage resources.
+    - Image Generation: Generating images is resource-intensive. You MUST set 'shouldGenerateNewImage' to 'false' if the scene or characters have not changed significantly. For example, during a conversation, or after a minor action like inspecting an object in the same room, the image should not be regenerated. Only set it to 'true' when moving to a new location, a new character appears, or a dramatic event visually transforms the scene. This is a critical instruction.
     
     You MUST provide a response in the specified JSON format. Update the inventory and quest based on the events in the story.
     The imagePrompt must be highly detailed and adhere to the consistent art style.
@@ -144,6 +148,7 @@ export class GeminiService {
         quest: 'Recover from a mysterious error.',
         inventory: [],
         imagePrompt: 'A swirling vortex of colorful magical energy, abstract digital painting, cinematic lighting.',
+        shouldGenerateNewImage: true,
         outcome: 'failure',
         inCombat: false
       };

@@ -10,6 +10,7 @@ export interface GameState {
   quest: string;
   inventory: string[];
   imagePrompt: string;
+  shouldGenerateNewImage: boolean;
   unlockedAchievementId?: string;
   outcome?: 'success' | 'neutral' | 'failure';
   inCombat?: boolean;

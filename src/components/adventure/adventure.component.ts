@@ -27,6 +27,7 @@ export class AdventureComponent implements OnInit {
   showDefeatBanner = signal(false);
   showCombatTutorial = signal(false);
   imageError = signal<boolean>(false);
+  imageGenerationCooldown = signal(0);
   
   difficulty = signal<Difficulty>('Normal');
   combatEncounters = signal<number>(0);
@@ -76,6 +77,7 @@ export class AdventureComponent implements OnInit {
       this.currentImage.set(initialImage);
     } else {
       this.imageError.set(true);
+      this.imageGenerationCooldown.set(3);
     }
     this.achievementService.unlock('first-step');
     this.isLoading.set(false);
@@ -87,12 +89,31 @@ export class AdventureComponent implements OnInit {
     this.audioService.playSound('choice');
     this.isLoading.set(true);
     this.updateLoadingMessage();
-    this.currentImage.set('');
-    this.imageError.set(false);
     
     const oldInventorySize = this.gameState()?.inventory.length ?? 0;
     const newState = await this.geminiService.generateStorySegment(choice.text, this.difficulty(), this.combatEncounters());
     
+    const wantsNewImage = newState.shouldGenerateNewImage;
+    const isOnCooldown = this.imageGenerationCooldown() > 0;
+    
+    if (wantsNewImage) {
+      if (isOnCooldown) {
+        this.imageGenerationCooldown.update(c => c - 1);
+      } else {
+        this.imageError.set(false);
+        const newImage = await this.geminiService.generateImage(newState.imagePrompt);
+        if (newImage) {
+          this.currentImage.set(newImage);
+        } else {
+          this.imageError.set(true);
+          this.imageGenerationCooldown.set(3);
+        }
+      }
+    } else {
+      this.imageError.set(false); 
+    }
+
+    this.gameState.set(newState);
     this.updateDifficulty(newState.outcome);
 
     if (newState.inCombat && !this.tutorialService.hasSeenCombatTutorial()) {
@@ -117,14 +138,6 @@ export class AdventureComponent implements OnInit {
       this.showDefeatBanner.set(true);
       this.combatEncounters.update(c => c + 1);
       setTimeout(() => this.showDefeatBanner.set(false), 4000);
-    }
-
-    this.gameState.set(newState);
-    const newImage = await this.geminiService.generateImage(newState.imagePrompt);
-    if (newImage) {
-      this.currentImage.set(newImage);
-    } else {
-      this.imageError.set(true);
     }
 
     this.isLoading.set(false);

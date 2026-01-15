@@ -42,6 +42,13 @@
 
   <!-- Image Container -->
   <div class="aspect-video w-full bg-slate-900 rounded-md mb-6 relative overflow-hidden flex items-center justify-center">
+    <!-- Cooldown notification -->
+    @if(imageGenerationCooldown() > 0 && !isLoading()) {
+      <div class="absolute top-0 left-0 right-0 p-2 bg-slate-900/80 text-center z-20">
+        <p class="text-amber-200 text-sm font-serif-story italic">The visual ether is stabilizing... Image generation resumes in {{ imageGenerationCooldown() }} turn(s).</p>
+      </div>
+    }
+
     @if (isLoading() || imageError() || !currentImage()) {
       <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 z-10">
         @if (imageError() && !isLoading()) {
