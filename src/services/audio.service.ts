@@ -17,7 +17,7 @@ export class AudioService {
     }
   }
 
-  playSound(type: 'choice' | 'item' | 'achievement' | 'victory'): void {
+  playSound(type: 'choice' | 'item' | 'achievement' | 'victory' | 'defeat'): void {
     this.initializeAudioContext();
     if (!this.audioContext) return;
 
@@ -66,9 +66,16 @@ export class AudioService {
         oscillator.frequency.setValueAtTime(523.2, this.audioContext.currentTime + 0.3);
         gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 1);
         break;
+      case 'defeat':
+        gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(110, this.audioContext.currentTime); // A2
+        oscillator.frequency.exponentialRampToValueAtTime(82.4, this.audioContext.currentTime + 1.5); // E2
+        gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 2);
+        break;
     }
 
     oscillator.start(this.audioContext.currentTime);
-    oscillator.stop(this.audioContext.currentTime + 1);
+    oscillator.stop(this.audioContext.currentTime + 2);
   }
 }

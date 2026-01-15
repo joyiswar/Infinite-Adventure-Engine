@@ -7,6 +7,7 @@ import { AchievementService } from '../../services/achievement.service';
 import { SaveGameService } from '../../services/save-game.service';
 import { Difficulty, SaveData } from '../../models/savedata.model';
 import { AudioService } from '../../services/audio.service';
+import { TutorialService } from '../../services/tutorial.service';
 
 @Component({
   selector: 'app-adventure',
@@ -23,6 +24,8 @@ export class AdventureComponent implements OnInit {
   isLoading = signal<boolean>(true);
   loadingMessage = signal<string>('The mists of fate are swirling...');
   showVictoryBanner = signal(false);
+  showDefeatBanner = signal(false);
+  showCombatTutorial = signal(false);
   
   difficulty = signal<Difficulty>('Normal');
   private successStreak = 0;
@@ -46,7 +49,8 @@ export class AdventureComponent implements OnInit {
     private geminiService: GeminiService,
     private achievementService: AchievementService,
     private saveGameService: SaveGameService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private tutorialService: TutorialService
   ) {
     effect(() => {
       const state = this.gameState();
@@ -84,6 +88,10 @@ export class AdventureComponent implements OnInit {
     
     this.updateDifficulty(newState.outcome);
 
+    if (newState.inCombat && !this.tutorialService.hasSeenCombatTutorial()) {
+      this.showCombatTutorial.set(true);
+    }
+
     if (newState.unlockedAchievementId) {
       this.achievementService.unlock(newState.unlockedAchievementId);
     }
@@ -96,6 +104,10 @@ export class AdventureComponent implements OnInit {
       this.audioService.playSound('victory');
       this.showVictoryBanner.set(true);
       setTimeout(() => this.showVictoryBanner.set(false), 3000);
+    } else if (newState.combatResult === 'defeat') {
+      this.audioService.playSound('defeat');
+      this.showDefeatBanner.set(true);
+      setTimeout(() => this.showDefeatBanner.set(false), 4000);
     }
 
     this.gameState.set(newState);
@@ -143,6 +155,11 @@ export class AdventureComponent implements OnInit {
 
   closeModal(): void {
     this.isModalOpen.set(false);
+  }
+
+  closeCombatTutorial(): void {
+    this.showCombatTutorial.set(false);
+    this.tutorialService.markCombatTutorialAsSeen();
   }
 
   private getCurrentSaveData(): SaveData | null {

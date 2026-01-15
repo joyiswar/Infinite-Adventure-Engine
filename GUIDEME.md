@@ -29,7 +29,7 @@ Sometimes, your path will lead to conflict. When a battle begins:
 - The game will enter a **Combat Mode**.
 - Your choices will change to specific combat actions like "Attack", "Defend", or "Use Item". Expect vivid descriptions of your actions and their consequences.
 - The icon `⚔️` will appear next to your choices to indicate you are in combat.
-- Choose your actions wisely to defeat your foes. Once the battle is over, the story and choices will return to normal. Celebrate your victories with a special visual flourish when you win a tough battle!
+- Choose your actions wisely to defeat your foes. Once the battle is over, the story and choices will return to normal. Celebrate your victories with a special visual flourish when you win a tough battle! If you are defeated, a somber screen will mark the end of the battle.
 
 ### Saving Your Progress
 Never lose your unique story. You have two ways to save:

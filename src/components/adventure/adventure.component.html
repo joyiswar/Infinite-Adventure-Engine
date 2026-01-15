@@ -10,6 +10,36 @@
     </div>
   }
 
+  <!-- Defeat Banner -->
+  @if(showDefeatBanner()) {
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-20 defeat-animate">
+      <h2 class="text-6xl md:text-8xl font-bold font-serif-story text-red-500 tracking-widest" style="text-shadow: 0 0 15px #c00;">
+        DEFEAT
+      </h2>
+    </div>
+  }
+
+  <!-- Combat Tutorial Modal -->
+  @if (showCombatTutorial()) {
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-30 p-4">
+      <div class="bg-slate-800 border border-amber-500/50 rounded-lg shadow-xl w-full max-w-lg p-8 text-center tutorial-fade-in">
+        <h2 class="text-3xl font-bold font-serif-story text-amber-300 mb-4">Welcome to Combat!</h2>
+        <div class="prose prose-invert max-w-none text-left space-y-4 text-slate-300">
+          <p>You've entered your first battle. Here's how it works:</p>
+          <ul class="list-disc pl-5">
+            <li><strong>Actions:</strong> Your choices are now combat actions. The AI will generate options like attacking, defending, using items from your inventory, or even trying clever tactics.</li>
+            <li><strong>Descriptive Outcomes:</strong> Pay attention to the story! It will describe the results of your actions and the enemy's response in detail.</li>
+            <li><strong>Victory:</strong> Defeat your foe to continue your adventure. Winning a battle may unlock achievements or rewards.</li>
+          </ul>
+          <p class="text-center">Choose your actions wisely to emerge victorious. Good luck!</p>
+        </div>
+        <button (click)="closeCombatTutorial()" class="mt-8 px-8 py-3 bg-amber-700 hover:bg-amber-600 rounded-md transition-colors text-white font-semibold text-lg">
+          Begin Battle
+        </button>
+      </div>
+    </div>
+  }
+
   <!-- Image Container -->
   <div class="aspect-video w-full bg-slate-900 rounded-md mb-6 relative overflow-hidden flex items-center justify-center">
     @if (isLoading() || !currentImage()) {
