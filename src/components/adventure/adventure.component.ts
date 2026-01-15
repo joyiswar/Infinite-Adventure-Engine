@@ -8,6 +8,7 @@ import { SaveGameService } from '../../services/save-game.service';
 import { Difficulty, SaveData } from '../../models/savedata.model';
 import { AudioService } from '../../services/audio.service';
 import { TutorialService } from '../../services/tutorial.service';
+import { LoreCodexService } from '../../services/lore-codex.service';
 
 @Component({
   selector: 'app-adventure',
@@ -53,7 +54,8 @@ export class AdventureComponent implements OnInit {
     private achievementService: AchievementService,
     private saveGameService: SaveGameService,
     private audioService: AudioService,
-    private tutorialService: TutorialService
+    private tutorialService: TutorialService,
+    private loreCodexService: LoreCodexService
   ) {
     effect(() => {
       const state = this.gameState();
@@ -111,6 +113,10 @@ export class AdventureComponent implements OnInit {
       }
     } else {
       this.imageError.set(false); 
+    }
+
+    if (newState.codexEntries && newState.codexEntries.length > 0) {
+      this.loreCodexService.addEntries(newState.codexEntries);
     }
 
     this.gameState.set(newState);
@@ -199,6 +205,7 @@ export class AdventureComponent implements OnInit {
       achievements: this.achievementService.achievements(),
       difficulty: this.difficulty(),
       combatEncounters: this.combatEncounters(),
+      codex: this.loreCodexService.codex(),
       timestamp: Date.now()
     };
   }
@@ -232,6 +239,7 @@ export class AdventureComponent implements OnInit {
       this.achievementService.achievements.set(saveData.achievements);
       this.difficulty.set(saveData.difficulty);
       this.combatEncounters.set(saveData.combatEncounters ?? 0);
+      this.loreCodexService.codex.set(saveData.codex ?? []);
 
       setTimeout(() => this.isLoading.set(false), 200);
       this.closeModal();

@@ -2,6 +2,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Achievement } from '../../models/achievement.model';
+import { CodexEntry } from '../../models/codex.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,4 +17,8 @@ export class SidebarComponent {
   achievements = input.required<Achievement[]>();
   newAchievement = input<boolean>(false);
   lastUnlockedId = input<string | null>(null);
+
+  codex = input<CodexEntry[]>([]);
+  newCodexEntry = input<boolean>(false);
+  lastAddedCodexTitle = input<string | null>(null);
 }

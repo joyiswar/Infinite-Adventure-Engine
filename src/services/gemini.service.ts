@@ -59,6 +59,18 @@ export class GeminiService {
           total: { type: Type.NUMBER }
         },
         description: 'For multi-stage boss battles, this object indicates the current and total stages. Return null for normal combat.'
+      },
+      codexEntries: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.OBJECT,
+          properties: {
+            title: { type: Type.STRING },
+            content: { type: Type.STRING }
+          },
+          required: ['title', 'content']
+        },
+        description: 'An array of new lore codex entries discovered in this turn. A codex entry should be created for any new, significant named character, location, item, or plot point. Only include newly discovered information. Return an empty array if nothing new was discovered.'
       }
     },
     required: ['story', 'choices', 'quest', 'inventory', 'imagePrompt', 'shouldGenerateNewImage', 'outcome', 'inCombat']
@@ -107,6 +119,13 @@ export class GeminiService {
     Available achievements to award:
     ${achievementsString}
 
+    LORE CODEX: You must identify important lore elements as they are introduced.
+    - When a new, significant named character, location, magical item, or important plot point is introduced, create a codex entry for it.
+    - Populate the 'codexEntries' array with these new entries.
+    - The entry 'title' should be the name of the subject (e.g., "The Whispering Caverns", "Grak the Goblin Chief").
+    - The entry 'content' should be a concise, 1-2 sentence encyclopedia-style description.
+    - CRITICAL: Only return entries for lore that is NEWLY discovered in the current story segment. Do not repeat entries from previous turns. If no new lore is discovered, return an empty array.
+
     RESOURCE MANAGEMENT: To ensure a smooth experience, you must manage resources.
     - Image Generation: Generating images is resource-intensive. You MUST set 'shouldGenerateNewImage' to 'false' if the scene or characters have not changed significantly. For example, during a conversation, or after a minor action like inspecting an object in the same room, the image should not be regenerated. Only set it to 'true' when moving to a new location, a new character appears, or a dramatic event visually transforms the scene. This is a critical instruction.
     
@@ -150,7 +169,8 @@ export class GeminiService {
         imagePrompt: 'A swirling vortex of colorful magical energy, abstract digital painting, cinematic lighting.',
         shouldGenerateNewImage: true,
         outcome: 'failure',
-        inCombat: false
+        inCombat: false,
+        codexEntries: []
       };
     }
   }

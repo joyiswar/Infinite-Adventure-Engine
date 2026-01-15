@@ -23,6 +23,32 @@
     }
   </div>
 
+  <!-- Lore Codex -->
+  <div>
+    <h2 class="text-2xl font-bold font-serif-story text-amber-300 border-b-2 border-amber-500/30 pb-2 mb-4" [class.glow-animation]="newCodexEntry()">Lore Codex</h2>
+    @if (codex().length > 0) {
+      <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
+        @for (entry of codex(); track entry.title) {
+          <details 
+            class="bg-slate-900/50 rounded-md transition-all duration-300" 
+            [class.achievement-pop-in]="newCodexEntry() && lastAddedCodexTitle() === entry.title">
+            <summary class="cursor-pointer p-3 font-semibold text-slate-200 hover:text-amber-300 list-none flex items-center justify-between">
+              <span>{{ entry.title }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div class="p-3 border-t border-slate-700">
+              <p class="text-slate-300 text-sm prose prose-invert max-w-none">{{ entry.content }}</p>
+            </div>
+          </details>
+        }
+      </div>
+    } @else {
+      <p class="text-slate-400 italic">No lore discovered yet.</p>
+    }
+  </div>
+
   <!-- Achievements -->
   <div>
     <h2 class="text-2xl font-bold font-serif-story text-amber-300 border-b-2 border-amber-500/30 pb-2 mb-4" [class.glow-animation]="newAchievement()">Achievements</h2>

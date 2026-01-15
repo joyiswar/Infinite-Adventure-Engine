@@ -1,4 +1,6 @@
 
+import { CodexEntry } from "./codex.model";
+
 export interface Choice {
   id: number;
   text: string;
@@ -19,4 +21,5 @@ export interface GameState {
     current: number;
     total: number;
   };
+  codexEntries?: CodexEntry[];
 }
