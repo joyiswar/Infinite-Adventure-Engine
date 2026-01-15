@@ -9,6 +9,7 @@ import { Difficulty, SaveData } from '../../models/savedata.model';
 import { AudioService } from '../../services/audio.service';
 import { TutorialService } from '../../services/tutorial.service';
 import { LoreCodexService } from '../../services/lore-codex.service';
+import { InventoryItem } from '../../models/inventory.model';
 
 @Component({
   selector: 'app-adventure',
@@ -19,9 +20,11 @@ import { LoreCodexService } from '../../services/lore-codex.service';
 })
 export class AdventureComponent implements OnInit {
   @Output() gameStateChange = new EventEmitter<GameState>();
+  @Output() portraitChange = new EventEmitter<string>();
 
   gameState = signal<GameState | null>(null);
   currentImage = signal<string>('');
+  characterPortraitUrl = signal<string>('');
   isLoading = signal<boolean>(true);
   loadingMessage = signal<string>('The mists of fate are swirling...');
   showVictoryBanner = signal(false);
@@ -95,24 +98,42 @@ export class AdventureComponent implements OnInit {
     const oldInventorySize = this.gameState()?.inventory.length ?? 0;
     const newState = await this.geminiService.generateStorySegment(choice.text, this.difficulty(), this.combatEncounters());
     
+    const imagePromises: Promise<string | null>[] = [];
     const wantsNewImage = newState.shouldGenerateNewImage;
     const isOnCooldown = this.imageGenerationCooldown() > 0;
     
-    if (wantsNewImage) {
-      if (isOnCooldown) {
+    // Main scene image promise
+    if (wantsNewImage && !isOnCooldown) {
+      this.imageError.set(false);
+      imagePromises.push(this.geminiService.generateImage(newState.imagePrompt));
+    } else {
+      if (wantsNewImage && isOnCooldown) {
         this.imageGenerationCooldown.update(c => c - 1);
       } else {
         this.imageError.set(false);
-        const newImage = await this.geminiService.generateImage(newState.imagePrompt);
-        if (newImage) {
-          this.currentImage.set(newImage);
-        } else {
-          this.imageError.set(true);
-          this.imageGenerationCooldown.set(3);
-        }
       }
+      imagePromises.push(Promise.resolve(null));
+    }
+    
+    // Character portrait promise
+    if (newState.characterPortraitPrompt) {
+      imagePromises.push(this.geminiService.generateImage(newState.characterPortraitPrompt));
     } else {
-      this.imageError.set(false); 
+      imagePromises.push(Promise.resolve(null));
+    }
+
+    const [mainImageUrl, portraitUrl] = await Promise.all(imagePromises);
+
+    if (mainImageUrl) {
+      this.currentImage.set(mainImageUrl);
+    } else if (wantsNewImage && !isOnCooldown) {
+      this.imageError.set(true);
+      this.imageGenerationCooldown.set(3);
+    }
+    
+    if (portraitUrl) {
+      this.characterPortraitUrl.set(portraitUrl);
+      this.portraitChange.emit(portraitUrl);
     }
 
     if (newState.codexEntries && newState.codexEntries.length > 0) {
@@ -201,6 +222,7 @@ export class AdventureComponent implements OnInit {
     return {
       gameState: currentState,
       currentImage: this.currentImage(),
+      characterPortraitUrl: this.characterPortraitUrl(),
       storyHistory: this.geminiService.getStoryHistory(),
       achievements: this.achievementService.achievements(),
       difficulty: this.difficulty(),
@@ -235,6 +257,8 @@ export class AdventureComponent implements OnInit {
       
       this.gameState.set(saveData.gameState);
       this.currentImage.set(saveData.currentImage);
+      this.characterPortraitUrl.set(saveData.characterPortraitUrl ?? '');
+      this.portraitChange.emit(this.characterPortraitUrl());
       this.geminiService.setStoryHistory(saveData.storyHistory);
       this.achievementService.achievements.set(saveData.achievements);
       this.difficulty.set(saveData.difficulty);

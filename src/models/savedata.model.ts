@@ -8,6 +8,7 @@ export type Difficulty = 'Easy' | 'Normal' | 'Hard';
 export interface SaveData {
   gameState: GameState;
   currentImage: string;
+  characterPortraitUrl?: string;
   storyHistory: string[];
   achievements: Achievement[];
   difficulty: Difficulty;

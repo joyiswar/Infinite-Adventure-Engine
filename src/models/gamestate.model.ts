@@ -1,5 +1,6 @@
 
 import { CodexEntry } from "./codex.model";
+import { InventoryItem } from "./inventory.model";
 
 export interface Choice {
   id: number;
@@ -10,7 +11,7 @@ export interface GameState {
   story: string;
   choices: Choice[];
   quest: string;
-  inventory: string[];
+  inventory: InventoryItem[];
   imagePrompt: string;
   shouldGenerateNewImage: boolean;
   unlockedAchievementId?: string;
@@ -22,4 +23,5 @@ export interface GameState {
     total: number;
   };
   codexEntries?: CodexEntry[];
+  characterPortraitPrompt?: string;
 }

@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { AudioService } from './services/audio.service';
 import { LoreCodexService } from './services/lore-codex.service';
 import { CodexEntry } from './models/codex.model';
+import { InventoryItem } from './models/inventory.model';
 
 interface Toast {
   title: string;
@@ -26,8 +27,9 @@ interface Toast {
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Infinite Adventure Engine';
   
-  inventory = signal<string[]>([]);
+  inventory = signal<InventoryItem[]>([]);
   quest = signal<string>('Your quest has not yet been revealed.');
+  characterPortraitUrl = signal<string>('');
   
   unlockedAchievements = signal<Achievement[]>([]);
   newAchievementUnlocked = signal(false);
@@ -80,6 +82,10 @@ export class AppComponent implements OnInit, OnDestroy {
   onGameStateChange(newState: GameState) {
     this.inventory.set(newState.inventory);
     this.quest.set(newState.quest);
+  }
+
+  onPortraitChange(url: string) {
+    this.characterPortraitUrl.set(url);
   }
   
   private showToast(title: string, message: string): void {

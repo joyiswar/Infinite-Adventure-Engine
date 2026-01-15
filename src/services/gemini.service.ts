@@ -43,8 +43,15 @@ export class GeminiService {
       quest: { type: Type.STRING, description: 'A brief, one-sentence description of the current main quest objective.' },
       inventory: {
         type: Type.ARRAY,
-        items: { type: Type.STRING },
-        description: 'A list of all items the player currently possesses. This should be a complete list, including previously held items.'
+        items: { 
+          type: Type.OBJECT,
+          properties: {
+            name: { type: Type.STRING },
+            description: { type: Type.STRING, description: 'A detailed, flavorful description of the item, 1-2 sentences long.' }
+          },
+          required: ['name', 'description']
+        },
+        description: 'A list of all items the player currently possesses. This should be a complete list, including previously held items. For each item, provide a flavorful description.'
       },
       imagePrompt: { type: Type.STRING, description: 'A detailed, descriptive prompt for an image generation model to visualize the current scene. It MUST include the style: "cinematic fantasy digital painting, epic lighting, detailed environment". Maintain character and object consistency from the story. Describe the main character and the scene vividly.' },
       shouldGenerateNewImage: { type: Type.BOOLEAN, description: 'Set to true if the scene has changed significantly enough to require a new image. Set to false for minor actions or dialogue updates where the previous image is still relevant.' },
@@ -71,6 +78,10 @@ export class GeminiService {
           required: ['title', 'content']
         },
         description: 'An array of new lore codex entries discovered in this turn. A codex entry should be created for any new, significant named character, location, item, or plot point. Only include newly discovered information. Return an empty array if nothing new was discovered.'
+      },
+      characterPortraitPrompt: {
+        type: Type.STRING,
+        description: 'A prompt for a character portrait. If interacting with an NPC, describe their face and expression. If alone, describe the player character. Style MUST be: "close-up character portrait, fantasy digital painting, detailed face, expressive". If not applicable, return null.'
       }
     },
     required: ['story', 'choices', 'quest', 'inventory', 'imagePrompt', 'shouldGenerateNewImage', 'outcome', 'inCombat']
@@ -126,10 +137,16 @@ export class GeminiService {
     - The entry 'content' should be a concise, 1-2 sentence encyclopedia-style description.
     - CRITICAL: Only return entries for lore that is NEWLY discovered in the current story segment. Do not repeat entries from previous turns. If no new lore is discovered, return an empty array.
 
+    CHARACTER PORTRAIT: You must also generate a prompt for a character portrait.
+    - If the story describes an interaction with a specific NPC, the prompt should be for their portrait, describing their face, species, and expression.
+    - If the player is alone, the prompt should describe the player character's portrait, reflecting their current emotional state (e.g., determined, scared, curious).
+    - The prompt style MUST be 'close-up character portrait, fantasy digital painting, detailed face, expressive'.
+    - If no specific character is relevant to the scene (e.g., just describing a landscape), you MUST return null for this field.
+
     RESOURCE MANAGEMENT: To ensure a smooth experience, you must manage resources.
     - Image Generation: Generating images is resource-intensive. You MUST set 'shouldGenerateNewImage' to 'false' if the scene or characters have not changed significantly. For example, during a conversation, or after a minor action like inspecting an object in the same room, the image should not be regenerated. Only set it to 'true' when moving to a new location, a new character appears, or a dramatic event visually transforms the scene. This is a critical instruction.
     
-    You MUST provide a response in the specified JSON format. Update the inventory and quest based on the events in the story.
+    You MUST provide a response in the specified JSON format. Update the inventory (with descriptions) and quest based on the events in the story.
     The imagePrompt must be highly detailed and adhere to the consistent art style.
     The 'outcome' field is critical for game mechanics and must reflect the result of the player's action.`;
 
@@ -183,7 +200,7 @@ export class GeminiService {
         config: {
           numberOfImages: 1,
           outputMimeType: 'image/jpeg',
-          aspectRatio: '16:9',
+          aspectRatio: '1:1',
         },
       });
 

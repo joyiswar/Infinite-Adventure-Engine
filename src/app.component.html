@@ -5,7 +5,7 @@
   </header>
 
   <div class="flex-grow md:w-2/3 lg:w-3/4">
-    <app-adventure (gameStateChange)="onGameStateChange($event)"></app-adventure>
+    <app-adventure (gameStateChange)="onGameStateChange($event)" (portraitChange)="onPortraitChange($event)"></app-adventure>
   </div>
   
   <aside class="md:w-1/3 lg:w-1/4 md:border-l md:pl-6 md:border-slate-700">
@@ -17,7 +17,8 @@
       [lastUnlockedId]="lastUnlockedAchievementId()"
       [codex]="codex()"
       [newCodexEntry]="newCodexEntryAdded()"
-      [lastAddedCodexTitle]="lastAddedCodexTitle()">
+      [lastAddedCodexTitle]="lastAddedCodexTitle()"
+      [characterPortraitUrl]="characterPortraitUrl()">
     </app-sidebar>
   </aside>
 </main>
