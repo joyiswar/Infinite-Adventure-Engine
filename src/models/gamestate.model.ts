@@ -14,4 +14,8 @@ export interface GameState {
   outcome?: 'success' | 'neutral' | 'failure';
   inCombat?: boolean;
   combatResult?: 'victory' | 'defeat';
+  combatStage?: {
+    current: number;
+    total: number;
+  };
 }

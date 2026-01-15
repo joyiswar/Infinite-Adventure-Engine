@@ -28,6 +28,7 @@ export class AdventureComponent implements OnInit {
   showCombatTutorial = signal(false);
   
   difficulty = signal<Difficulty>('Normal');
+  combatEncounters = signal<number>(0);
   private successStreak = 0;
   
   isModalOpen = signal(false);
@@ -67,7 +68,7 @@ export class AdventureComponent implements OnInit {
   async startGame(): Promise<void> {
     this.isLoading.set(true);
     this.updateLoadingMessage();
-    const initialState = await this.geminiService.generateStorySegment(undefined, this.difficulty());
+    const initialState = await this.geminiService.generateStorySegment(undefined, this.difficulty(), this.combatEncounters());
     this.gameState.set(initialState);
     const initialImage = await this.geminiService.generateImage(initialState.imagePrompt);
     this.currentImage.set(initialImage);
@@ -84,7 +85,7 @@ export class AdventureComponent implements OnInit {
     this.currentImage.set('');
     
     const oldInventorySize = this.gameState()?.inventory.length ?? 0;
-    const newState = await this.geminiService.generateStorySegment(choice.text, this.difficulty());
+    const newState = await this.geminiService.generateStorySegment(choice.text, this.difficulty(), this.combatEncounters());
     
     this.updateDifficulty(newState.outcome);
 
@@ -103,10 +104,12 @@ export class AdventureComponent implements OnInit {
     if (newState.combatResult === 'victory') {
       this.audioService.playSound('victory');
       this.showVictoryBanner.set(true);
+      this.combatEncounters.update(c => c + 1);
       setTimeout(() => this.showVictoryBanner.set(false), 3000);
     } else if (newState.combatResult === 'defeat') {
       this.audioService.playSound('defeat');
       this.showDefeatBanner.set(true);
+      this.combatEncounters.update(c => c + 1);
       setTimeout(() => this.showDefeatBanner.set(false), 4000);
     }
 
@@ -172,6 +175,7 @@ export class AdventureComponent implements OnInit {
       storyHistory: this.geminiService.getStoryHistory(),
       achievements: this.achievementService.achievements(),
       difficulty: this.difficulty(),
+      combatEncounters: this.combatEncounters(),
       timestamp: Date.now()
     };
   }
@@ -203,6 +207,7 @@ export class AdventureComponent implements OnInit {
       this.geminiService.setStoryHistory(saveData.storyHistory);
       this.achievementService.achievements.set(saveData.achievements);
       this.difficulty.set(saveData.difficulty);
+      this.combatEncounters.set(saveData.combatEncounters ?? 0);
 
       setTimeout(() => this.isLoading.set(false), 200);
       this.closeModal();

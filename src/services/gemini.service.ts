@@ -50,7 +50,15 @@ export class GeminiService {
       unlockedAchievementId: { type: Type.STRING, description: 'The ID of an achievement unlocked in this turn, if any. Only award achievements from the provided list. Return null if no achievement is unlocked.'},
       outcome: { type: Type.STRING, description: 'The outcome for the player from this story segment. Must be one of: "success", "neutral", or "failure". This reflects whether the choice led to a positive, neutral, or negative result.'},
       inCombat: { type: Type.BOOLEAN, description: 'Set to true if the player is in a combat encounter, false otherwise. This is critical.'},
-      combatResult: { type: Type.STRING, description: 'Only set when combat ends. Set to "victory" if the player wins, or "defeat" if they lose. Otherwise, return null.'}
+      combatResult: { type: Type.STRING, description: 'Only set when combat ends. Set to "victory" if the player wins, or "defeat" if they lose. Otherwise, return null.'},
+      combatStage: {
+        type: Type.OBJECT,
+        properties: {
+          current: { type: Type.NUMBER },
+          total: { type: Type.NUMBER }
+        },
+        description: 'For multi-stage boss battles, this object indicates the current and total stages. Return null for normal combat.'
+      }
     },
     required: ['story', 'choices', 'quest', 'inventory', 'imagePrompt', 'outcome', 'inCombat']
   };
@@ -63,7 +71,7 @@ export class GeminiService {
     this.storyHistory = history;
   }
 
-  async generateStorySegment(playerChoice?: string, difficulty: Difficulty = 'Normal'): Promise<GameState> {
+  async generateStorySegment(playerChoice?: string, difficulty: Difficulty = 'Normal', combatEncounters: number = 0): Promise<GameState> {
     const achievementsString = this.achievementsToAward.map(a => `- ${a.id}: ${a.description}`).join('\n');
     const systemInstruction = `You are a master storyteller and game master for an infinite choose-your-own-adventure game. 
     Your goal is to create a rich, engaging, and ever-evolving fantasy narrative. The story should be immersive and adapt dynamically to the player's choices.
@@ -76,6 +84,17 @@ export class GeminiService {
     - When the combat ends (player wins or loses), you MUST set 'inCombat' back to false and provide normal narrative choices.
     - Crucially, when combat ends, you MUST set the 'combatResult' field: 'victory' if the player won, 'defeat' if they lost.
     
+    COMBAT ESCALATION: The difficulty of combat should increase as the player wins more battles. The player has completed ${combatEncounters} combat encounters so far.
+    - Encounters 0-2: Keep fights simple, against a single, standard enemy.
+    - Encounters 3-5: Introduce slightly tougher enemies or pairs of weaker enemies.
+    - Encounters 6+: You can now create multi-stage boss battles or fights against multiple dangerous foes.
+
+    MULTI-STAGE COMBAT: For a boss battle, use the 'combatStage' field.
+    - When a multi-stage fight begins, set 'inCombat' to true and define the stages, e.g., { "current": 1, "total": 3 }.
+    - When a stage is cleared, describe the transition (e.g., "The beast roars, entering a new phase!"), increment 'combatStage.current', but KEEP 'inCombat' as true. 'combatResult' should remain null.
+    - The fight only ends when the FINAL stage is won ('current' equals 'total'). At this point, set 'inCombat' to false and 'combatResult' to 'victory'.
+    - If the player is defeated at any stage, the entire combat ends. Set 'inCombat' to false and 'combatResult' to 'defeat'.
+
     ACHIEVEMENTS: You can award achievements. When the player's actions meet the criteria, set the 'unlockedAchievementId' in your response. Only award an achievement once.
     Available achievements to award:
     ${achievementsString}

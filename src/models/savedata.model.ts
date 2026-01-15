@@ -10,5 +10,6 @@ export interface SaveData {
   storyHistory: string[];
   achievements: Achievement[];
   difficulty: Difficulty;
+  combatEncounters: number;
   timestamp: number;
 }

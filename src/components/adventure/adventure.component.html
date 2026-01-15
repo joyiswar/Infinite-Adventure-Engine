@@ -57,6 +57,14 @@
   </div>
 
   @if (gameState(); as state) {
+    <!-- Boss Battle Stage Indicator -->
+    @if (state.inCombat && state.combatStage; as cs) {
+      <div class="text-center mb-4 border-y-2 border-red-800/50 py-2">
+        <h3 class="text-2xl font-bold font-serif-story text-red-400 tracking-wider animate-pulse">BOSS BATTLE</h3>
+        <p class="text-lg text-slate-300">Stage {{ cs.current }} of {{ cs.total }}</p>
+      </div>
+    }
+
     <!-- Story Text -->
     <div class="flex-grow mb-6 prose prose-invert max-w-none prose-p:text-slate-300">
       <p class="text-xl leading-relaxed font-serif-story whitespace-pre-wrap">{{ state.story }}</p>
