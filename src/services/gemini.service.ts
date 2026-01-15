@@ -135,7 +135,7 @@ export class GeminiService {
     - Populate the 'codexEntries' array with these new entries.
     - The entry 'title' should be the name of the subject (e.g., "The Whispering Caverns", "Grak the Goblin Chief").
     - The entry 'content' should be a concise, 1-2 sentence encyclopedia-style description.
-    - CRITICAL: Only return entries for lore that is NEWLY discovered in the current story segment. Do not repeat entries from previous turns. If no new lore is discovered, return an empty array.
+    - CRITICAL: Only return entries for lore that is NEWLY discovered in the current story segment. Do not repeat entries from previous turns. If no new lore is discovered, return an an empty array.
 
     CHARACTER PORTRAIT: You must also generate a prompt for a character portrait.
     - If the story describes an interaction with a specific NPC, the prompt should be for their portrait, describing their face, species, and expression.
