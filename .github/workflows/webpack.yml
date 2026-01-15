@@ -43,15 +43,12 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        # This step assumes you have a package.json and package-lock.json file.
-        # It will fail if these files are not present.
-        run: npm ci
+        # Use npm install to create a lock file and install dependencies from package.json
+        run: npm install
         
       - name: Build
-        # This runs the 'build' script from your package.json.
-        # The '--if-present' flag prevents an error if the script doesn't exist.
-        # You will need to configure this script to output the static site to a 'dist' folder.
-        run: npm run build --if-present
+        # This now runs the 'build' script from package.json (i.e., 'vite build')
+        run: npm run build
         
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -59,8 +56,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This should point to the output directory of your build script
-          path: './dist' # Update this path if your build script outputs to a different directory
+          # This points to the output directory of the vite build script
+          path: './dist'
 
   # Deployment job
   deploy:
