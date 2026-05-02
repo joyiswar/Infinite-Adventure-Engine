@@ -1,4 +1,3 @@
-
 import { ChangeDetectionStrategy, Component, effect, EventEmitter, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameState, Choice } from '../../models/gamestate.model';
@@ -200,9 +199,10 @@ export class AdventureComponent implements OnInit {
     this.loadingMessage.set(this.loadingMessages[randomIndex]);
   }
 
-  openModal(mode: 'Save' | 'Load'): void {
+  async openModal(mode: 'Save' | 'Load'): Promise<void> {
     this.modalMode.set(mode);
-    this.saveSlots.set(this.saveGameService.getSaveSlots());
+    const slots = await this.saveGameService.getSaveSlots();
+    this.saveSlots.set(slots);
     this.isModalOpen.set(true);
   }
 
@@ -232,24 +232,24 @@ export class AdventureComponent implements OnInit {
     };
   }
 
-  handleSave(slotId: number): void {
+  async handleSave(slotId: number): Promise<void> {
     const saveData = this.getCurrentSaveData();
     if (saveData) {
-      this.saveGameService.save(slotId, saveData);
+      await this.saveGameService.save(slotId, saveData);
       this.closeModal();
     }
   }
   
-  private handleAutosave(): void {
+  private async handleAutosave(): Promise<void> {
     const saveData = this.getCurrentSaveData();
     if(saveData) {
-      this.saveGameService.save(0, saveData); // Slot 0 is for autosave
+      await this.saveGameService.save(0, saveData); // Slot 0 is for autosave
       console.log('Game autosaved.');
     }
   }
 
-  handleLoad(slotId: number): void {
-    const saveData = this.saveGameService.load(slotId);
+  async handleLoad(slotId: number): Promise<void> {
+    const saveData = await this.saveGameService.load(slotId);
     if (saveData) {
       this.isLoading.set(true);
       this.updateLoadingMessage();
