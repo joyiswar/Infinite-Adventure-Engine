@@ -1,20 +1,20 @@
 import { ChangeDetectionStrategy, Component, effect, EventEmitter, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameState, Choice } from '../../models/gamestate.model';
-import { GeminiService } from '../../services/gemini.service';
-import { AchievementService } from '../../services/achievement.service';
-import { SaveGameService } from '../../services/save-game.service';
-import { Difficulty, SaveData } from '../../models/savedata.model';
-import { AudioService } from '../../services/audio.service';
-import { TutorialService } from '../../services/tutorial.service';
-import { LoreCodexService } from '../../services/lore-codex.service';
-import { InventoryItem } from '../../models/inventory.model';
+import { GameState, Choice } from '../../entities/gamestate.model';
+import { GeminiService } from '../../engine/ai-engine.service';
+import { AchievementService } from '../../systems/achievement-system.service';
+import { SaveGameService } from '../../systems/persistence-system.service';
+import { Difficulty, SaveData } from '../../entities/savedata.model';
+import { AudioService } from '../../systems/audio-system.service';
+import { TutorialService } from '../../systems/tutorial-system.service';
+import { LoreCodexService } from '../../systems/codex-system.service';
+import { InventoryItem } from '../../entities/inventory.model';
 
 @Component({
   selector: 'app-adventure',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './adventure.component.html',
+  templateUrl: './adventure.scene.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdventureComponent implements OnInit {

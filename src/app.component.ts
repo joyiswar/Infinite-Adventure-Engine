@@ -1,16 +1,15 @@
-
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { AdventureComponent } from './components/adventure/adventure.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { GameState } from './models/gamestate.model';
-import { AchievementService } from './services/achievement.service';
-import { Achievement } from './models/achievement.model';
+import { AdventureComponent } from './scenes/adventure-scene/adventure.scene';
+import { SidebarComponent } from './ui/sidebar-panel/sidebar.component';
+import { GameState } from './entities/gamestate.model';
+import { AchievementService } from './systems/achievement-system.service';
+import { Achievement } from './entities/achievement.model';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { AudioService } from './services/audio.service';
-import { LoreCodexService } from './services/lore-codex.service';
-import { CodexEntry } from './models/codex.model';
-import { InventoryItem } from './models/inventory.model';
+import { AudioService } from './systems/audio-system.service';
+import { LoreCodexService } from './systems/codex-system.service';
+import { CodexEntry } from './entities/codex.model';
+import { InventoryItem } from './entities/inventory.model';
 
 interface Toast {
   title: string;

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { GameState } from '../models/gamestate.model';
-import { Difficulty } from '../models/savedata.model';
-import { SupabaseService } from './supabase.service';
+import { GameState } from '../entities/gamestate.model';
+import { Difficulty } from '../entities/savedata.model';
+import { SupabaseService } from '../systems/supabase-system.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +33,12 @@ export class GeminiService {
 
   async generateStorySegment(playerChoice?: string, difficulty: Difficulty = 'Normal', combatEncounters: number = 0): Promise<GameState> {
     const achievementsString = this.achievementsToAward.map(a => `- ${a.id}: ${a.description}`).join('\n');
-    const systemInstruction = `You are a master storyteller and game master for an infinite choose-your-own-adventure game. 
+    const systemInstruction = `You are a master storyteller and game master for an infinite choose-your-own-adventure game.
     Your goal is to create a rich, engaging, and ever-evolving fantasy narrative. The story should be immersive and adapt dynamically to the player's choices.
     The current game difficulty is ${difficulty}. Adjust the challenge accordingly.
-    
+
     ACHIEVEMENTS: ${achievementsString}
-    
+
     Manage combat, lore codex, and character portraits as per standard protocols.
     Return valid JSON matching the GameState model.`;
 

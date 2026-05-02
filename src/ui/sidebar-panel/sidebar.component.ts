@@ -1,9 +1,9 @@
 
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Achievement } from '../../models/achievement.model';
-import { CodexEntry } from '../../models/codex.model';
-import { InventoryItem } from '../../models/inventory.model';
+import { Achievement } from '../../entities/achievement.model';
+import { CodexEntry } from '../../entities/codex.model';
+import { InventoryItem } from '../../entities/inventory.model';
 
 @Component({
   selector: 'app-sidebar',

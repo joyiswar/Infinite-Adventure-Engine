@@ -1,6 +1,6 @@
 
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { CodexEntry } from '../models/codex.model';
+import { CodexEntry } from '../entities/codex.model';
 import { Subject } from 'rxjs';
 
 @Injectable({

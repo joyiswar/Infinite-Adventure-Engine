@@ -1,6 +1,6 @@
 
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Achievement } from '../models/achievement.model';
+import { Achievement } from '../entities/achievement.model';
 import { Subject } from 'rxjs';
 
 @Injectable({
