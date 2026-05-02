@@ -8,6 +8,8 @@ import { Difficulty, SaveData } from '../../entities/savedata.model';
 import { AudioService } from '../../systems/audio-system.service';
 import { TutorialService } from '../../systems/tutorial-system.service';
 import { LoreCodexService } from '../../systems/codex-system.service';
+import { DifficultyScalingService } from '../../systems/difficulty-scaling.service';
+import { LeaderboardSystem } from '../../systems/leaderboard-system.service';
 import { InventoryItem } from '../../entities/inventory.model';
 
 @Component({
@@ -32,12 +34,11 @@ export class AdventureComponent implements OnInit {
   imageError = signal<boolean>(false);
   imageGenerationCooldown = signal(0);
   
-  difficulty = signal<Difficulty>('Normal');
   combatEncounters = signal<number>(0);
-  private successStreak = 0;
+  encountersWon = signal<number>(0);
   
   isModalOpen = signal(false);
-  modalMode = signal<'Save' | 'Load'>('Save');
+  modalMode = signal<'Save' | 'Load' | 'Leaderboard'>('Save');
   saveSlots = signal<(SaveData | null)[]>([]);
 
   private choiceCounter = 0;
@@ -57,7 +58,9 @@ export class AdventureComponent implements OnInit {
     private saveGameService: SaveGameService,
     private audioService: AudioService,
     private tutorialService: TutorialService,
-    private loreCodexService: LoreCodexService
+    private loreCodexService: LoreCodexService,
+    private leaderboardSystem: LeaderboardSystem,
+    public difficultyService: DifficultyScalingService
   ) {
     effect(() => {
       const state = this.gameState();
@@ -74,7 +77,7 @@ export class AdventureComponent implements OnInit {
   async startGame(): Promise<void> {
     this.isLoading.set(true);
     this.updateLoadingMessage();
-    const initialState = await this.geminiService.generateStorySegment(undefined, this.difficulty(), this.combatEncounters());
+    const initialState = await this.geminiService.generateStorySegment(undefined, this.difficultyService.currentDifficulty(), this.combatEncounters());
     this.gameState.set(initialState);
     const initialImage = await this.geminiService.generateImage(initialState.imagePrompt);
     if (initialImage) {
@@ -95,13 +98,12 @@ export class AdventureComponent implements OnInit {
     this.updateLoadingMessage();
     
     const oldInventorySize = this.gameState()?.inventory.length ?? 0;
-    const newState = await this.geminiService.generateStorySegment(choice.text, this.difficulty(), this.combatEncounters());
+    const newState = await this.geminiService.generateStorySegment(choice.text, this.difficultyService.currentDifficulty(), this.combatEncounters());
     
     const imagePromises: Promise<string | null>[] = [];
     const wantsNewImage = newState.shouldGenerateNewImage;
     const isOnCooldown = this.imageGenerationCooldown() > 0;
     
-    // Main scene image promise
     if (wantsNewImage && !isOnCooldown) {
       this.imageError.set(false);
       imagePromises.push(this.geminiService.generateImage(newState.imagePrompt));
@@ -114,7 +116,6 @@ export class AdventureComponent implements OnInit {
       imagePromises.push(Promise.resolve(null));
     }
     
-    // Character portrait promise
     if (newState.characterPortraitPrompt) {
       imagePromises.push(this.geminiService.generateImage(newState.characterPortraitPrompt));
     } else {
@@ -140,7 +141,7 @@ export class AdventureComponent implements OnInit {
     }
 
     this.gameState.set(newState);
-    this.updateDifficulty(newState.outcome);
+    this.difficultyService.update(newState.outcome);
 
     if (newState.inCombat && !this.tutorialService.hasSeenCombatTutorial()) {
       this.showCombatTutorial.set(true);
@@ -158,6 +159,8 @@ export class AdventureComponent implements OnInit {
       this.audioService.playSound('victory');
       this.showVictoryBanner.set(true);
       this.combatEncounters.update(c => c + 1);
+      this.encountersWon.update(c => c + 1);
+      this.syncLeaderboard();
       setTimeout(() => this.showVictoryBanner.set(false), 3000);
     } else if (newState.combatResult === 'defeat') {
       this.audioService.playSound('defeat');
@@ -173,25 +176,10 @@ export class AdventureComponent implements OnInit {
       this.handleAutosave();
     }
   }
-  
-  private updateDifficulty(outcome: GameState['outcome']): void {
-    if (outcome === 'success') {
-      this.successStreak++;
-      if (this.difficulty() === 'Normal' && this.successStreak >= 3) {
-        this.difficulty.set('Hard');
-        this.successStreak = 0;
-      } else if (this.difficulty() === 'Easy' && this.successStreak >= 2) {
-        this.difficulty.set('Normal');
-        this.successStreak = 0;
-      }
-    } else if (outcome === 'failure') {
-      this.successStreak = 0;
-      if (this.difficulty() === 'Hard') {
-        this.difficulty.set('Normal');
-      } else if (this.difficulty() === 'Normal') {
-        this.difficulty.set('Easy');
-      }
-    }
+
+  private async syncLeaderboard() {
+      const score = (this.encountersWon() * 100) + (this.achievementService.getUnlockedAchievements().length * 50);
+      await this.leaderboardSystem.updateScore(score, this.encountersWon(), this.achievementService.getUnlockedAchievements().length);
   }
   
   private updateLoadingMessage(): void {
@@ -199,10 +187,12 @@ export class AdventureComponent implements OnInit {
     this.loadingMessage.set(this.loadingMessages[randomIndex]);
   }
 
-  async openModal(mode: 'Save' | 'Load'): Promise<void> {
+  async openModal(mode: 'Save' | 'Load' | 'Leaderboard'): Promise<void> {
     this.modalMode.set(mode);
-    const slots = await this.saveGameService.getSaveSlots();
-    this.saveSlots.set(slots);
+    if (mode !== 'Leaderboard') {
+        const slots = await this.saveGameService.getSaveSlots();
+        this.saveSlots.set(slots);
+    }
     this.isModalOpen.set(true);
   }
 
@@ -225,7 +215,7 @@ export class AdventureComponent implements OnInit {
       characterPortraitUrl: this.characterPortraitUrl(),
       storyHistory: this.geminiService.getStoryHistory(),
       achievements: this.achievementService.achievements(),
-      difficulty: this.difficulty(),
+      difficulty: this.difficultyService.currentDifficulty(),
       combatEncounters: this.combatEncounters(),
       codex: this.loreCodexService.codex(),
       timestamp: Date.now()
@@ -236,6 +226,7 @@ export class AdventureComponent implements OnInit {
     const saveData = this.getCurrentSaveData();
     if (saveData) {
       await this.saveGameService.save(slotId, saveData);
+      this.syncLeaderboard();
       this.closeModal();
     }
   }
@@ -243,7 +234,7 @@ export class AdventureComponent implements OnInit {
   private async handleAutosave(): Promise<void> {
     const saveData = this.getCurrentSaveData();
     if(saveData) {
-      await this.saveGameService.save(0, saveData); // Slot 0 is for autosave
+      await this.saveGameService.save(0, saveData);
       console.log('Game autosaved.');
     }
   }
@@ -261,7 +252,7 @@ export class AdventureComponent implements OnInit {
       this.portraitChange.emit(this.characterPortraitUrl());
       this.geminiService.setStoryHistory(saveData.storyHistory);
       this.achievementService.achievements.set(saveData.achievements);
-      this.difficulty.set(saveData.difficulty);
+      this.difficultyService.set(saveData.difficulty);
       this.combatEncounters.set(saveData.combatEncounters ?? 0);
       this.loreCodexService.codex.set(saveData.codex ?? []);
 

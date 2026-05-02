@@ -33,13 +33,28 @@ export class GeminiService {
 
   async generateStorySegment(playerChoice?: string, difficulty: Difficulty = 'Normal', combatEncounters: number = 0): Promise<GameState> {
     const achievementsString = this.achievementsToAward.map(a => `- ${a.id}: ${a.description}`).join('\n');
-    const systemInstruction = `You are a master storyteller and game master for an infinite choose-your-own-adventure game.
-    Your goal is to create a rich, engaging, and ever-evolving fantasy narrative. The story should be immersive and adapt dynamically to the player's choices.
-    The current game difficulty is ${difficulty}. Adjust the challenge accordingly.
+
+    const systemInstruction = `You are an Advanced AI Game Master.
+    Your mission is to orchestrate a complex, procedural fantasy world where choices have weight.
+
+    CURRENT DIFFICULTY: ${difficulty}.
+    - Scale encounters, puzzle complexity, and NPC hostility accordingly.
+    - At 'Hard', include more tactical trade-offs and resource scarcity.
+
+    PROCEDURAL DEPTH:
+    - Introduce NPCs with unique motivations and secrets.
+    - Create environmental events (weather changes, magical anomalies).
+    - Track world state implicitly through narrative.
+
+    COMBAT & CHALLENGES:
+    - Manage structured combat. Completed encounters: ${combatEncounters}.
+    - Ensure tactical variety based on enemy types (Brutes, Casters, etc.).
 
     ACHIEVEMENTS: ${achievementsString}
 
-    Manage combat, lore codex, and character portraits as per standard protocols.
+    LORE & WORLD-BUILDING:
+    - Generate concise codex entries for NEW discoveries.
+
     Return valid JSON matching the GameState model.`;
 
     let prompt = "Start a new fantasy adventure for me. I awaken in a mysterious place.";
