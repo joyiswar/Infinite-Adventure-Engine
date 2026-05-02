@@ -8,8 +8,8 @@ export class SupabaseService {
   private supabase: SupabaseClient;
 
   constructor() {
-    const supabaseUrl = 'https://ugedscjzlezumceczfrk.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZWRzY2p6bGV6dW1jZWN6ZnJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2OTI2NDgsImV4cCI6MjA5MzI2ODY0OH0.JOarma-bj8-ojSaB175krXGtqA7ni3OLTZdcLVpdunM';
+    const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL || 'https://ugedscjzlezumceczfrk.supabase.co';
+    const supabaseKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZWRzY2p6bGV6dW1jZWN6ZnJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2OTI2NDgsImV4cCI6MjA5MzI2ODY0OH0.JOarma-bj8-ojSaB175krXGtqA7ni3OLTZdcLVpdunM';
     this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
@@ -31,5 +31,9 @@ export class SupabaseService {
 
   get user() {
     return this.supabase.auth.getUser();
+  }
+
+  get url() {
+    return (import.meta as any).env?.VITE_SUPABASE_URL || 'https://ugedscjzlezumceczfrk.supabase.co';
   }
 }

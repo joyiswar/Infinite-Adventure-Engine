@@ -17,9 +17,11 @@ export class GeminiService {
       { id: 'giant-slayer', description: 'Defeat a powerful foe or overcome a great challenge.' }
   ];
 
-  private readonly edgeFunctionUrl = 'https://ugedscjzlezumceczfrk.supabase.co/functions/v1/adventure-engine';
-
   constructor(private http: HttpClient, private supabase: SupabaseService) {}
+
+  private get edgeFunctionUrl() {
+    return `${this.supabase.url}/functions/v1/adventure-engine`;
+  }
 
   getStoryHistory(): string[] {
     return this.storyHistory;
@@ -72,8 +74,6 @@ export class GeminiService {
   }
 
   async generateImage(prompt: string): Promise<string | null> {
-    // For now, image generation still direct or via another edge function
-    // Implementing as a placeholder to avoid exposing keys directly in frontend logic
     return null;
   }
 
