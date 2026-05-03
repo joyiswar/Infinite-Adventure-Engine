@@ -1,244 +1,56 @@
-<div class="bg-slate-800 rounded-lg shadow-xl p-6 h-full flex flex-col relative">
-  <!-- Victory Banner -->
-  @if(showVictoryBanner()) {
-  <div
-    class="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-20 victory-animate"
-  >
-    <h2
-      class="text-6xl md:text-8xl font-bold font-serif-story text-amber-300 tracking-widest"
-      style="text-shadow: 0 0 20px #f59e0b"
-    >
-      VICTORY
-    </h2>
-  </div>
-  }
+<div class="relative min-h-screen flex flex-col">
+  <!-- 3D Rendering Layer -->
+  <div #canvasContainer class="fixed inset-0 pointer-events-none opacity-20 z-0"></div>
 
-  <!-- Defeat Banner -->
-  @if(showDefeatBanner()) {
-  <div
-    class="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-20 defeat-animate"
-  >
-    <h2
-      class="text-6xl md:text-8xl font-bold font-serif-story text-red-500 tracking-widest"
-      style="text-shadow: 0 0 15px #c00"
-    >
-      DEFEAT
-    </h2>
-  </div>
-  }
+  <div class="relative z-10 flex-grow p-4 md:p-8">
+    <!-- Existing UI elements ... -->
+    <div class="max-w-4xl mx-auto space-y-8">
+      @if (gameState()) {
+        <section class="bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-2xl overflow-hidden shadow-2xl">
+          <!-- Image Section -->
+          <div class="relative aspect-video bg-slate-900 flex items-center justify-center">
+            @if (isLoading()) {
+              <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-900/80">
+                <div class="w-16 h-16 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+                <p class="mt-4 text-amber-300 font-serif-story text-xl italic">{{ loadingMessage() }}</p>
+              </div>
+            }
 
-  <!-- Combat Tutorial Modal -->
-  @if (showCombatTutorial()) {
-  <div
-    class="absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-30 p-4"
-  >
-    <div
-      class="bg-slate-800 border border-amber-500/50 rounded-lg shadow-xl w-full max-w-lg p-8 text-center tutorial-fade-in"
-    >
-      <h2 class="text-3xl font-bold font-serif-story text-amber-300 mb-4">Welcome to Combat!</h2>
-      <div class="prose prose-invert max-w-none text-left space-y-4 text-slate-300">
-        <p>You've entered your first battle. Here's how it works:</p>
-        <ul class="list-disc pl-5">
-          <li>
-            <strong>Actions:</strong> Your choices are now combat actions. The AI will generate
-            options like attacking, defending, using items from your inventory, or even trying
-            clever tactics.
-          </li>
-          <li>
-            <strong>Descriptive Outcomes:</strong> Pay attention to the story! It will describe the
-            results of your actions and the enemy's response in detail.
-          </li>
-          <li>
-            <strong>Victory:</strong> Defeat your foe to continue your adventure. Winning a battle
-            may unlock achievements or rewards.
-          </li>
-        </ul>
-        <p class="text-center">Choose your actions wisely to emerge victorious. Good luck!</p>
-      </div>
-      <button
-        (click)="closeCombatTutorial()"
-        class="mt-8 px-8 py-3 bg-amber-700 hover:bg-amber-600 rounded-md transition-colors text-white font-semibold text-lg"
-      >
-        Begin Battle
-      </button>
-    </div>
-  </div>
-  }
+            @if (currentImage()) {
+              <img [src]="currentImage()" alt="Scene" class="w-full h-full object-cover">
+            } @else {
+              <div class="text-slate-500 italic">The scene is manifesting...</div>
+            }
+          </div>
 
-  <!-- Image Container -->
-  <div
-    class="aspect-video w-full bg-slate-900 rounded-md mb-6 relative overflow-hidden flex items-center justify-center"
-  >
-    <!-- Cooldown notification -->
-    @if(imageGenerationCooldown() > 0 && !isLoading()) {
-    <div class="absolute top-0 left-0 right-0 p-2 bg-slate-900/80 text-center z-20">
-      <p class="text-amber-200 text-sm font-serif-story italic">
-        The visual ether is stabilizing... Image generation resumes in {{ imageGenerationCooldown()
-        }} turn(s).
-      </p>
-    </div>
-    } @if (isLoading() || imageError() || !currentImage()) {
-    <div
-      class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 z-10"
-    >
-      @if (imageError() && !isLoading()) {
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-10 w-10 text-red-400 mb-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-        />
-      </svg>
-      <p class="text-red-300 text-lg font-serif-story italic">The mists obscure your vision...</p>
-      <p class="text-slate-400 text-sm">(Image generation failed)</p>
+          <!-- Story Section -->
+          <div class="p-6 md:p-8 space-y-6">
+            <div class="prose prose-invert max-w-none">
+              <p class="text-xl md:text-2xl font-serif-story leading-relaxed text-slate-100">
+                {{ gameState()?.story }}
+              </p>
+            </div>
+
+            <!-- Choices Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+              @for (choice of gameState()?.choices; track choice.id) {
+                <button
+                  (click)="handleChoice(choice)"
+                  [disabled]="isLoading()"
+                  class="p-4 text-left border-2 border-slate-600 rounded-xl hover:border-amber-400 hover:bg-amber-400/10 transition-all duration-200 group relative"
+                >
+                  <span class="absolute left-2 top-2 text-xs text-slate-500 group-hover:text-amber-300">#{{ choice.id }}</span>
+                  <span class="block mt-2 font-medium">{{ choice.text }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        </section>
       } @else {
-      <svg
-        class="animate-spin h-10 w-10 text-amber-300 mb-4"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          class="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="4"
-        ></circle>
-        <path
-          class="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        ></path>
-      </svg>
-      <p class="text-amber-200 text-lg font-serif-story italic">{{ loadingMessage() }}</p>
+         <div class="flex items-center justify-center h-64">
+           <div class="w-16 h-16 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+         </div>
       }
     </div>
-    } @if (currentImage() && !imageError()) {
-    <img
-      [src]="currentImage()"
-      alt="A scene from the adventure"
-      class="w-full h-full object-cover transition-opacity duration-500"
-      [class.opacity-30]="isLoading()"
-    />
-    }
-  </div>
-
-  @if (gameState(); as state) {
-  <!-- Boss Battle Stage Indicator -->
-  @if (state.inCombat && state.combatStage; as cs) {
-  <div class="text-center mb-4 border-y-2 border-red-800/50 py-2">
-    <h3 class="text-2xl font-bold font-serif-story text-red-400 tracking-wider animate-pulse">
-      BOSS BATTLE
-    </h3>
-    <p class="text-lg text-slate-300">Stage {{ cs.current }} of {{ cs.total }}</p>
-  </div>
-  }
-
-  <!-- Story Text -->
-  <div class="flex-grow mb-6 prose prose-invert max-w-none prose-p:text-slate-300">
-    <p class="text-xl leading-relaxed font-serif-story whitespace-pre-wrap">{{ state.story }}</p>
-  </div>
-
-  <!-- Actions Container -->
-  <div class="mt-auto pt-6 border-t border-slate-700">
-    <!-- Choices -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      @for (choice of state.choices; track choice.id) {
-      <button
-        (click)="handleChoice(choice)"
-        [disabled]="isLoading()"
-        class="w-full text-left p-4 bg-slate-700 rounded-md border border-slate-600 hover:bg-amber-800 hover:border-amber-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-amber-400"
-      >
-        <span class="font-medium" [class.text-red-400]="state.inCombat"
-          >{{ state.inCombat ? '⚔️ ' : '' }}{{ choice.text }}</span
-        >
-      </button>
-      }
-    </div>
-    <!-- Save/Load Buttons -->
-    <div class="flex items-center justify-center gap-4">
-      <button
-        (click)="openModal('Save')"
-        class="px-6 py-2 bg-slate-600/50 rounded-md hover:bg-slate-600 transition-colors"
-      >
-        Save Game
-      </button>
-      <button
-        (click)="openModal('Load')"
-        class="px-6 py-2 bg-slate-600/50 rounded-md hover:bg-slate-600 transition-colors"
-      >
-        Load Game
-      </button>
-    </div>
-  </div>
-  }
-</div>
-
-<!-- Save/Load Modal -->
-@if (isModalOpen()) {
-<div
-  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
-  (click)="closeModal()"
->
-  <div
-    class="bg-slate-800 border border-slate-600 rounded-lg shadow-xl w-full max-w-md p-6"
-    (click)="$event.stopPropagation()"
-  >
-    <h2 class="text-2xl font-bold font-serif-story text-amber-300 mb-6">{{ modalMode() }} Game</h2>
-
-    <div class="space-y-4">
-      @for (slot of saveSlots(); track $index) {
-      <div class="bg-slate-700 rounded-md p-4 flex items-center justify-between">
-        <div>
-          <p class="font-bold text-slate-200">
-            @if ($index === 0) {
-            <span class="text-amber-300">Autosave</span>
-            } @else { Slot {{ $index }} }
-          </p>
-          @if (slot) {
-          <p class="text-sm text-slate-400">{{ formatDate(slot.timestamp) }}</p>
-          } @else {
-          <p class="text-sm text-slate-400 italic">Empty</p>
-          }
-        </div>
-        <div>
-          @if (modalMode() === 'Save') {
-          <button
-            (click)="handleSave($index)"
-            [disabled]="$index === 0"
-            class="px-4 py-2 bg-amber-700 hover:bg-amber-600 rounded-md transition-colors text-white font-semibold disabled:bg-slate-600 disabled:cursor-not-allowed"
-          >
-            Save
-          </button>
-          } @if (modalMode() === 'Load') {
-          <button
-            (click)="handleLoad($index)"
-            [disabled]="!slot"
-            class="px-4 py-2 bg-amber-700 hover:bg-amber-600 rounded-md transition-colors text-white font-semibold disabled:bg-slate-600 disabled:cursor-not-allowed"
-          >
-            Load
-          </button>
-          }
-        </div>
-      </div>
-      }
-    </div>
-
-    <button
-      (click)="closeModal()"
-      class="mt-6 w-full py-2 bg-slate-600/50 hover:bg-slate-600 rounded-md transition-colors"
-    >
-      Cancel
-    </button>
   </div>
 </div>
-}
