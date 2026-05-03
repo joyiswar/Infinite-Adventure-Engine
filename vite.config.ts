@@ -34,6 +34,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist'
   },
+  preview: {
+    allowedHosts: ['infinite-adventure-engine.onrender.com']
+  },
   resolve: {
     mainFields: ['module'],
   },
