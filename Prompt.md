@@ -294,11 +294,4 @@ If feasible:
 
 ---
 
-## If you want next step
-
-I can also:
-
-* Break this into **multiple Jules prompts (per phase)** for better control
-* Or **review your repo manually** and customize this 10x deeper (recommended)
-
 [1]: https://www.dongaigc.com/p/EtherealEngine/etherealengine?utm_source=chatgpt.com "etherealengine - 构建沉浸式社交空间的开源元宇宙引擎 - 懂AI"
