@@ -1,7 +1,8 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import angular from '@analogjs/vite-plugin-angular';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [angular({
     tsconfig: './tsconfig.json'
   })],
@@ -11,4 +12,11 @@ export default defineConfig({
   resolve: {
     mainFields: ['module'],
   },
-});
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['src/test-setup.ts'],
+    include: ['**/*.spec.ts'],
+    reporters: ['default'],
+  },
+}));
