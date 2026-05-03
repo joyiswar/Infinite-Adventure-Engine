@@ -12,20 +12,20 @@ The IAE is designed as a modular, industry-standard game engine tailored for the
 
 ```mermaid
 graph TD
-    subgraph Frontend (Angular 21)
+    subgraph "Frontend Layer (Angular 21)"
         UI[UI Panels / Sidebar] --> SM[Signals State Management]
         SM --> Engine[AI Engine Proxy]
         SM --> Systems[Game Systems: Audio, Achiev, Codex]
     end
 
-    subgraph Backend (Supabase)
+    subgraph "Backend Layer (Supabase)"
         Engine --> EF[Edge Function Proxy]
         EF --> Gemini[Google Gemini AI]
         Systems --> DB[(PostgreSQL Database)]
         Systems --> Auth[Supabase Auth]
     end
 
-    subgraph Monitoring
+    subgraph "Monitoring Layer"
         Metrics[Render Metrics]
         Logs[Neon Analytics]
     end
