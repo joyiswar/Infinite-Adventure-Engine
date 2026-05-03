@@ -1,43 +1,46 @@
 # Infinite Adventure Engine
 
-Welcome to the Infinite Adventure Engine, a cutting-edge web application that redefines the choose-your-own-adventure genre. Powered by Google Gemini API and modern cloud infrastructure, this application offers a truly dynamic, secure, and endless storytelling experience.
+Welcome to the Infinite Adventure Engine (IAE), a cutting-edge web application that redefines the choose-your-own-adventure genre. Powered by Google Gemini API and modern cloud infrastructure, this application offers a truly dynamic, secure, and endless storytelling experience.
 
 **Live Production Demo**: [https://infinite-adventure-engine.onrender.com/](https://infinite-adventure-engine.onrender.com/)
 
-## Engine Architecture
+---
 
-The Infinite Adventure Engine is designed as a modern, modular game engine tailored for the web. It implements the core pillars of interactive storytelling:
+## 🏛 Engine Architecture
 
--   **Core Gameplay Loop**: Manages turn-based decisions, narrative progression, and adaptive difficulty scaling based on player performance.
--   **Rendering Layer**: A responsive frontend layer built with Angular and CSS, visualizing the journey with real-time AI-generated imagery.
--   **State Management**: Leverages Angular Signals for efficient, zoneless state tracking of inventory, quests, and lore.
--   **Asset Pipeline**: A dynamic pipeline that fetches and processes AI-generated text and images on-the-fly.
--   **Backend Integration**: Includes persistent cloud saves, secure AI proxying, and authentication via Supabase.
+The IAE is designed as a modular, industry-standard game engine tailored for the web.
 
-### Modern Design Principles
-Emphasizing modularity and scalability, the engine follows modern standards for web-based interactive media:
--   **Modular Architecture**: Decoupled services for AI, persistence, and UI.
--   **Web Deployment Compatibility**: Optimized for global delivery via Render.
--   **Scalable Backend Infrastructure**: Utilizes Supabase Edge Functions and PostgreSQL for robust, distributed logic and storage, inspired by high-performance engines like [IR Engine](https://github.com/ir-engine/ir-engine).
+```mermaid
+graph TD
+    subgraph Frontend (Angular 21)
+        UI[UI Panels / Sidebar] --> SM[Signals State Management]
+        SM --> Engine[AI Engine Proxy]
+        SM --> Systems[Game Systems: Audio, Achiev, Codex]
+    end
 
-## Features
+    subgraph Backend (Supabase)
+        Engine --> EF[Edge Function Proxy]
+        EF --> Gemini[Google Gemini AI]
+        Systems --> DB[(PostgreSQL Database)]
+        Systems --> Auth[Supabase Auth]
+    end
 
--   **Infinite Storylines**: Generative AI creates unique stories that adapt dynamically to your decisions.
--   **AI-Generated Imagery**: Visual consistency is maintained through carefully crafted art style prompts.
--   **Persistent Cloud Saves**: Your progress is securely stored in the cloud using Supabase.
--   **Secure Architecture**: AI operations are proxied through server-side Edge Functions to protect API keys.
--   **Zoneless Performance**: Built with Angular 21 for maximum efficiency.
+    subgraph Monitoring
+        Metrics[Render Metrics]
+        Logs[Neon Analytics]
+    end
+```
 
-## Tech Stack
+### Core Engine Pillars
+-   **Core Gameplay Loop**: Automated turn management and adaptive difficulty scaling.
+-   **Rendering Layer**: Zoneless Angular UI visualizing real-time AI-generated imagery.
+-   **State Management**: Signals-based architecture for reactive inventory, quests, and lore.
+-   **Asset Pipeline**: Secure on-the-fly generation and fetching of AI assets.
+-   **Persistence**: Distributed cloud saves via Supabase.
 
--   **Framework**: Angular 21 (Zoneless)
--   **Build Tool**: Vite 8 / Analogjs
--   **Backend/Auth**: Supabase (Database, Auth, Edge Functions)
--   **AI**: Google Gemini API
--   **Deployment**: Render / Supabase
--   **Language**: TypeScript 5.9
+---
 
-## Setup and Installation
+## 🚀 Getting Started
 
 ### Local Setup
 1.  **Clone the Repository**:
@@ -52,24 +55,49 @@ Emphasizing modularity and scalability, the engine follows modern standards for 
     ```
 
 3.  **Configure Environment**:
-    Add your credentials to a `.env` file:
+    Create a `.env` file with your credentials:
     ```env
     VITE_SUPABASE_URL=your_supabase_url
     VITE_SUPABASE_ANON_KEY=your_supabase_key
     ```
 
-## Running the Application
--   **Development**: `npm run dev`
+### Running the Application
+-   **Development Mode**: `npm run dev`
 -   **Production Build**: `npm run build`
--   **Preview**: `npm run serve`
+-   **Local Preview**: `npm run serve`
 
-## About the Developer
+---
+
+## 🛠 Production Deployment
+
+### Frontend (Render)
+-   **Platform**: [Render](https://render.com)
+-   **Build Command**: `npm install --legacy-peer-deps && npm run build`
+-   **Start Command**: `npm run serve`
+-   **Environment Variables**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
+
+### Backend (Supabase)
+-   **Database**: PostgreSQL for save slots and achievements.
+-   **AI Proxy**: Edge function deployed at `/functions/v1/adventure-engine`.
+-   **Security**: `GEMINI_API_KEY` stored securely in Supabase Secrets.
+
+---
+
+## 📈 Roadmap (Linear Board)
+Work is organized into a prioritized roadmap:
+-   **Sprint 1**: Stabilization & Test Coverage (INF-12, INF-13).
+-   **Sprint 2**: Features & Realtime Social (INF-14, INF-15).
+-   **Sprint 3**: Scaling & Analytics (INF-16).
+
+---
+
+## 👨‍💻 About the Developer
 
 **Mamun Chowdhury**
 Senior IT Project Manager & Software Architect
 
-Mamun is a technical leader dedicated to building high-performance, AI-integrated web applications and scalable backend infrastructures. With expertise in modular architecture and real-time services, he provides strategic leadership and mentorship to global teams of developers and designers.
+Mamun is a technical leader dedicated to building high-performance, AI-integrated web applications and scalable backend infrastructures.
 
 -   **Portfolio & Contact**: [https://mamun.pt](https://mamun.pt/)
 -   **LinkedIn**: [Mamun Chowdhury](https://www.linkedin.com/in/mamun-pt/)
--   **Company**: Vertigo Sourcing
+-   **Company**: [Vertigo Sourcing](https://vertigosourcing.com)
