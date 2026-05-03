@@ -1,50 +1,43 @@
 # Infinite Adventure Engine - Upgrade & Deployment Plan
 
-This document tracks the progress of the production-grade upgrade for the Infinite Adventure Engine.
-
 ## ✅ Completed Phases
 
 ### Phase 1: Deep Codebase Audit
-- [x] Language/Framework identification (Angular 21, Vite 8).
-- [x] Architecture mapping (Hybrid Cloud-Client).
-- [x] Technical debt analysis and Linear issue creation.
+- [x] Identified stack: Angular 21, Vite 8, TypeScript 5.9.
+- [x] Mapped Hybrid Cloud-Client architecture.
+- [x] Created Linear issues (INF-9 to INF-11) for technical debt.
 
 ### Phase 2: Modern Architecture Design
-- [x] Modular refactoring into `/engine`, `/systems`, `/entities`, `/scenes`, and `/ui`.
-- [x] Decoupling core AI logic from UI components.
+- [x] Refactored into `/engine`, `/systems`, `/entities`, `/scenes`, and `/ui`.
+- [x] Decoupled game logic from presentation components.
 
 ### Phase 3: Feature Upgrades
 - [x] Dynamic difficulty scaling system.
-- [x] Cloud saves and leaderboard (Supabase).
-- [x] Procedural AI enhancements.
+- [x] Cloud saves and leaderboard (Supabase Integration).
+- [x] Enhanced AI GM with procedural narrative depth.
 
 ### Phase 4: Cleanup & Refactor
-- [x] Removed redundant configurations (angular.json).
-- [x] Standardized code with ESLint and Prettier.
+- [x] Standardized code with ESLint (Flat Config) and Prettier.
+- [x] Removed legacy `angular.json` and temporary artifacts.
 
 ### Phase 5: MCP Integration Execution
-- [x] Supabase Auth, Realtime, and Edge Functions.
-- [x] Neon Analytics for gameplay metrics.
-- [x] Linear roadmap organization.
+- [x] Supabase Auth, Realtime, and Edge Functions (v4 - Secure Proxy).
+- [x] Neon Analytics project provisioned for high-scale metrics.
+- [x] Structured roadmap on Linear (Sprints 1-3).
 
 ### Phase 6: Deployment Pipeline
-- [x] GitHub Actions for Lint & Build.
-- [x] Render deployment with auto-rollouts.
+- [x] GitHub Actions automated linting and build validation.
+- [x] Render deployment with explicit port-binding (10000) and allowed-host security.
 
 ### Phase 7: Testing & QA
-- [x] Vitest integration.
-- [x] Core logic unit tests.
+- [x] Integrated Vitest with JSDOM for Angular logic testing.
+- [x] Verified core logic stability via unit tests.
 
 ### Phase 8: Final Outputs
-- [x] Comprehensive README.md and DOCS.md.
+- [x] Comprehensive `README.md` with Mermaid diagrams.
+- [x] Detailed technical `DOCS.md`.
+- [x] Final production verification and delivery.
 
-## 🚀 Upcoming / Optional (High Value)
-
-### Phase 9: Future-Proofing & XR
-- [ ] Add Three.js for 3D rendering foundations.
-- [ ] Implement basic WebXR scene for immersive story viewing.
-- [ ] Mobile-specific touch gestures for navigation.
-
-### Phase 10: Scaling & Multiplayer
-- [ ] Implement realtime chat/multiplayer-ready state sync.
-- [ ] Expand Neon Analytics dashboard.
+## 🚀 Live Environment
+- **Game URL**: [https://infinite-adventure-engine.onrender.com/](https://infinite-adventure-engine.onrender.com/)
+- **Lead Architect**: [Mamun Chowdhury](https://mamun.pt/)
