@@ -1,7 +1,6 @@
-
-import { Achievement } from "./achievement.model";
-import { CodexEntry } from "./codex.model";
-import { GameState } from "./gamestate.model";
+import { Achievement } from './achievement.model';
+import { CodexEntry } from './codex.model';
+import { GameState } from './gamestate.model';
 
 export type Difficulty = 'Easy' | 'Normal' | 'Hard';
 

@@ -1,6 +1,5 @@
-
-import { CodexEntry } from "./codex.model";
-import { InventoryItem } from "./inventory.model";
+import { CodexEntry } from './codex.model';
+import { InventoryItem } from './inventory.model';
 
 export interface Choice {
   id: number;

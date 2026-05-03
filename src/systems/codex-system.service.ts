@@ -1,14 +1,13 @@
-
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { CodexEntry } from '../entities/codex.model';
 import { Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoreCodexService {
   private readonly storageKey = 'adventure_codex';
-  
+
   codex: WritableSignal<CodexEntry[]> = signal(this.loadCodex());
   public onCodexEntryAdded = new Subject<CodexEntry>();
 
@@ -27,13 +26,15 @@ export class LoreCodexService {
       return;
     }
 
-    const currentTitles = new Set(this.codex().map(entry => entry.title.toLowerCase()));
-    const uniqueNewEntries = newEntries.filter(entry => !currentTitles.has(entry.title.toLowerCase()));
+    const currentTitles = new Set(this.codex().map((entry) => entry.title.toLowerCase()));
+    const uniqueNewEntries = newEntries.filter(
+      (entry) => !currentTitles.has(entry.title.toLowerCase()),
+    );
 
     if (uniqueNewEntries.length > 0) {
-      this.codex.update(currentCodex => [...currentCodex, ...uniqueNewEntries]);
+      this.codex.update((currentCodex) => [...currentCodex, ...uniqueNewEntries]);
       this.saveCodex();
-      uniqueNewEntries.forEach(entry => this.onCodexEntryAdded.next(entry));
+      uniqueNewEntries.forEach((entry) => this.onCodexEntryAdded.next(entry));
     }
   }
 

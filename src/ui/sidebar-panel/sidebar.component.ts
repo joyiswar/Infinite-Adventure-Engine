@@ -1,4 +1,3 @@
-
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Achievement } from '../../entities/achievement.model';
@@ -10,7 +9,7 @@ import { InventoryItem } from '../../entities/inventory.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './sidebar.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
   inventory = input.required<InventoryItem[]>();

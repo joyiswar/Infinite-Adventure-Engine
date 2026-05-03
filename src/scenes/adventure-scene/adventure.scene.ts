@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  EventEmitter,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameState, Choice } from '../../entities/gamestate.model';
 import { GeminiService } from '../../engine/ai-engine.service';
@@ -17,7 +25,7 @@ import { InventoryItem } from '../../entities/inventory.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './adventure.scene.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdventureComponent implements OnInit {
   @Output() gameStateChange = new EventEmitter<GameState>();
@@ -33,10 +41,10 @@ export class AdventureComponent implements OnInit {
   showCombatTutorial = signal(false);
   imageError = signal<boolean>(false);
   imageGenerationCooldown = signal(0);
-  
+
   combatEncounters = signal<number>(0);
   encountersWon = signal<number>(0);
-  
+
   isModalOpen = signal(false);
   modalMode = signal<'Save' | 'Load' | 'Leaderboard'>('Save');
   saveSlots = signal<(SaveData | null)[]>([]);
@@ -49,7 +57,7 @@ export class AdventureComponent implements OnInit {
     'Consulting the ancient scrolls...',
     'Illustrating your next chapter...',
     'The weaver of tales spins her thread...',
-    'Destiny is being written...'
+    'Destiny is being written...',
   ];
 
   constructor(
@@ -60,7 +68,7 @@ export class AdventureComponent implements OnInit {
     private tutorialService: TutorialService,
     private loreCodexService: LoreCodexService,
     private leaderboardSystem: LeaderboardSystem,
-    public difficultyService: DifficultyScalingService
+    public difficultyService: DifficultyScalingService,
   ) {
     effect(() => {
       const state = this.gameState();
@@ -77,7 +85,11 @@ export class AdventureComponent implements OnInit {
   async startGame(): Promise<void> {
     this.isLoading.set(true);
     this.updateLoadingMessage();
-    const initialState = await this.geminiService.generateStorySegment(undefined, this.difficultyService.currentDifficulty(), this.combatEncounters());
+    const initialState = await this.geminiService.generateStorySegment(
+      undefined,
+      this.difficultyService.currentDifficulty(),
+      this.combatEncounters(),
+    );
     this.gameState.set(initialState);
     const initialImage = await this.geminiService.generateImage(initialState.imagePrompt);
     if (initialImage) {
@@ -92,30 +104,34 @@ export class AdventureComponent implements OnInit {
 
   async handleChoice(choice: Choice): Promise<void> {
     if (this.isLoading()) return;
-    
+
     this.audioService.playSound('choice');
     this.isLoading.set(true);
     this.updateLoadingMessage();
-    
+
     const oldInventorySize = this.gameState()?.inventory.length ?? 0;
-    const newState = await this.geminiService.generateStorySegment(choice.text, this.difficultyService.currentDifficulty(), this.combatEncounters());
-    
+    const newState = await this.geminiService.generateStorySegment(
+      choice.text,
+      this.difficultyService.currentDifficulty(),
+      this.combatEncounters(),
+    );
+
     const imagePromises: Promise<string | null>[] = [];
     const wantsNewImage = newState.shouldGenerateNewImage;
     const isOnCooldown = this.imageGenerationCooldown() > 0;
-    
+
     if (wantsNewImage && !isOnCooldown) {
       this.imageError.set(false);
       imagePromises.push(this.geminiService.generateImage(newState.imagePrompt));
     } else {
       if (wantsNewImage && isOnCooldown) {
-        this.imageGenerationCooldown.update(c => c - 1);
+        this.imageGenerationCooldown.update((c) => c - 1);
       } else {
         this.imageError.set(false);
       }
       imagePromises.push(Promise.resolve(null));
     }
-    
+
     if (newState.characterPortraitPrompt) {
       imagePromises.push(this.geminiService.generateImage(newState.characterPortraitPrompt));
     } else {
@@ -130,7 +146,7 @@ export class AdventureComponent implements OnInit {
       this.imageError.set(true);
       this.imageGenerationCooldown.set(3);
     }
-    
+
     if (portraitUrl) {
       this.characterPortraitUrl.set(portraitUrl);
       this.portraitChange.emit(portraitUrl);
@@ -151,26 +167,26 @@ export class AdventureComponent implements OnInit {
       this.achievementService.unlock(newState.unlockedAchievementId);
     }
     if (newState.inventory.length > oldInventorySize) {
-        this.achievementService.unlock('treasure-hunter');
-        this.audioService.playSound('item');
+      this.achievementService.unlock('treasure-hunter');
+      this.audioService.playSound('item');
     }
 
     if (newState.combatResult === 'victory') {
       this.audioService.playSound('victory');
       this.showVictoryBanner.set(true);
-      this.combatEncounters.update(c => c + 1);
-      this.encountersWon.update(c => c + 1);
+      this.combatEncounters.update((c) => c + 1);
+      this.encountersWon.update((c) => c + 1);
       this.syncLeaderboard();
       setTimeout(() => this.showVictoryBanner.set(false), 3000);
     } else if (newState.combatResult === 'defeat') {
       this.audioService.playSound('defeat');
       this.showDefeatBanner.set(true);
-      this.combatEncounters.update(c => c + 1);
+      this.combatEncounters.update((c) => c + 1);
       setTimeout(() => this.showDefeatBanner.set(false), 4000);
     }
 
     this.isLoading.set(false);
-    
+
     this.choiceCounter++;
     if (this.choiceCounter % this.autosaveInterval === 0) {
       this.handleAutosave();
@@ -178,10 +194,15 @@ export class AdventureComponent implements OnInit {
   }
 
   private async syncLeaderboard() {
-      const score = (this.encountersWon() * 100) + (this.achievementService.getUnlockedAchievements().length * 50);
-      await this.leaderboardSystem.updateScore(score, this.encountersWon(), this.achievementService.getUnlockedAchievements().length);
+    const score =
+      this.encountersWon() * 100 + this.achievementService.getUnlockedAchievements().length * 50;
+    await this.leaderboardSystem.updateScore(
+      score,
+      this.encountersWon(),
+      this.achievementService.getUnlockedAchievements().length,
+    );
   }
-  
+
   private updateLoadingMessage(): void {
     const randomIndex = Math.floor(Math.random() * this.loadingMessages.length);
     this.loadingMessage.set(this.loadingMessages[randomIndex]);
@@ -190,8 +211,8 @@ export class AdventureComponent implements OnInit {
   async openModal(mode: 'Save' | 'Load' | 'Leaderboard'): Promise<void> {
     this.modalMode.set(mode);
     if (mode !== 'Leaderboard') {
-        const slots = await this.saveGameService.getSaveSlots();
-        this.saveSlots.set(slots);
+      const slots = await this.saveGameService.getSaveSlots();
+      this.saveSlots.set(slots);
     }
     this.isModalOpen.set(true);
   }
@@ -218,7 +239,7 @@ export class AdventureComponent implements OnInit {
       difficulty: this.difficultyService.currentDifficulty(),
       combatEncounters: this.combatEncounters(),
       codex: this.loreCodexService.codex(),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -230,10 +251,10 @@ export class AdventureComponent implements OnInit {
       this.closeModal();
     }
   }
-  
+
   private async handleAutosave(): Promise<void> {
     const saveData = this.getCurrentSaveData();
-    if(saveData) {
+    if (saveData) {
       await this.saveGameService.save(0, saveData);
       console.log('Game autosaved.');
     }
@@ -245,7 +266,7 @@ export class AdventureComponent implements OnInit {
       this.isLoading.set(true);
       this.updateLoadingMessage();
       this.imageError.set(false);
-      
+
       this.gameState.set(saveData.gameState);
       this.currentImage.set(saveData.currentImage);
       this.characterPortraitUrl.set(saveData.characterPortraitUrl ?? '');

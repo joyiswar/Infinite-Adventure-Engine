@@ -9,28 +9,36 @@ export interface LeaderboardEntry {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LeaderboardSystem {
   constructor(private supabase: SupabaseService) {}
 
-  async updateScore(score: number, encountersWon: number, achievementsCount: number): Promise<void> {
+  async updateScore(
+    score: number,
+    encountersWon: number,
+    achievementsCount: number,
+  ): Promise<void> {
     try {
-      const { data: { user } } = await this.supabase.user;
+      const {
+        data: { user },
+      } = await this.supabase.user;
       if (!user) return;
 
-      const username = user.user_metadata?.['full_name'] || user.email?.split('@')[0] || 'Unknown Traveler';
+      const username =
+        user.user_metadata?.['full_name'] || user.email?.split('@')[0] || 'Unknown Traveler';
 
-      const { error } = await this.supabase.client
-        .from('leaderboard')
-        .upsert({
+      const { error } = await this.supabase.client.from('leaderboard').upsert(
+        {
           user_id: user.id,
           username,
           score,
           encounters_won: encountersWon,
           achievements_count: achievementsCount,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'user_id' });
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' },
+      );
 
       if (error) throw error;
     } catch (error) {

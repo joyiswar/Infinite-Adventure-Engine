@@ -3,7 +3,7 @@ import { Difficulty } from '../entities/savedata.model';
 import { GameState } from '../entities/gamestate.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DifficultyScalingService {
   currentDifficulty = signal<Difficulty>('Normal');

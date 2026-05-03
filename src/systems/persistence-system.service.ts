@@ -3,28 +3,31 @@ import { SaveData } from '../entities/savedata.model';
 import { SupabaseService } from './supabase-system.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SaveGameService {
   constructor(private supabase: SupabaseService) {}
 
   async save(slotId: number, data: SaveData): Promise<void> {
     try {
-      const { data: { user } } = await this.supabase.user;
+      const {
+        data: { user },
+      } = await this.supabase.user;
       if (!user) {
         // Fallback to localStorage if not logged in
         localStorage.setItem(`adventure_save_slot_${slotId}`, JSON.stringify(data));
         return;
       }
 
-      const { error } = await this.supabase.client
-        .from('save_slots')
-        .upsert({
+      const { error } = await this.supabase.client.from('save_slots').upsert(
+        {
           slot_id: slotId,
           user_id: user.id,
           data: data as any,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'user_id,slot_id' });
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,slot_id' },
+      );
 
       if (error) throw error;
       console.log(`Game saved to slot ${slotId} in cloud`);
@@ -35,10 +38,12 @@ export class SaveGameService {
 
   async load(slotId: number): Promise<SaveData | null> {
     try {
-      const { data: { user } } = await this.supabase.user;
+      const {
+        data: { user },
+      } = await this.supabase.user;
       if (!user) {
         const savedData = localStorage.getItem(`adventure_save_slot_${slotId}`);
-        return savedData ? JSON.parse(savedData) as SaveData : null;
+        return savedData ? (JSON.parse(savedData) as SaveData) : null;
       }
 
       const { data, error } = await this.supabase.client
@@ -57,11 +62,13 @@ export class SaveGameService {
   }
 
   async getSaveSlots(): Promise<(SaveData | null)[]> {
-    const { data: { user } } = await this.supabase.user;
+    const {
+      data: { user },
+    } = await this.supabase.user;
     if (!user) {
-      return [0, 1, 2, 3].map(id => {
+      return [0, 1, 2, 3].map((id) => {
         const savedData = localStorage.getItem(`adventure_save_slot_${id}`);
-        return savedData ? JSON.parse(savedData) as SaveData : null;
+        return savedData ? (JSON.parse(savedData) as SaveData) : null;
       });
     }
 
@@ -71,12 +78,12 @@ export class SaveGameService {
       .eq('user_id', user.id);
 
     if (error) {
-        console.error('Error fetching save slots:', error);
-        return [null, null, null, null];
+      console.error('Error fetching save slots:', error);
+      return [null, null, null, null];
     }
 
     const slots: (SaveData | null)[] = [null, null, null, null];
-    data?.forEach(item => {
+    data?.forEach((item) => {
       if (item.slot_id >= 0 && item.slot_id <= 3) {
         slots[item.slot_id] = item.data as unknown as SaveData;
       }
