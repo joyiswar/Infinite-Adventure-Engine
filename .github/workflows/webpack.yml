@@ -1,19 +1,19 @@
-# GitHub Actions workflow for building and verifying the Angular application
+# Advanced CI/CD Pipeline for Infinite Adventure Engine
 
-name: Build and Verify
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "staging", "develop"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "staging"]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,6 +27,21 @@ jobs:
           
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Lint
+        run: npx eslint src
         
       - name: Build
         run: npm run build
+
+      # Placeholder for future tests (Sprint 1)
+      - name: Test
+        run: echo "Skipping tests - implemented in Sprint 1"
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy
+        run: echo "Deployment managed via Render Auto-Deploy on Main branch."

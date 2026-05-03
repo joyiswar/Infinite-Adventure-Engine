@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AudioService {
   private audioContext: AudioContext | null = null;
 
-  private initializeAudioContext() {
-    if (!this.audioContext) {
-      try {
-        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      } catch (e) {
-        console.error('Web Audio API is not supported in this browser');
-      }
+  constructor() {
+    try {
+      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    } catch (e) {
+      console.warn('Web Audio API is not supported in this browser');
     }
   }
 
-  playSound(type: 'choice' | 'item' | 'achievement' | 'victory' | 'defeat'): void {
-    this.initializeAudioContext();
+  async playSound(type: 'choice' | 'victory' | 'defeat' | 'item' | 'achievement'): Promise<void> {
     if (!this.audioContext) return;
+
+    if (this.audioContext.state === 'suspended') {
+      await this.audioContext.resume();
+    }
 
     const oscillator = this.audioContext.createOscillator();
     const gainNode = this.audioContext.createGain();
@@ -26,58 +27,66 @@ export class AudioService {
     oscillator.connect(gainNode);
     gainNode.connect(this.audioContext.destination);
 
-    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.1, this.audioContext.currentTime + 0.01);
+    const now = this.audioContext.currentTime;
 
     switch (type) {
       case 'choice':
         oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 0.2);
+        oscillator.frequency.setValueAtTime(440, now);
+        oscillator.frequency.exponentialRampToValueAtTime(110, now + 0.1);
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        oscillator.start(now);
+        oscillator.stop(now + 0.1);
+        break;
+      case 'victory': {
+        const victoryFreqs = [523.25, 659.25, 783.99, 1046.50];
+        victoryFreqs.forEach((freq, i) => {
+          const osc = this.audioContext!.createOscillator();
+          const gn = this.audioContext!.createGain();
+          osc.connect(gn);
+          gn.connect(this.audioContext!.destination);
+          osc.frequency.setValueAtTime(freq, now + i * 0.1);
+          gn.gain.setValueAtTime(0.1, now + i * 0.1);
+          gn.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+          osc.start(now + i * 0.1);
+          osc.stop(now + i * 0.1 + 0.3);
+        });
+        break;
+      }
+      case 'defeat':
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(220, now);
+        oscillator.frequency.linearRampToValueAtTime(55, now + 0.5);
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.5);
+        oscillator.start(now);
+        oscillator.stop(now + 0.5);
         break;
       case 'item':
         oscillator.type = 'triangle';
-        oscillator.frequency.setValueAtTime(660, this.audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(880, this.audioContext.currentTime + 0.1);
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 0.3);
+        oscillator.frequency.setValueAtTime(880, now);
+        oscillator.frequency.exponentialRampToValueAtTime(1760, now + 0.05);
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+        oscillator.start(now);
+        oscillator.stop(now + 0.2);
         break;
-      case 'achievement':
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(523, this.audioContext.currentTime); // C5
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 0.5);
-
-        const osc2 = this.audioContext.createOscillator();
-        osc2.connect(gainNode);
-        osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(783, this.audioContext.currentTime); // G5
-        osc2.start(this.audioContext.currentTime + 0.1);
-        osc2.stop(this.audioContext.currentTime + 0.4);
+      case 'achievement': {
+        const achFreqs = [880, 1100, 1320];
+        achFreqs.forEach((freq, i) => {
+          const osc = this.audioContext!.createOscillator();
+          const gn = this.audioContext!.createGain();
+          osc.connect(gn);
+          gn.connect(this.audioContext!.destination);
+          osc.frequency.setValueAtTime(freq, now + i * 0.05);
+          gn.gain.setValueAtTime(0.1, now + i * 0.05);
+          gn.gain.exponentialRampToValueAtTime(0.01, now + i * 0.05 + 0.5);
+          osc.start(now + i * 0.05);
+          osc.stop(now + i * 0.05 + 0.5);
+        });
         break;
-      case 'victory':
-        gainNode.gain.setValueAtTime(0.08, this.audioContext.currentTime);
-        // C4
-        oscillator.frequency.setValueAtTime(261.6, this.audioContext.currentTime);
-        // E4
-        oscillator.frequency.setValueAtTime(329.6, this.audioContext.currentTime + 0.1);
-        // G4
-        oscillator.frequency.setValueAtTime(392.0, this.audioContext.currentTime + 0.2);
-        // C5
-        oscillator.frequency.setValueAtTime(523.2, this.audioContext.currentTime + 0.3);
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 1);
-        break;
-      case 'defeat':
-        gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
-        oscillator.type = 'sawtooth';
-        oscillator.frequency.setValueAtTime(110, this.audioContext.currentTime); // A2
-        oscillator.frequency.exponentialRampToValueAtTime(
-          82.4,
-          this.audioContext.currentTime + 1.5,
-        ); // E2
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 2);
-        break;
+      }
     }
-
-    oscillator.start(this.audioContext.currentTime);
-    oscillator.stop(this.audioContext.currentTime + 2);
   }
 }
