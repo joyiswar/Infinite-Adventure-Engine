@@ -79,6 +79,11 @@ graph TD
 ### Backend (Supabase)
 -   **Database**: PostgreSQL for save slots and achievements.
 -   **AI Proxy**: Edge function deployed at `/functions/v1/adventure-engine`.
+-   **Auth Setup**:
+    -   Go to **Authentication > Providers** in the Supabase Dashboard.
+    -   Enable the **Google** provider.
+    -   Configure the **Client ID** and **Client Secret** obtained from the [Google Cloud Console](https://console.cloud.google.com/).
+    -   Add `https://ugedscjzlezumceczfrk.supabase.co/auth/v1/callback` to your Google OAuth Authorized Redirect URIs.
 -   **Security**: `GEMINI_API_KEY` stored securely in Supabase Secrets.
 
 ---

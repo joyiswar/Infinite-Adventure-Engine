@@ -45,7 +45,7 @@ IAE follows a modular, system-based architecture designed for scalability and se
 
 ### Supabase Integration
 IAE utilizes Supabase for:
--   **Authentication**: Google OAuth and Email/Password.
+-   **Authentication**: Google OAuth (requires enabling in Supabase Dashboard > Authentication > Providers).
 -   **Database**: PostgreSQL for `save_slots`, `achievements`, and `leaderboard`.
 -   **Realtime**: Live updates for the global leaderboard.
 -   **Edge Functions**: Secure proxy for Google Gemini API to prevent key exposure.

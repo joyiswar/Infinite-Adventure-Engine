@@ -4,14 +4,13 @@ import { GameState, Choice } from '../../entities/gamestate.model';
 import { GeminiService } from '../../engine/ai-engine.service';
 import { AchievementService } from '../../systems/achievement-system.service';
 import { SaveGameService } from '../../systems/persistence-system.service';
-import { Difficulty, SaveData } from '../../entities/savedata.model';
+import { SaveData } from '../../entities/savedata.model';
 import { AudioService } from '../../systems/audio-system.service';
 import { TutorialService } from '../../systems/tutorial-system.service';
 import { LoreCodexService } from '../../systems/codex-system.service';
 import { DifficultyScalingService } from '../../systems/difficulty-scaling.service';
 import { LeaderboardSystem } from '../../systems/leaderboard-system.service';
 import { RenderingEngine } from '../../engine/rendering-engine.service';
-import { InventoryItem } from '../../entities/inventory.model';
 
 @Component({
   selector: 'app-adventure',
