@@ -5,7 +5,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
   providedIn: 'root',
 })
 export class AnalyticsService {
-  private supabase: SupabaseClient;
+  private supabase: SupabaseClient | null = null;
 
   constructor() {
     const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL;
@@ -15,7 +15,6 @@ export class AnalyticsService {
       this.supabase = createClient(supabaseUrl, supabaseKey);
     } else {
       console.warn('Supabase credentials missing. Analytics disabled.');
-      this.supabase = null as any;
     }
   }
 

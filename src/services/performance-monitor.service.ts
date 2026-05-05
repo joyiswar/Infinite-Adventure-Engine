@@ -6,11 +6,11 @@ import { Injectable, signal } from '@angular/core';
 export class PerformanceMonitorService {
   private frameCount = 0;
   private lastTime = performance.now();
+  private lastFrameTime = performance.now();
 
   fps = signal<number>(0);
   frameTime = signal<number>(0);
   memoryUsage = signal<number>(0);
-  private lastFrameTime = performance.now();
 
   recordFrame() {
     const now = performance.now();
