@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AETHER ENGINE | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(30, 34, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 191, 0, 0.1);
+        }
+        .amber-glow-text {
+            text-shadow: 0 0 8px rgba(255, 191, 0, 0.5);
+        }
+        .runic-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#31353c",
+                        "surface-container-lowest": "#0a0e15",
+                        "primary-container": "#0f1115",
+                        "surface-tint": "#c6c6cc",
+                        "surface": "#0f141a",
+                        "on-surface-variant": "#c6c6cb",
+                        "on-background": "#dfe2ec",
+                        "surface-container-high": "#262a31",
+                        "on-error-container": "#ffdad6",
+                        "secondary": "#ffdb9d",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "outline-variant": "#45474b",
+                        "on-error": "#690005",
+                        "on-tertiary": "#00363a",
+                        "on-surface": "#dfe2ec",
+                        "secondary-container": "#feb700",
+                        "primary-fixed": "#e2e2e8",
+                        "tertiary-container": "#001416",
+                        "surface-container": "#1c2027",
+                        "background": "#0f141a",
+                        "on-secondary-fixed": "#271900",
+                        "secondary-fixed": "#ffdea8",
+                        "on-secondary": "#412d00",
+                        "tertiary-fixed": "#7df4ff",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dfe2ec",
+                        "on-primary-fixed": "#1a1c20",
+                        "tertiary-fixed-dim": "#00dbe9",
+                        "surface-bright": "#353941",
+                        "on-secondary-container": "#6b4b00",
+                        "tertiary": "#00dbe9",
+                        "primary-fixed-dim": "#c6c6cc",
+                        "outline": "#909095",
+                        "on-tertiary-container": "#008a93",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "primary": "#c6c6cc",
+                        "secondary-fixed-dim": "#ffba20",
+                        "inverse-on-surface": "#2d3138",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed-variant": "#45474b",
+                        "on-primary-container": "#7b7c82",
+                        "on-primary": "#2f3035",
+                        "surface-container-low": "#181c23",
+                        "surface-container-highest": "#31353c",
+                        "on-tertiary-fixed": "#002022",
+                        "inverse-primary": "#5d5e63",
+                        "surface-dim": "#0f141a"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "h2": ["Space Grotesk"],
+                        "h3": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen selection:bg-secondary-container selection:text-on-secondary-container overflow-hidden flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-2 z-50 bg-[#0F1115]/80 backdrop-blur-xl docked full-width top-0 border-b border-amber-500/20 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-amber-500" data-icon="psychology">psychology</span>
+<h1 class="text-amber-500 font-black tracking-[0.2em] drop-shadow-[0_0_8px_rgba(255,191,0,0.5)] font-h3 uppercase">AETHER ENGINE</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8 font-['Space_Grotesk'] tracking-wider uppercase font-bold text-sm">
+<a class="text-amber-400 drop-shadow-[0_0_5px_rgba(255,191,0,0.8)] hover:bg-amber-500/10 hover:text-amber-300 transition-all duration-300 px-3 py-1 rounded" href="#">Story</a>
+<a class="text-slate-500 hover:bg-amber-500/10 hover:text-amber-300 transition-all duration-300 px-3 py-1 rounded" href="#">Hero</a>
+<a class="text-slate-500 hover:bg-amber-500/10 hover:text-amber-300 transition-all duration-300 px-3 py-1 rounded" href="#">Vault</a>
+</nav>
+<div class="w-10 h-10 rounded-full border-2 border-amber-500/50 overflow-hidden bg-surface-container shadow-[0_0_10px_rgba(255,191,0,0.3)]">
+<img alt="User Profile Avatar" data-alt="A detailed digital close-up portrait of a user avatar in a high-fantasy cyberpunk setting. The figure wears an obsidian mask with glowing amber optical sensors and intricate etched circuit patterns across the forehead. Lighting is dramatic and low-key, with a vibrant amber rim light accentuating the sharp metallic textures against a dark, foggy background. The visual style is cinematic and polished, reflecting a gritty industrial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB2t11WK9_Dy6Uiohu_1waFco9OC0k3LNcsnUIqg5uLufcMFycvC3_NLP8nWd0wLISwpIglVO7ST_hMWzqLPqChDNR-X3Ebjn7gxSDuWu2yJ0BN9bB7ntMNhIa9lxN1l4RilPnb2MmCC65F0BUD9BvR0cekI2yLAZeGwNQ2q-PqLS7_dbqlutRv375ujZbIHtYPwmhOckk8GWLgm9yc1rx_JAFu_fJtE_BxA1GuNHlDGteuaeBB9jxmHeWMQugSCzMcuHm4P0MAqIh"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 relative overflow-hidden">
+<!-- NavigationDrawer / Immersive Sidebar -->
+<aside class="hidden lg:flex h-full w-80 flex-col z-40 bg-[#0F1115] border-r border-amber-500/20 shadow-2xl relative backdrop-blur-xl" style="background: rgba(15, 20, 26, 0.9);">
+<div class="runic-noise absolute inset-0"></div>
+<!-- Character Portrait Area -->
+<div class="p-8 flex flex-col items-center border-b border-amber-500/10">
+<div class="relative w-40 h-40 rounded-full p-1 bg-gradient-to-tr from-amber-500 to-transparent shadow-[0_0_20px_rgba(255,191,0,0.2)]">
+<div class="w-full h-full rounded-full overflow-hidden border-2 border-surface-container">
+<img alt="Cyborg Knight" data-alt="A cinematic character portrait of a cyborg knight in a gritty dark fantasy world. The knight wears black matte armor with glowing amber circuitry lines etched into the chest piece and helmet. One cybernetic eye glows with an intense orange light. The background is a blurred cityscape of a rain-slicked industrial cyberpunk district with hazy neon lights. High-contrast lighting highlights the metallic sheen and the battle-worn textures of the armor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD42fsaedLrnRdWL03GF8vZgCcruCCUIwX30A1RPGEbsEj4M__coZx29aeJjdCRxD0M0rNgURgcg3ePB4WUSLVMlhhBlcnuISWtUJavFzL0Dq7NGzCuxTXERMOiS9W9ev0ZXgWcHUKVP6oDTR-YgNHYndH1ixxwwtOsbYURBXqvLcVETlqDUDqwCs64mHlLoXNO7NZui_6x40VZOUUF5ytcC_m84QCCS9dk54ye_nTf7l2K9DwBFkWYrY7FJGXC8Me8EAq_oMXeugVb"/>
+</div>
+<div class="absolute -bottom-2 bg-amber-500 text-surface px-4 py-0.5 font-h3 text-xs font-black skew-x-[-12deg]">LVL 42</div>
+</div>
+<h2 class="mt-6 font-h3 text-amber-500 amber-glow-text uppercase tracking-widest text-lg">Kaelen Voss</h2>
+<span class="text-slate-500 font-label-sm uppercase text-[10px] tracking-tighter">Rogue Technomancer</span>
+</div>
+<!-- Quest & Stats -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-amber-500/70 text-[10px]">CURRENT QUEST</span>
+<span class="font-label-sm text-amber-500 text-[10px]">68%</span>
+</div>
+<h3 class="font-h3 text-sm text-on-surface mb-3 uppercase tracking-wider">The Neon Citadel</h3>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-amber-500 w-[68%] shadow-[0_0_10px_rgba(255,191,0,0.5)]"></div>
+</div>
+</div>
+<!-- Inventory Grid -->
+<div>
+<h3 class="font-label-sm text-slate-500 mb-4 uppercase tracking-[0.2em] text-[10px]">Inventory</h3>
+<div class="grid grid-cols-4 gap-2">
+<!-- Items -->
+<div class="aspect-square bg-surface-container border border-amber-500/30 flex items-center justify-center group cursor-pointer hover:bg-amber-500/10 transition-colors backdrop-blur-md">
+<span class="material-symbols-outlined text-amber-500 scale-75" data-icon="colorize">colorize</span>
+</div>
+<div class="aspect-square bg-surface-container border border-cyan-500/30 flex items-center justify-center group cursor-pointer hover:bg-cyan-500/10 transition-colors backdrop-blur-md">
+<span class="material-symbols-outlined text-cyan-400 scale-75" data-icon="bolt">bolt</span>
+</div>
+<div class="aspect-square bg-surface-container border border-white/10 flex items-center justify-center backdrop-blur-md">
+<span class="material-symbols-outlined text-slate-600 scale-75" data-icon="lock">lock</span>
+</div>
+<div class="aspect-square bg-surface-container border border-white/10 flex items-center justify-center backdrop-blur-md">
+<span class="material-symbols-outlined text-slate-600 scale-75" data-icon="medical_services">medical_services</span>
+</div>
+<div class="aspect-square bg-surface-container border border-amber-500/30 flex items-center justify-center group cursor-pointer hover:bg-amber-500/10 transition-colors backdrop-blur-md">
+<span class="material-symbols-outlined text-amber-500 scale-75" data-icon="key">key</span>
+</div>
+<div class="aspect-square bg-surface-container border border-white/10 flex items-center justify-center backdrop-blur-md"></div>
+<div class="aspect-square bg-surface-container border border-white/10 flex items-center justify-center backdrop-blur-md"></div>
+<div class="aspect-square bg-surface-container border border-white/10 flex items-center justify-center backdrop-blur-md"></div>
+</div>
+</div>
+<div class="pt-4 border-t border-white/5">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-amber-500/70 text-lg" data-icon="sports_esports">sports_esports</span>
+<h3 class="font-label-sm text-slate-500 uppercase tracking-[0.2em] text-[10px]">Google Play Games</h3>
+</div>
+<div class="bg-surface-container/50 border border-white/5 p-4 rounded-lg">
+<div class="flex justify-between items-center mb-3">
+<span class="text-[9px] text-slate-500 font-bold tracking-tighter uppercase">Last Synced: 2m ago</span>
+<div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"></div>
+</div>
+<button class="w-full bg-amber-500/10 border border-amber-500/30 text-amber-500 py-2 rounded text-[10px] font-black uppercase tracking-widest hover:bg-amber-500/20 transition-all active:scale-95">
+            Link Account
+        </button>
+</div>
+</div>
+</div>
+<!-- Bottom Achievements -->
+<div class="p-6 border-t border-white/5 flex justify-around">
+<span class="material-symbols-outlined text-amber-500/40" data-icon="military_tech">military_tech</span>
+<span class="material-symbols-outlined text-amber-500/40" data-icon="star">star</span>
+<span class="material-symbols-outlined text-amber-500/40" data-icon="verified">verified</span>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 relative flex flex-col p-gutter lg:p-margin bg-surface-container-lowest overflow-hidden">
+<div class="runic-noise absolute inset-0 opacity-10"></div>
+<!-- Main Adventure View -->
+<div class="relative flex-1 rounded-lg overflow-hidden border border-amber-500/20 group">
+<div class="absolute inset-0 z-0">
+<img alt="Adventure Scene" class="w-full h-full object-cover grayscale-[0.3] group-hover:scale-105 transition-transform duration-[10s] ease-out" data-alt="A sprawling panoramic view of a techno-sorcery landscape. Gigantic obsidian spires etched with glowing amber runes rise from a misty canyon where streams of neon-cyan energy flow like water. Dark, heavy storm clouds swirl above, illuminated from below by the intense amber light of the spires. The atmosphere is thick with ancient mystery and futuristic industrial power, rendered in a dark, atmospheric style with heavy focus on light-based layering and glassmorphism depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDId8rudIcmnWEDefbad7xHEjVVhFrMKpsZSQT4UUsdmNarww25gpcpKY7_Mn61hpOR88rOr8lbadsBF_gzSGDomoYMl4glTk3KixXAjeH7W-vb2a-hItVYc2Vr1365_tdESWlV7QBoD5labkXQdO5h29z1VRUdRpNKFnEPeRWFnEBoWFfI1UWaJIJqlovFJd53EikD_frMW846A7u7lMIGINcv63h_hUtfLx3RzkseTPL1rRKo3nh67QHcwjbIsjVT3AQI70VDN2cZ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40"></div>
+</div>
+<!-- Story Overlay -->
+<div class="absolute bottom-0 left-0 right-0 p-8 lg:p-12 z-10 flex flex-col gap-8">
+<div class="max-w-3xl glass-panel p-8 rounded-xl border-l-4 border-l-amber-500">
+<h2 class="font-h2 text-amber-400 mb-4 uppercase tracking-widest text-2xl amber-glow-text">The Gates of Archive-7</h2>
+<p class="font-body-lg text-on-surface leading-relaxed drop-shadow-lg">
+                            The heavy hydraulic hiss of the monolithic obsidian doors echoes through the rain-slicked canyon. Before you stands the threshold of the <span class="text-amber-500 font-bold">Neon Citadel</span>, its surfaces pulsating with ancient encrypted signals. The data-wind howls, carrying whispers of a code lost for eons. Your internal sensors spike—security drones are converging on your position.
+                        </p>
+</div>
+<!-- Narrative Controls -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<button class="flex items-center justify-center gap-3 bg-surface-container/80 backdrop-blur border border-amber-500/40 px-6 py-4 rounded font-h3 text-sm text-on-surface hover:bg-amber-500/20 hover:border-amber-500 hover:text-amber-400 transition-all duration-300 active:scale-95 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="visibility_off">visibility_off</span>
+                            STRIKE FROM SHADOWS
+                        </button>
+<button class="flex items-center justify-center gap-3 bg-surface-container/80 backdrop-blur border border-amber-500/40 px-6 py-4 rounded font-h3 text-sm text-on-surface hover:bg-amber-500/20 hover:border-amber-500 hover:text-amber-400 transition-all duration-300 active:scale-95 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="payments">payments</span>
+                            NEGOTIATE WITH CREDITS
+                        </button>
+<button class="flex items-center justify-center gap-3 bg-amber-500/10 backdrop-blur border-2 border-amber-500 px-6 py-4 rounded font-h3 text-sm text-amber-500 shadow-[0_0_20px_rgba(255,191,0,0.2)] hover:bg-amber-500 hover:text-surface transition-all duration-300 active:scale-95 group">
+<span class="material-symbols-outlined group-hover:rotate-45 transition-transform" data-icon="code">code</span>
+                            INVOKE ANCIENT CODE
+                        </button>
+</div>
+</div>
+</div>
+<!-- Leaderboard Widget (Floating Corner) -->
+<div class="absolute top-margin right-margin z-30 w-56 glass-panel p-4 rounded-lg border border-amber-500/30 shadow-2xl">
+<div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
+<span class="material-symbols-outlined text-amber-500 text-sm" data-icon="leaderboard">leaderboard</span>
+<h4 class="font-h3 text-[10px] text-slate-400 uppercase tracking-widest">TOP OPERATIVES</h4>
+</div>
+<ul class="space-y-3">
+<li class="flex justify-between items-center text-xs">
+<span class="text-amber-500 font-bold">1. ZERO_COOL</span>
+<span class="text-slate-500 font-label-sm">14.2k</span>
+</li>
+<li class="flex justify-between items-center text-xs">
+<span class="text-slate-300">2. RUNIC_GHOST</span>
+<span class="text-slate-500 font-label-sm">12.8k</span>
+</li>
+<li class="flex justify-between items-center text-xs">
+<span class="text-slate-300">3. HEX_SLAYER</span>
+<span class="text-slate-500 font-label-sm">11.5k</span>
+</li>
+</ul>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-2 bg-[#0F1115]/90 backdrop-blur-2xl border-t border-cyan-500/20 z-50">
+<div class="flex flex-col items-center justify-center text-amber-500 bg-amber-500/10 rounded-t-lg border-t-2 border-amber-500 px-4 py-1 translate-y-[-2px] transition-transform">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase font-medium tracking-tighter">Story</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-1 hover:bg-cyan-500/5 transition-colors">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase font-medium tracking-tighter">Hero</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-1 hover:bg-cyan-500/5 transition-colors">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase font-medium tracking-tighter">Vault</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-1 hover:bg-cyan-500/5 transition-colors">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase font-medium tracking-tighter">Journal</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-1 hover:bg-cyan-500/5 transition-colors">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase font-medium tracking-tighter">Ranks</span>
+</div>
+</nav>
+</body></html>

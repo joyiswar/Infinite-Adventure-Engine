@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0f141a;
+            color: #dfe2ec;
+            font-family: 'Inter', sans-serif;
+        }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+        .mono-data {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .arcane-glow {
+            box-shadow: 0 0 15px rgba(0, 219, 233, 0.2);
+        }
+        .glass-panel {
+            background: rgba(30, 34, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(198, 198, 204, 0.1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#dfe2ec",
+                        "on-primary": "#2f3035",
+                        "tertiary-container": "#001416",
+                        "background": "#0f141a",
+                        "tertiary-fixed-dim": "#00dbe9",
+                        "primary-fixed-dim": "#c6c6cc",
+                        "outline-variant": "#45474b",
+                        "surface-container-low": "#181c23",
+                        "on-tertiary-fixed": "#002022",
+                        "inverse-primary": "#5d5e63",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-bright": "#353941",
+                        "on-tertiary": "#00363a",
+                        "on-secondary-fixed": "#271900",
+                        "primary-fixed": "#e2e2e8",
+                        "primary-container": "#0f1115",
+                        "surface-container-high": "#262a31",
+                        "on-error": "#690005",
+                        "inverse-surface": "#dfe2ec",
+                        "inverse-on-surface": "#2d3138",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#31353c",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffba20",
+                        "secondary-fixed": "#ffdea8",
+                        "on-surface-variant": "#c6c6cb",
+                        "on-background": "#dfe2ec",
+                        "tertiary-fixed": "#7df4ff",
+                        "on-tertiary-container": "#008a93",
+                        "outline": "#909095",
+                        "surface-dim": "#0f141a",
+                        "on-primary-fixed": "#1a1c20",
+                        "tertiary": "#00dbe9",
+                        "on-secondary": "#412d00",
+                        "surface-tint": "#c6c6cc",
+                        "surface-container": "#1c2027",
+                        "on-primary-container": "#7b7c82",
+                        "secondary-container": "#feb700",
+                        "surface-container-highest": "#31353c",
+                        "on-primary-fixed-variant": "#45474b",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "on-secondary-container": "#6b4b00",
+                        "on-error-container": "#ffdad6",
+                        "secondary": "#ffdb9d",
+                        "surface-container-lowest": "#0a0e15",
+                        "surface": "#0f141a",
+                        "primary": "#c6c6cc"
+                    },
+                    "fontFamily": {
+                        "h3": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "h2": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="overflow-x-hidden">
+<div class="fixed inset-0 scanline z-50 pointer-events-none opacity-20"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-slate-900/80 backdrop-blur-xl border-b border-amber-500/20 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-amber-500/50 flex items-center justify-center bg-slate-800 overflow-hidden">
+<img alt="operative_id_0821" class="w-full h-full object-cover" data-alt="A futuristic digital avatar portrait of a technical operator in a cyberpunk setting. The operative wears sleek charcoal tactical gear with glowing amber ocular implants. The lighting is low-key, focused on the sharp contours of the face and the technological components. The overall aesthetic is dark fantasy industrialism, consistent with a high-stakes engine environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm3V2horgL5VnFu4tXf4jdRqaPlq2XK703LryhPtC4UaqNOf28fWtVHjtTiklknHES3iRYcfJCvNKqGmUeiPtMo7L3QbeFkzdkR6cFPDIvYBW3xO6KOynshNtrkL8xC4oRrAzUTwBi6WnKpfG-4Fi1_-hYCJzpuve4LPTgKKp0-M6NaxzdQORtjwg9mS7k0u32__sI9SQTVWVGsTa9ZYhlfbu6OYtYiyQAb8HK9GutGVXT2p0pX3w9PCb3m9hKQnDi5euD6VBKyBh8"/>
+</div>
+<h1 class="font-['Space_Grotesk'] tracking-tighter uppercase text-lg font-bold text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]">AETHER ENGINE v4.2.0</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="transition-all duration-300 ease-out active:scale-95 text-slate-400 hover:text-amber-400 hover:bg-white/5 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-6">
+<!-- Dashboard Hero Section: Bento Style -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Neural Link Integrity (Module 1) -->
+<div class="md:col-span-8 glass-panel rounded-xl p-6 border-amber-500/30 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl" data-icon="neurology">neurology</span>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-8">
+<div class="relative w-48 h-48 flex items-center justify-center">
+<!-- SVG Circular Gauge -->
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-slate-800" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary drop-shadow-[0_0_8px_rgba(0,219,233,0.6)]" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.9" stroke-dashoffset="1.1" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-h1 text-on-surface leading-none">99.8%</span>
+<span class="font-label-sm text-tertiary uppercase tracking-widest">STABILITY</span>
+</div>
+</div>
+<div class="flex-1 space-y-6">
+<div>
+<h2 class="font-h3 text-amber-500 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+                                Neural Link Integrity
+                            </h2>
+<p class="font-body-md text-on-surface-variant mt-2">Active synchronization with Operative consciousness stream.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-3 rounded border border-outline-variant">
+<span class="block font-label-sm text-on-surface-variant uppercase">Sync Variance</span>
+<span class="block font-h3 text-tertiary mono-data">0.002 ms</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded border border-outline-variant">
+<span class="block font-label-sm text-on-surface-variant uppercase">Feedback Loop</span>
+<span class="block font-h3 text-tertiary mono-data">NOMINAL</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Real-time Waveform (Module 5) -->
+<div class="md:col-span-4 glass-panel rounded-xl p-6 border-amber-500/30 flex flex-col justify-between">
+<div>
+<h3 class="font-h3 text-amber-500 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="waves">waves</span>
+                        Harmonics
+                    </h3>
+<p class="font-label-sm text-on-surface-variant uppercase mt-1">Aether Harmonic Frequency</p>
+</div>
+<div class="h-32 flex items-end gap-1 px-2 overflow-hidden">
+<!-- Simulated Waveform -->
+<div class="w-2 bg-tertiary/20 h-1/2 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary/40 h-2/3 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary h-full animate-pulse rounded-t-sm shadow-[0_0_10px_rgba(0,219,233,0.5)]"></div>
+<div class="w-2 bg-tertiary/60 h-3/4 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary/30 h-1/2 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary/50 h-2/3 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary h-5/6 animate-pulse rounded-t-sm shadow-[0_0_10px_rgba(0,219,233,0.5)]"></div>
+<div class="w-2 bg-tertiary/20 h-1/3 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary/80 h-3/4 animate-pulse rounded-t-sm"></div>
+<div class="w-2 bg-tertiary h-1/2 animate-pulse rounded-t-sm"></div>
+</div>
+<div class="flex justify-between items-center mt-4 mono-data text-tertiary text-xs">
+<span>2.44 GHz</span>
+<span class="text-on-surface-variant">420.00 Hz</span>
+<span>1.22 THz</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Reactor Core Health (Module 2) -->
+<div class="glass-panel rounded-xl p-6 border-amber-500/30">
+<h3 class="font-h3 text-amber-500 uppercase flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined" data-icon="radioactive">dangerous</span>
+                    Reactor Core Health
+                </h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between font-label-sm text-on-surface uppercase mb-2">
+<span>Thermal Containment</span>
+<span class="text-tertiary">94% Optimal</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden border border-outline-variant">
+<div class="h-full bg-tertiary w-[94%] shadow-[0_0_10px_rgba(0,219,233,0.3)]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-on-surface uppercase mb-2">
+<span>Isotope Stability</span>
+<span class="text-tertiary">98% Optimal</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden border border-outline-variant">
+<div class="h-full bg-tertiary w-[98%] shadow-[0_0_10px_rgba(0,219,233,0.3)]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-on-surface uppercase mb-2">
+<span>Magnetic Flux</span>
+<span class="text-tertiary">91% Optimal</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden border border-outline-variant">
+<div class="h-full bg-tertiary w-[91%] shadow-[0_0_10px_rgba(0,219,233,0.3)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Propulsion Diagnostics (Module 3) -->
+<div class="glass-panel rounded-xl p-6 border-amber-500/30">
+<h3 class="font-h3 text-amber-500 uppercase flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+                    Propulsion Diagnostics
+                </h3>
+<div class="grid grid-cols-1 gap-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded border border-outline-variant group hover:border-tertiary transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 flex items-center justify-center bg-tertiary-container text-tertiary rounded">
+<span class="material-symbols-outlined" data-icon="flare">flare</span>
+</div>
+<div>
+<h4 class="font-body-lg font-bold text-on-surface">Void Thrusters</h4>
+<span class="font-label-sm text-on-surface-variant uppercase">Quantum Displacement Engine</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-tertiary bg-tertiary/10 px-2 py-1 rounded border border-tertiary/30">READY</span>
+<span class="mono-data text-[10px] mt-1 text-on-surface-variant">LMT: 100.00%</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded border border-outline-variant group hover:border-tertiary transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 flex items-center justify-center bg-tertiary-container text-tertiary rounded">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+</div>
+<div>
+<h4 class="font-body-lg font-bold text-on-surface">Aether Injection Manifolds</h4>
+<span class="font-label-sm text-on-surface-variant uppercase">Fluid Dynamics Controller</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-tertiary bg-tertiary/10 px-2 py-1 rounded border border-tertiary/30">READY</span>
+<span class="mono-data text-[10px] mt-1 text-on-surface-variant">FLX: 42.5 L/S</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sub-System Checklist (Module 4) -->
+<div class="glass-panel rounded-xl p-6 border-amber-500/30">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-h3 text-amber-500 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+                    Sub-System Checklist
+                </h3>
+<span class="mono-data text-tertiary text-sm">TOTAL VERIFIED: 12/12</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Checklist Items -->
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Life Support</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Inertial Dampeners</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Encryption Keys</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Nav-Computer</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Fuel Cells</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Void Shields</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Communication</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Cargo Lock</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Atmospherics</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Sensor Array</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Gravity Gen</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest border-l-2 border-tertiary">
+<span class="font-label-sm text-on-surface">Escape Pods</span>
+<div class="flex items-center gap-2 text-[10px] mono-data">
+<span class="text-tertiary">VERIFIED</span>
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 bg-slate-900/80 backdrop-blur-xl border-t border-amber-500/20 shadow-[0_-4px_20px_rgba(245,158,11,0.1)]">
+<a class="flex flex-col items-center justify-center text-slate-500 grayscale pt-2 transition-all duration-300 ease-out active:scale-90 font-['Space_Grotesk'] text-[10px] uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span>Terminal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 grayscale pt-2 transition-all duration-300 ease-out active:scale-90 font-['Space_Grotesk'] text-[10px] uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span>Briefing</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 grayscale pt-2 transition-all duration-300 ease-out active:scale-90 font-['Space_Grotesk'] text-[10px] uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span>Arsenal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] border-t-2 border-amber-500 pt-2 transition-all duration-300 ease-out active:scale-90 font-['Space_Grotesk'] text-[10px] uppercase tracking-widest animate-pulse-slow" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span>System</span>
+</a>
+</nav>
+</body></html>

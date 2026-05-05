@@ -1,0 +1,13 @@
+{
+  "name": "assets/38df601850e94dda83346415e396f396",
+  "designSystem": {
+    "displayName": "Aether-Circuit Design System",
+    "styleGuidelines": "## Brand & Style\nThis design system bridges high-fantasy mysticism with gritty cyberpunk industrialism...",
+    "theme": {
+      "colorMode": "DARK",
+      "font": "SPACE_GROTESK",
+      "customColor": "#0F1115"
+    },
+    "designMd": "---\nname: Aether-Circuit Design System\ncolors:\n  surface: '#0f141a'\n  ..."
+  }
+}

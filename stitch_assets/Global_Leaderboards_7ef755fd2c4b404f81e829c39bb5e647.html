@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Engine - Global Leaderboards</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0f1115",
+                        "surface": "#0f141a",
+                        "tertiary-fixed-dim": "#00dbe9",
+                        "on-primary-fixed": "#1a1c20",
+                        "secondary-fixed-dim": "#ffba20",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "on-primary-fixed-variant": "#45474b",
+                        "tertiary-fixed": "#7df4ff",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#353941",
+                        "on-secondary-container": "#6b4b00",
+                        "surface-tint": "#c6c6cc",
+                        "surface-container-lowest": "#0a0e15",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#2d3138",
+                        "on-tertiary": "#00363a",
+                        "secondary-fixed": "#ffdea8",
+                        "on-secondary": "#412d00",
+                        "on-surface": "#dfe2ec",
+                        "on-primary-container": "#7b7c82",
+                        "secondary-container": "#feb700",
+                        "surface-container": "#1c2027",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "on-tertiary-container": "#008a93",
+                        "surface-dim": "#0f141a",
+                        "on-primary": "#2f3035",
+                        "on-background": "#dfe2ec",
+                        "tertiary-container": "#001416",
+                        "surface-container-high": "#262a31",
+                        "background": "#0f141a",
+                        "surface-variant": "#31353c",
+                        "tertiary": "#00dbe9",
+                        "primary": "#c6c6cc",
+                        "surface-container-highest": "#31353c",
+                        "outline-variant": "#45474b",
+                        "secondary": "#ffdb9d",
+                        "inverse-surface": "#dfe2ec",
+                        "inverse-primary": "#5d5e63",
+                        "on-surface-variant": "#c6c6cb",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#c6c6cc",
+                        "on-tertiary-fixed": "#002022",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-low": "#181c23",
+                        "on-secondary-fixed": "#271900",
+                        "outline": "#909095",
+                        "primary-fixed": "#e2e2e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "24px",
+                        "unit": "4px",
+                        "panel-padding": "12px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h3": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "h2": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "h1": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.circuit-bg {
+    background-image: radial-gradient(circle at 2px 2px, rgba(0, 219, 233, 0.05) 1px, transparent 0);
+    background-size: 24px 24px
+    }
+.runic-noise {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDa1WtS5hQlRZSqgGRDv-o7ekTlor8M5-8_JCFsYlqNc9jY4X2xoSAXfeWg4IQqX_eZ68z2xJQNAlpufIFWdDYsPNxN0fFCdxAeDJsYmbzbEA2fY4EIQ04_kBzW8zxffI-2J0CBCSMGYMqeHYLvfLONakRZOTWjvMk4AtmUrlas9WqUzsFkm8CkkPeN1mrRGz1xFCuoDEdPElKSqvdl6qD9d-IhtumRVlXLXDW8ImUklH1vAo5ZNcVk50BqaLViwkjPZZkL5Tf9mUSI);
+    opacity: 0.05;
+    pointer-events: none
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen selection:bg-tertiary selection:text-on-tertiary">
+<!-- TopAppBar -->
+<header class="bg-[#1E2229]/80 backdrop-blur-xl fixed top-0 left-0 w-full z-50 border-b border-white/10 shadow-[0_4_20px_rgba(0,0,0,0.5)] flex justify-between items-center px-6 py-4 max-w-none">
+<div class="flex items-center gap-4">
+<div class="relative w-10 h-10 rounded-full border border-amber-500/50 p-0.5 overflow-hidden">
+<img alt="Operative HUD Avatar" class="w-full h-full object-cover rounded-full" data-alt="A futuristic portrait of a cybernetic operative with glowing orange optical implants and tactical carbon-fiber facial plating. The lighting is dramatic and low-key, with amber highlights reflecting off metallic surfaces. The style is gritty cyberpunk with high-fantasy runic symbols faintly visible in the background, maintaining a dark techno-sorcery aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv5oBH1KaB0xQbRNpzcH4cMgPA0Y9eQkhmjlLF6bE-nMI51-PSEtMQFEide96ESrWHFX9ZFEtrXF2MooxIgMRU6ZTKtusezNTiISzMvFIOHkT2aeQFiMb1crJboiK8yb-hwmYKCzGeaguWCJhmrov5NrgP5zXD_wr84fQHjxCeJwXsIkkt7YoAXaufaIeB9P5wcnh5uIz1V36YBiIzoGCq-RTHzUVkJJdARERAy1WBCd_PigIBYAl4S9uJmYXAlwDfbsNCfch-JFoz"/>
+</div>
+<h1 class="text-xl font-black text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)] font-space-grotesk tracking-widest uppercase">AETHER ENGINE</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-cyan-400 transition-colors duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto circuit-bg relative">
+<div class="runic-noise absolute inset-0"></div>
+<!-- Leaderboard Header & Toggle -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 relative z-10">
+<div class="space-y-1">
+<span class="font-label-sm text-label-sm text-tertiary tracking-[0.2em] uppercase">Sector Rankings</span>
+<h2 class="font-h1 text-h1 text-on-surface uppercase leading-none">Global Ranks</h2>
+</div>
+<div class="flex bg-surface-container-high p-1 rounded-lg border border-white/10 backdrop-blur-md">
+<button class="px-6 py-2 rounded font-label-sm text-label-sm uppercase bg-secondary-container text-on-secondary-fixed shadow-[0_0_15px_rgba(254,183,0,0.3)] transition-all">
+                    Global
+                </button>
+<button class="px-6 py-2 rounded font-label-sm text-label-sm uppercase text-slate-500 hover:text-on-surface-variant transition-colors">
+                    Friends
+                </button>
+</div>
+</div>
+<!-- Podium / Top 3 Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 relative z-10">
+<!-- Rank 2 -->
+<div class="order-2 md:order-1 bg-surface-container/60 backdrop-blur-xl border border-white/10 p-6 rounded-xl flex flex-col items-center text-center relative group overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-slate-500/30"></div>
+<div class="text-slate-500 font-h2 mb-4">#02</div>
+<div class="w-20 h-20 rounded-full border-2 border-slate-500 mb-4 p-1">
+<img alt="VOID_STALKER" class="w-full h-full object-cover rounded-full" data-alt="A mysterious figure wearing a sleek matte-black tactical helmet with a singular glowing cyan slit for vision. The setting is a dark industrial laboratory with cool blue ambient lighting and misty atmosphere. Sharp digital lines and holographic data fragments float around the subject in a futuristic techno-sorcery style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIQXT49gd83S0zD8u0UEP5eHytEZxG5gwaChpXRZOhBTk6Lz-fyMl-4fzP8iSpIOCATZEqj8NPq41kNeiUCnYUwUI75keMcf_54lwf4bhLUtsw3ErsrVSEO_ahTdI7bY1ia3Si2yfmExJcNqujvf6MdUDYoAan8XPuEZ9v8vgTl0hPnoQHjgoouykBY8VzQMA0FKE14l7gpSqX3_umgo_Mcr0VsErhPhDZE3wSc5L7xvoptHzzZ380YgXaWxZixMgduLesmMmXhjPc"/>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-1">VOID_STALKER</h3>
+<div class="text-tertiary font-label-sm tracking-widest uppercase mb-4">Master Operative</div>
+<div class="text-2xl font-bold font-h2 text-tertiary-fixed-dim">894,320 <span class="text-xs font-normal text-slate-500">AP</span></div>
+</div>
+<!-- Rank 1 -->
+<div class="order-1 md:order-2 bg-surface-container/80 backdrop-blur-2xl border border-amber-500/30 p-8 rounded-xl flex flex-col items-center text-center relative transform md:-translate-y-4 shadow-[0_0_40px_rgba(0,0,0,0.6)] overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-2 bg-amber-500/50"></div>
+<div class="text-amber-500 font-h1 mb-4 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">#01</div>
+<div class="w-28 h-28 rounded-full border-4 border-amber-500 mb-4 p-1 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+<img alt="HEX_SLAYER" class="w-full h-full object-cover rounded-full" data-alt="A powerful warrior in ornate, gold-etched carbon fiber armor that combines medieval knight aesthetics with high-tech futuristic circuitry. The background is a swirling vortex of amber energy and ancient runic glyphs. The lighting is golden and intense, highlighting the intricate textures of the suit and the fierce expression of the wearer." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB1pcH6j_AgnU5B-icffJ9b3OXSogPqafIMAvn0LoWIF9q3BXhT4uD26rD0dGL0WzSifK-wtE8ThlbQp8ZUgMx4NxJZhDF7j5Op70Uu5mgYpmXDMWvddBudAoxaiE7KshJRie4DS2oEkfDiRJHi1UjBXrBhaoMC7LiBJg-36QxOCe4m3NSCvDvOidiiviq1xtoiBPKwzetTvpi5P4w0Mv1dr0Q1OXTBfr5t-RhYQ5ONqLbthtMd_DiNNIbZ3AjWDbjnnPVO8gUpgRR"/>
+</div>
+<h3 class="font-h1 text-h3 text-on-surface mb-1 tracking-tight">HEX_SLAYER</h3>
+<div class="text-secondary-container font-label-sm tracking-[0.2em] uppercase mb-4">Apex Harbinger</div>
+<div class="text-4xl font-bold font-h2 text-secondary-container drop-shadow-[0_0_8px_rgba(254,183,0,0.4)]">1,245,900 <span class="text-sm font-normal text-slate-500">AP</span></div>
+</div>
+<!-- Rank 3 -->
+<div class="order-3 md:order-3 bg-surface-container/60 backdrop-blur-xl border border-white/10 p-6 rounded-xl flex flex-col items-center text-center relative group overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-orange-700/30"></div>
+<div class="text-orange-700/70 font-h2 mb-4">#03</div>
+<div class="w-20 h-20 rounded-full border-2 border-orange-700/50 mb-4 p-1">
+<img alt="NEON_WITCH" class="w-full h-full object-cover rounded-full" data-alt="A digital portrait of a sorceress with flowing holographic hair that shifts between deep violet and cyan. She wears a high-tech obsidian collar etched with glowing violet runes. The mood is arcane and mysterious, set against a backdrop of deep space with nebulae that resemble digital artifacts." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeP3CrXf3ELgfDr2a243Eij37eGpbFtaKbURSTDvz5rGiZco-A8lxKENqhEQQQALoM3zjQq63QaAyifszOvLdMwfZYbIgZmeAOsHcK-XHVn_LH-WSx_ka3SWDjD7WZS6bDku7VUgZ5JXxyR0qOsNg9CcwV3tjiS6vXyEzHjPVFW8HcXYvaYh-ntzq6A1BakWBlUBCsuzY-iw_0WXiK7rKkLxnSXvzCqXezIv5G9PeRw-noCgQ5pyHZ-fEECfFW8rBTJiai2JJ1X8Xe"/>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-1">NEON_WITCH</h3>
+<div class="text-tertiary font-label-sm tracking-widest uppercase mb-4">Elite Specialist</div>
+<div class="text-2xl font-bold font-h2 text-tertiary-fixed-dim">752,110 <span class="text-xs font-normal text-slate-500">AP</span></div>
+</div>
+</div>
+<!-- Leaderboard List -->
+<div class="space-y-3 relative z-10">
+<!-- Table Header (Hidden on Mobile) -->
+<div class="hidden md:grid grid-cols-12 gap-4 px-6 py-2 text-slate-500 font-label-sm uppercase tracking-widest">
+<div class="col-span-1">Rank</div>
+<div class="col-span-6">Operative Identity</div>
+<div class="col-span-2 text-right">Level</div>
+<div class="col-span-3 text-right">Score (AP)</div>
+</div>
+<!-- Rank 4 -->
+<div class="grid grid-cols-12 gap-4 items-center bg-surface-container/40 hover:bg-surface-container/60 border border-white/5 px-6 py-4 rounded-lg transition-all duration-300 group">
+<div class="col-span-2 md:col-span-1 font-h3 text-slate-400">04</div>
+<div class="col-span-6 md:col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden border border-white/10 group-hover:border-cyan-500/50 transition-colors">
+<img alt="CYBER_GHOST" class="w-full h-full object-cover" data-alt="A portrait of a phantom-like operative in white and grey urban camouflage tactical gear. The helmet has a translucent visor displaying scrolling green digital code. The background is a rainy, neon-lit futuristic street in Tokyo at night, with sharp reflections on wet pavement." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-6K7oiFiQ7nSoj36yIyBbR6-yQjHfftpdxGfNlzAgafyTB7IEylK-G4y3kyVX1jcVbXzqqMqabUfx1zERoon4MtmRQzWEfbQadybydklQYzc_rLh-vUxo9iZv1rU1JU9C-nC157QksB9iosoN0BKclJScpzj0cHwPljxGFhSvqtTFzpjALKO_Ysk3PJSyjx69PhqzMnUTyapY7YtaNuD5pOFJgAsS0nBxD_mNeVxR4ae5usyJJacDSiBRUuridGpxT2WLMcRbK9tE"/>
+</div>
+<div>
+<div class="font-body-lg text-on-surface font-semibold group-hover:text-cyan-400 transition-colors">CYBER_GHOST</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-tighter">Stealth Division</div>
+</div>
+</div>
+<div class="hidden md:block md:col-span-2 text-right font-body-md text-tertiary-fixed-dim">LVL 82</div>
+<div class="col-span-4 md:col-span-3 text-right font-h3 text-tertiary tracking-tighter">642,880</div>
+</div>
+<!-- Rank 5 (THE USER) -->
+<div class="grid grid-cols-12 gap-4 items-center bg-amber-500/5 backdrop-blur-xl border border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)] px-6 py-5 rounded-lg relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
+<div class="col-span-2 md:col-span-1 font-h3 text-amber-500 drop-shadow-[0_0_5px_rgba(245,158,11,0.4)]">05</div>
+<div class="col-span-6 md:col-span-6 flex items-center gap-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-lg bg-surface-variant overflow-hidden border border-amber-500/50 p-0.5">
+<img alt="OPERATIVE_USER" class="w-full h-full object-cover rounded" data-alt="The user operative, wearing high-tech carbon fiber armor with glowing orange light tubes integrated into the suit. The face is partially covered by a metallic respirator mask. Behind them, complex geometric patterns of orange light pulse in a dark, atmospheric engine room environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7hU6ghhQPSngRV4NW0d8AOF3N4jDgGwvkN21B2hHydLniCSqjBSFPAkmMj3A7x0y9V7uREwZRKiZobnaUYi1LLDGrv42ife858sQvTI4w035JEVudaWRw2sxMi4HFBkV5W_9W8XVtKrgRr-wsUwPdNXT2MXTbRNmqeMebnbc9kcIID0rHcOvSNzwOJv3pcSzttdYdSmUGqZlMYQuBOgjqoEdpqsWCA8ZVfHVGoz92TavcjKnYCp54eTrJkFFFjpmhmKRpuwFMP1J5"/>
+</div>
+<div class="absolute -top-2 -right-2 bg-amber-500 text-on-secondary-fixed text-[8px] font-black px-1.5 py-0.5 rounded border border-amber-200/20">YOU</div>
+</div>
+<div>
+<div class="font-h3 text-on-surface font-bold">OPERATIVE_HUD</div>
+<div class="text-[10px] text-amber-500/70 uppercase tracking-tighter font-bold">Aether Vanguard</div>
+</div>
+</div>
+<div class="hidden md:block md:col-span-2 text-right font-body-md text-amber-400">LVL 79</div>
+<div class="col-span-4 md:col-span-3 text-right font-h3 text-amber-500 drop-shadow-[0_0_5px_rgba(245,158,11,0.4)] tracking-tighter">610,400</div>
+</div>
+<!-- Rank 6 -->
+<div class="grid grid-cols-12 gap-4 items-center bg-surface-container/40 hover:bg-surface-container/60 border border-white/5 px-6 py-4 rounded-lg transition-all duration-300 group">
+<div class="col-span-2 md:col-span-1 font-h3 text-slate-400">06</div>
+<div class="col-span-6 md:col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden border border-white/10 group-hover:border-cyan-500/50 transition-colors">
+<img alt="DATA_RAIDER" class="w-full h-full object-cover" data-alt="A cybernetic hacker wearing an oversized dark hoodie with glowing purple fiber optic cables woven into the fabric. Multiple holographic screens float in front of them, projecting intricate code and digital maps. The scene is lit by the neon glow of the virtual interfaces in a dark apartment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKtLoCYr3VSIT9j-W1echh7afRSRq5HpOzFkUoETEOiHUbx1CZqeyuf4-2jOC6U0Jb5_S1JG-EbtdVXfP-biITX9wABCpi5E3frfB7es8k0PUtzxc9-6hfbiTJ-dPpUPR2I--SLjZ1ymtKX1OjxhQGdnDRQd-upL7FYwnj6b0NWq39zJnh3pgi2PQoYuvYscMSkd1CQWNlGdfFn33F2BitqO8BsePBVuWCEFI1368a_nmTcE6oa4y8a94sJGvfBJB14Owg57ZpnGk7"/>
+</div>
+<div>
+<div class="font-body-lg text-on-surface font-semibold group-hover:text-cyan-400 transition-colors">DATA_RAIDER</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-tighter">Infiltration Unit</div>
+</div>
+</div>
+<div class="hidden md:block md:col-span-2 text-right font-body-md text-tertiary-fixed-dim">LVL 75</div>
+<div class="col-span-4 md:col-span-3 text-right font-h3 text-tertiary tracking-tighter">589,200</div>
+</div>
+<!-- Rank 7 -->
+<div class="grid grid-cols-12 gap-4 items-center bg-surface-container/40 hover:bg-surface-container/60 border border-white/5 px-6 py-4 rounded-lg transition-all duration-300 group">
+<div class="col-span-2 md:col-span-1 font-h3 text-slate-400">07</div>
+<div class="col-span-6 md:col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden border border-white/10 group-hover:border-cyan-500/50 transition-colors">
+<img alt="ORACLE_V" class="w-full h-full object-cover" data-alt="An ethereal digital entity appearing as a shimmering, translucent figure composed of countless floating particles and glowing lines of code. The background is a geometric grid extending into infinity, colored in deep indigos and sharp electric blues. The overall feel is one of advanced artificial intelligence and cosmic mystery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgLl2fZPySfLkMnWrQX7dJ9wxuVbdn-bBMoHrmRAKaMMea7C4D3R6DkXn_7eJF178XYCtz0pmc7m13Endp5Ts54anyT4MQ2ekPG8QlldWtT0sotmMy9cMmVtTM_6k0uXsk2XcWcFp_xEg8XgXlic6uilFMFey7sY7OjPi-HRDgan9w6l2hYt4PlhvDQURiUsj9rHuJv1qCVcfJ0qSsRycv1rw6AhDctznjCQWDbBdd_fMvbgp_2yZDjlLmrDNyjOUx_1235uDiRTro"/>
+</div>
+<div>
+<div class="font-body-lg text-on-surface font-semibold group-hover:text-cyan-400 transition-colors">ORACLE_V</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-tighter">Intelligence Corps</div>
+</div>
+</div>
+<div class="hidden md:block md:col-span-2 text-right font-body-md text-tertiary-fixed-dim">LVL 71</div>
+<div class="col-span-4 md:col-span-3 text-right font-h3 text-tertiary tracking-tighter">545,000</div>
+</div>
+</div>
+<!-- Pagination / Load More (Stylized) -->
+<div class="mt-12 flex justify-center relative z-10">
+<button class="flex items-center gap-3 px-8 py-3 bg-surface-container border border-white/10 rounded-lg text-tertiary font-label-sm uppercase tracking-[0.2em] hover:bg-surface-container-high hover:border-cyan-500/40 transition-all group">
+                Access Deep Records
+                <span class="material-symbols-outlined text-sm group-hover:translate-y-0.5 transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-[#0F1115]/90 backdrop-blur-2xl fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-4 border-t border-amber-500/20 z-50 shadow-[0_-4px_24px_rgba(0,0,0,0.8)]">
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-0.5 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter mt-1">Story</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-0.5 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter mt-1">Hero</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-0.5 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter mt-1">Vault</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-0.5 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter mt-1">Journal</span>
+</button>
+<button class="flex flex-col items-center justify-center text-amber-500 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] bg-amber-500/5 rounded-t-lg h-full px-4 border-t-2 border-amber-500 active:translate-y-0.5 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="leaderboard" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter mt-1">Ranks</span>
+</button>
+</nav>
+</body></html>

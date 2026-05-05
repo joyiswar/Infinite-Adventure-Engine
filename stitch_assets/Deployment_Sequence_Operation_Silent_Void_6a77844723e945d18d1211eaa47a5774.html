@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AETHER ENGINE - Deployment Sequence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#e2e2e8",
+                    "surface-container-high": "#262a31",
+                    "on-tertiary": "#00363a",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "surface-dim": "#0f141a",
+                    "primary-fixed-dim": "#c6c6cc",
+                    "on-tertiary-fixed": "#002022",
+                    "tertiary": "#00dbe9",
+                    "surface-container": "#1c2027",
+                    "on-surface": "#dfe2ec",
+                    "on-secondary-fixed": "#271900",
+                    "on-tertiary-container": "#008a93",
+                    "secondary-fixed": "#ffdea8",
+                    "inverse-on-surface": "#2d3138",
+                    "on-error": "#690005",
+                    "on-error-container": "#ffdad6",
+                    "on-primary": "#2f3035",
+                    "surface-variant": "#31353c",
+                    "error": "#ffb4ab",
+                    "secondary-fixed-dim": "#ffba20",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#7b7c82",
+                    "surface-bright": "#353941",
+                    "tertiary-fixed": "#7df4ff",
+                    "secondary-container": "#feb700",
+                    "on-surface-variant": "#c6c6cb",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "inverse-primary": "#5d5e63",
+                    "surface-container-low": "#181c23",
+                    "outline": "#909095",
+                    "surface": "#0f141a",
+                    "secondary": "#ffdb9d",
+                    "tertiary-container": "#001416",
+                    "tertiary-fixed-dim": "#00dbe9",
+                    "on-primary-fixed-variant": "#45474b",
+                    "on-primary-fixed": "#1a1c20",
+                    "background": "#0f141a",
+                    "surface-container-highest": "#31353c",
+                    "on-secondary": "#412d00",
+                    "on-background": "#dfe2ec",
+                    "on-secondary-container": "#6b4b00",
+                    "surface-container-lowest": "#0a0e15",
+                    "primary-container": "#0f1115",
+                    "primary": "#c6c6cc",
+                    "outline-variant": "#45474b",
+                    "surface-tint": "#c6c6cc",
+                    "inverse-surface": "#dfe2ec"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin": "24px",
+                    "panel-padding": "12px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "h3": ["Space Grotesk"],
+                    "h2": ["Space Grotesk"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h1": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0f141a;
+            color: #dfe2ec;
+            overflow-x: hidden;
+        }
+        .scanline-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        .glass-panel {
+            background: rgba(30, 34, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-panel-active {
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.1);
+        }
+        .radial-progress-bg {
+            background: conic-gradient(from 0deg, #00dbe9 87%, transparent 87%);
+        }
+        .runic-texture {
+            mask-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10l80 80M90 10L10 90' stroke='white' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");
+            opacity: 0.05;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md antialiased min-h-screen flex flex-col">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-[-1] overflow-hidden bg-surface">
+<div class="absolute inset-0 opacity-40 mix-blend-overlay runic-texture"></div>
+<img class="w-full h-full object-cover filter grayscale contrast-125 brightness-50" data-alt="A cinematic, low-angle shot of a sprawling futuristic cityscape at night, characterized by deep shadows and monolithic architecture. Atmospheric haze and swirling void energy effects permeate the air, illuminated by flickers of amber and cyan holographic signs. The overall mood is tense, mysterious, and high-performance, fitting for a dark-fantasy techno-sorcery engine environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJWXB34NcdMyo33QqPR4RAz2vCKvxKH0Y7DMN0uscDIRvX7Dmzsn3ruvOnIS12sqwjjRJmyUH7vaZT9pvuMVt5u_7AwaxPm1MX7zMwqv0dnxP1Sbjh8rE_dGB_kAX1XxplsbCNBimufTWmF82Ake_-Awe5n8hU-FHK3PtwQeLQfMJHwL2CQOLxdY9CcvkJ7ab9VUMvwC2OzNhrw3MxEyuTj8o3xQ7DjHv_0hOiP0XKds1qwJK7AHyz-Y4WWAisXTILWEIZD02buudt"/>
+<div class="absolute inset-0 scanline-overlay"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50"></div>
+</div>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-slate-900/80 backdrop-blur-xl border-b border-amber-500/20">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-500" style="font-variation-settings: 'FILL' 1;">security</span>
+<div class="flex flex-col">
+<span class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-amber-500 font-black drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">AETHER_ENGINE_v4.2</span>
+<span class="text-[8px] font-label-sm tracking-widest text-on-surface-variant/50">SECURE_CHANNEL_ENCRYPTED</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-amber-400 font-bold border-b-2 border-amber-500 pb-1" href="#">TACTICAL</a>
+<a class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-slate-500 hover:text-cyan-400 transition-colors duration-200" href="#">SQUAD</a>
+<a class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-slate-500 hover:text-cyan-400 transition-colors duration-200" href="#">NEURAL</a>
+</nav>
+<div class="flex items-center gap-3 border-l border-amber-500/20 pl-6">
+<div class="text-right">
+<p class="text-[10px] font-label-sm text-amber-500/80 leading-none">ID: OPERATIVE_087</p>
+<p class="text-[10px] font-label-sm text-cyan-400/80 leading-none">RANK: TITAN_COMMANDER</p>
+</div>
+<div class="w-8 h-8 rounded-full border border-amber-500/50 bg-surface-container overflow-hidden p-0.5">
+<img class="w-full h-full object-cover rounded-full grayscale" data-alt="Close-up portrait of a cybernetic operative ID photo. The subject wears a sleek, dark obsidian helmet with glowing amber optical sensors and integrated tactical communication gear. Lighting is moody and high-contrast, casting deep shadows against a dark slate background, perfectly capturing a gritty cyberpunk industrial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBzQvcQL94v06dXe09rlDqj_sJt5hzrlclkxeAzrN1Bih4BiQT2Aqc6hNVxXVvdEb5EypdQ1IHMRchGREDXNH870g_uXvHfLGK156GGNMjYslMWazCALJpwpXlaWHQL7YNHxuWiIqgF1C9lDRdAbdZrPgc8k1vtY-BUYETYqbB78sxHXINgAFM_qFFsks7FcrHmLTaLSWknd-cOKNJlCY2hwslCwrcdXuZHwp75bXydTpaBFysnGZPHWWTvzASO_T6HRZ7KPH68vxD"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-16 mb-20 px-margin flex flex-col items-center justify-center gap-gutter max-w-7xl mx-auto w-full">
+<div class="grid grid-cols-12 gap-gutter w-full">
+<!-- Left Panel: Tactical Data -->
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-unit">
+<div class="glass-panel p-panel-padding rounded-lg flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<p class="font-label-sm text-secondary uppercase text-[10px] tracking-tighter opacity-70">Atmospheric Pressure</p>
+<div class="flex items-baseline gap-2">
+<span class="font-h2 text-primary">101.3</span>
+<span class="font-label-sm text-on-surface-variant text-[12px]">kPa</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-3/4 shadow-[0_0_8px_rgba(255,219,157,0.5)]"></div>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-lg flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<p class="font-label-sm text-tertiary uppercase text-[10px] tracking-tighter opacity-70">Neural Stability</p>
+<div class="flex items-baseline gap-2">
+<span class="font-h2 text-primary">99.8</span>
+<span class="font-label-sm text-on-surface-variant text-[12px]">%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[99.8%] shadow-[0_0_8px_rgba(0,219,233,0.5)]"></div>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-lg flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<p class="font-label-sm text-secondary uppercase text-[10px] tracking-tighter opacity-70">Void Phase</p>
+<div class="flex items-baseline gap-2">
+<span class="font-h2 text-primary">PH-04</span>
+</div>
+<div class="flex gap-1">
+<div class="flex-1 h-1 bg-secondary shadow-[0_0_8px_rgba(255,219,157,0.5)]"></div>
+<div class="flex-1 h-1 bg-secondary shadow-[0_0_8px_rgba(255,219,157,0.5)]"></div>
+<div class="flex-1 h-1 bg-secondary shadow-[0_0_8px_rgba(255,219,157,0.5)]"></div>
+<div class="flex-1 h-1 bg-secondary shadow-[0_0_8px_rgba(255,219,157,0.5)]"></div>
+<div class="flex-1 h-1 bg-surface-container-high"></div>
+</div>
+</div>
+</div>
+<!-- Central Focus: Neural Link Sync -->
+<div class="col-span-12 lg:col-span-6 flex flex-col items-center justify-center py-8">
+<div class="relative w-72 h-72 md:w-96 md:h-96 flex items-center justify-center">
+<!-- Outer Decorative Rings -->
+<div class="absolute inset-0 border-[1px] border-tertiary/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+<div class="absolute inset-4 border-[1px] border-tertiary/10 border-dashed rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+<div class="absolute inset-8 border-[2px] border-secondary/5 rounded-full"></div>
+<!-- Progress Circle -->
+<div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-2 bg-surface-container-lowest/50 backdrop-blur-md border border-white/5 flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 radial-progress-bg opacity-20"></div>
+<div class="relative z-10 flex flex-col items-center">
+<span class="font-label-sm text-tertiary uppercase tracking-widest text-[14px] mb-2">Neural Link Sync</span>
+<span class="font-h1 text-[80px] md:text-[100px] text-tertiary drop-shadow-[0_0_20px_rgba(0,219,233,0.5)] leading-none">87%</span>
+<div class="flex gap-1 mt-4">
+<span class="material-symbols-outlined text-tertiary text-xs" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span class="material-symbols-outlined text-tertiary text-xs" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span class="material-symbols-outlined text-tertiary text-xs opacity-30" style="font-variation-settings: 'FILL' 0;">sensors</span>
+</div>
+</div>
+</div>
+<!-- Glowing Accents -->
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-tertiary px-3 py-1 rounded-sm">
+<p class="text-[8px] font-bold text-on-tertiary uppercase tracking-tighter">Sync Active</p>
+</div>
+</div>
+</div>
+<!-- Right Panel: Countdown & Logs -->
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-gutter">
+<div class="glass-panel glass-panel-active p-6 rounded-lg flex flex-col items-center justify-center gap-2">
+<p class="font-label-sm text-secondary uppercase text-[12px] tracking-widest">Auto-Deployment</p>
+<div class="font-h2 text-secondary drop-shadow-[0_0_15px_rgba(255,219,157,0.6)]">T-MINUS 00:15</div>
+<div class="w-full h-0.5 bg-secondary/20 relative mt-2">
+<div class="absolute top-0 left-0 h-full bg-secondary w-1/4 shadow-[0_0_10px_rgba(255,219,157,0.8)]"></div>
+</div>
+</div>
+<div class="glass-panel flex-1 p-panel-padding rounded-lg flex flex-col gap-3">
+<div class="flex items-center justify-between border-b border-white/10 pb-2">
+<span class="font-label-sm text-primary text-[10px] uppercase">Telemetry Logs</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+</div>
+<div class="flex flex-col gap-2 font-mono text-[10px] text-on-surface-variant/70">
+<p><span class="text-tertiary">[08:44:21]</span> VOID_ENGINE_INIT: SUCCESS</p>
+<p><span class="text-tertiary">[08:44:23]</span> SYNCING_NEURAL_RECEPTORS...</p>
+<p><span class="text-secondary">[08:44:25]</span> AUTH_KEY_ACCEPTED: OP_087</p>
+<p><span class="text-tertiary">[08:44:28]</span> ATMOS_SHIELD_STABILIZED</p>
+<p><span class="text-secondary font-bold">&gt;&gt;&gt; STANDBY_FOR_LAUNCH</span></p>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="w-full max-w-2xl mt-8 mb-4">
+<button class="w-full relative group active:scale-95 transition-transform duration-150">
+<div class="absolute inset-0 bg-secondary rounded-lg blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
+<div class="relative glass-panel bg-secondary border-none p-6 rounded-lg overflow-hidden flex flex-col items-center justify-center">
+<div class="absolute inset-0 scanline-overlay opacity-30"></div>
+<span class="font-h3 text-on-secondary uppercase tracking-[0.2em] font-black">CONFIRM LAUNCH</span>
+<span class="font-label-sm text-on-secondary/70 text-[10px] uppercase tracking-widest mt-1">TACTICAL AUTHORIZATION REQUIRED</span>
+<!-- Decorative Corners -->
+<div class="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-on-secondary/30"></div>
+<div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-on-secondary/30"></div>
+<div class="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-on-secondary/30"></div>
+<div class="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-on-secondary/30"></div>
+</div>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-20 bg-slate-900/80 backdrop-blur-xl border-t border-cyan-900/30 shadow-[0_-4px_20px_rgba(0,0,0,0.6)]">
+<button class="flex flex-col items-center justify-center text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)] scale-110 active:translate-y-1 transition-all duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-tighter">TERMINAL</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-1 transition-all duration-150">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-tighter">BRIEFING</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-1 transition-all duration-150">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-tighter">ARSENAL</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-1 transition-all duration-150">
+<span class="material-symbols-outlined">sensors</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-tighter">NEXUS</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 active:translate-y-1 transition-all duration-150">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-tighter">SYSTEM</span>
+</button>
+</footer>
+</body></html>

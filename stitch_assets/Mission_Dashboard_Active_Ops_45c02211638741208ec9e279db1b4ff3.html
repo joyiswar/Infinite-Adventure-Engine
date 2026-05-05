@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Engine // Void Entry Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanline-overlay {
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+        .neural-gauge {
+            background: conic-gradient(from 180deg at 50% 50%, #22d3ee 0%, #22d3ee 92%, #1e2229 92%);
+        }
+        .rune-texture {
+            mask-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20zm20-20h20v20H20V0z' fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#008a93",
+                      "secondary-fixed": "#ffdea8",
+                      "inverse-on-surface": "#2d3138",
+                      "tertiary": "#00dbe9",
+                      "surface-container": "#1c2027",
+                      "on-surface": "#dfe2ec",
+                      "on-secondary-fixed": "#271900",
+                      "surface-container-high": "#262a31",
+                      "on-tertiary": "#00363a",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-dim": "#0f141a",
+                      "primary-fixed-dim": "#c6c6cc",
+                      "on-tertiary-fixed": "#002022",
+                      "primary-fixed": "#e2e2e8",
+                      "surface-variant": "#31353c",
+                      "error": "#ffb4ab",
+                      "on-primary": "#2f3035",
+                      "on-error": "#690005",
+                      "on-error-container": "#ffdad6",
+                      "secondary-container": "#feb700",
+                      "surface-bright": "#353941",
+                      "tertiary-fixed": "#7df4ff",
+                      "on-primary-container": "#7b7c82",
+                      "secondary-fixed-dim": "#ffba20",
+                      "error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "inverse-primary": "#5d5e63",
+                      "on-surface-variant": "#c6c6cb",
+                      "outline": "#909095",
+                      "surface": "#0f141a",
+                      "surface-container-low": "#181c23",
+                      "tertiary-fixed-dim": "#00dbe9",
+                      "on-primary-fixed-variant": "#45474b",
+                      "on-primary-fixed": "#1a1c20",
+                      "background": "#0f141a",
+                      "tertiary-container": "#001416",
+                      "secondary": "#ffdb9d",
+                      "primary": "#c6c6cc",
+                      "surface-container-lowest": "#0a0e15",
+                      "primary-container": "#0f1115",
+                      "on-background": "#dfe2ec",
+                      "on-secondary-container": "#6b4b00",
+                      "surface-container-highest": "#31353c",
+                      "on-secondary": "#412d00",
+                      "surface-tint": "#c6c6cc",
+                      "inverse-surface": "#dfe2ec",
+                      "outline-variant": "#45474b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "margin": "24px",
+                      "panel-padding": "12px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "h2": ["Space Grotesk"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "h1": ["Space Grotesk"],
+                      "h3": ["Space Grotesk"]
+              },
+              "fontSize": {
+                      "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden selection:bg-tertiary selection:text-surface">
+<div class="fixed inset-0 scanline-overlay z-50 opacity-10"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border border-tertiary flex items-center justify-center overflow-hidden">
+<img alt="Pilot" class="w-full h-full object-cover" data-alt="A futuristic digital avatar of a cyborg pilot with glowing neural implants in their temples. The aesthetic is high-tech noir with sharp cyan highlights against a dark obsidian background. Intricate circuitry lines glow on their skin, and the character wears a sleek, matte black tactical collar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhRT8AVw-T_x14FyUk8rHRqkduHP8Ih_z6ypXveItEzStdjxCuHuz3Ka-wGLjjQkNi7rv3mj5qSZcKI8_AnaiOPntNhc4gXKukAgpvcWkDQkoNkE-UsRanFekgY_z6tlgUjHD0xRgQaTB254HAlRv95uVXEkvJ6zDl2p6a1RWJCWBfQTt1LEA09TbM1VqRtoD_lOYeGWV5EN3xU2m0qB210_a_Q8VevCRXyj_uARSAjqNhXXRPwzXHmC1P31BKSh6Hs3GgsE696Yeq"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label-sm text-tertiary uppercase tracking-widest">Operator Active</span>
+<span class="font-h3 text-[14px] leading-tight text-on-surface">Pilot Neural Interface</span>
+</div>
+</div>
+<h1 class="font-['Space_Grotesk'] tracking-[0.2em] uppercase font-bold text-amber-500 text-lg">VOID ENTRY // STATION OMEGA</h1>
+<button class="w-10 h-10 flex items-center justify-center text-amber-500 hover:text-amber-400 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 pb-24 px-6 min-h-screen grid grid-cols-12 gap-6 relative">
+<!-- Background Decor -->
+<div class="fixed inset-0 rune-texture opacity-[0.03] pointer-events-none"></div>
+<!-- Left HUD: Telemetry & Status -->
+<aside class="col-span-12 lg:col-span-3 space-y-6">
+<!-- Neural Stability Gauge -->
+<div class="bg-slate-950/80 backdrop-blur-xl border border-white/10 p-panel-padding rounded-lg shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-20">
+<span class="material-symbols-outlined text-tertiary" data-icon="neurology">neurology</span>
+</div>
+<h4 class="font-h3 text-[12px] uppercase tracking-tighter text-on-primary-container mb-4">Neural Stability</h4>
+<div class="flex flex-col items-center justify-center py-4">
+<div class="relative w-32 h-32 rounded-full border-4 border-surface-container-high flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-4 border-tertiary opacity-20 blur-sm"></div>
+<div class="neural-gauge absolute inset-0 rounded-full mask-arc opacity-80"></div>
+<div class="flex flex-col items-center">
+<span class="font-h1 text-[32px] text-tertiary drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">92%</span>
+<span class="text-[8px] font-label-sm uppercase tracking-widest text-on-tertiary-container">Nominal</span>
+</div>
+</div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-label-sm text-outline uppercase">
+<span>Sync: High</span>
+<span>Lat: 4ms</span>
+</div>
+</div>
+<!-- Enemy Proximity Radar -->
+<div class="bg-slate-950/80 backdrop-blur-xl border border-white/10 p-panel-padding rounded-lg shadow-2xl h-64 flex flex-col">
+<h4 class="font-h3 text-[12px] uppercase tracking-tighter text-on-primary-container mb-2">Tactical Proximity</h4>
+<div class="flex-1 relative border border-tertiary/20 rounded-full overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-full h-[1px] bg-tertiary/10"></div>
+<div class="h-full w-[1px] bg-tertiary/10 absolute"></div>
+<div class="w-1/2 h-1/2 rounded-full border border-tertiary/10"></div>
+<div class="w-3/4 h-3/4 rounded-full border border-tertiary/10"></div>
+</div>
+<!-- Radar Blips -->
+<div class="absolute top-1/4 right-1/3 w-2 h-2 bg-error rounded-full shadow-[0_0_10px_#ffb4ab]"></div>
+<div class="absolute bottom-1/3 left-1/4 w-1.5 h-1.5 bg-error rounded-full shadow-[0_0_8px_#ffb4ab] animate-pulse"></div>
+<div class="z-10 bg-tertiary w-1 h-1 rounded-full shadow-[0_0_5px_#00dbe9]"></div>
+</div>
+<div class="mt-4 flex justify-between items-center text-[10px] font-mono text-error">
+<span>THREAT DETECTED</span>
+<span>142m</span>
+</div>
+</div>
+</aside>
+<!-- Center: Main Active Objectives (Bento Grid Style) -->
+<section class="col-span-12 lg:col-span-6 space-y-6">
+<div class="bg-slate-950/80 backdrop-blur-xl border border-secondary/30 p-6 rounded-xl shadow-[0_0_30px_rgba(254,183,0,0.1)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-transparent"></div>
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="font-h2 text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="assignment_late">assignment_late</span>
+                            Active Objectives
+                        </h2>
+<p class="text-on-primary-container text-xs mt-1 uppercase tracking-widest">Protocol: Void_Extraction_09</p>
+</div>
+<div class="px-3 py-1 bg-secondary/10 border border-secondary/50 rounded-full">
+<span class="text-[10px] text-secondary font-bold uppercase tracking-widest">Priority Alpha</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Completed Step -->
+<div class="flex items-center gap-4 p-4 bg-tertiary/5 border border-tertiary/20 rounded-lg group">
+<div class="w-8 h-8 rounded-full border border-tertiary flex items-center justify-center bg-tertiary/10 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+<span class="material-symbols-outlined text-tertiary text-lg" data-icon="check">check</span>
+</div>
+<div class="flex-1">
+<h5 class="text-tertiary font-h3 text-[16px] uppercase tracking-wide">Establish Neural Anchor</h5>
+<p class="text-on-tertiary-container text-xs">Connection secured with Station Omega</p>
+</div>
+<span class="text-[10px] font-mono text-tertiary/60">04:12 UTC</span>
+</div>
+<!-- Active Step -->
+<div class="flex items-center gap-4 p-4 bg-secondary/5 border border-secondary shadow-[0_0_20px_rgba(254,183,0,0.15)] rounded-lg relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-secondary/10 to-transparent"></div>
+<div class="w-8 h-8 rounded-full border border-secondary flex items-center justify-center bg-secondary/20 animate-pulse shadow-[0_0_15px_rgba(254,183,0,0.4)]">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="bolt">bolt</span>
+</div>
+<div class="flex-1 z-10">
+<h5 class="text-secondary font-h3 text-[16px] uppercase tracking-wide">Extract Aether Cores</h5>
+<p class="text-on-secondary-fixed-variant text-xs">Awaiting manual engagement (2/5 Cores)</p>
+</div>
+<div class="z-10 w-24 bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-2/5 shadow-[0_0_10px_#feb700]"></div>
+</div>
+</div>
+<!-- Pending Step -->
+<div class="flex items-center gap-4 p-4 bg-white/5 border border-white/5 rounded-lg opacity-50">
+<div class="w-8 h-8 rounded-full border border-outline flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="lock">lock</span>
+</div>
+<div class="flex-1">
+<h5 class="text-on-surface-variant font-h3 text-[16px] uppercase tracking-wide">Bypass Void Gate</h5>
+<p class="text-on-primary-container text-xs">Unlock conditions not met</p>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="mt-8 w-full py-4 bg-secondary text-on-secondary-fixed font-h3 text-[14px] uppercase tracking-[0.2em] rounded-lg shadow-[0_0_20px_rgba(254,183,0,0.3)] hover:shadow-[0_0_35px_rgba(254,183,0,0.5)] transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="power">power</span>
+                    Initiate Extraction Pulse
+                </button>
+</div>
+<!-- Resource Inventory -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-slate-950/80 backdrop-blur-xl border border-white/10 p-4 rounded-lg flex flex-col justify-between h-24">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-label-sm text-secondary uppercase tracking-widest">Aether Shards</span>
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="diamond">diamond</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-h1 text-[24px] text-secondary">1,284</span>
+<div class="flex-1 h-1 bg-surface-container-high rounded-full overflow-hidden mb-2">
+<div class="h-full bg-secondary w-3/4"></div>
+</div>
+</div>
+</div>
+<div class="bg-slate-950/80 backdrop-blur-xl border border-white/10 p-4 rounded-lg flex flex-col justify-between h-24">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-label-sm text-tertiary uppercase tracking-widest">Neural Credits</span>
+<span class="material-symbols-outlined text-tertiary text-lg" data-icon="token">token</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-h1 text-[24px] text-tertiary">42.0k</span>
+<div class="flex-1 h-1 bg-surface-container-high rounded-full overflow-hidden mb-2">
+<div class="h-full bg-tertiary w-1/2"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right HUD: Environment & Details -->
+<aside class="col-span-12 lg:col-span-3 space-y-6">
+<!-- Visual Feed -->
+<div class="bg-slate-950/80 backdrop-blur-xl border border-white/10 p-1 rounded-lg shadow-2xl overflow-hidden group">
+<div class="relative aspect-video rounded-md overflow-hidden grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500">
+<img alt="Void Horizon" class="w-full h-full object-cover" data-alt="A cinematic, first-person view of a swirling cosmic void with ethereal amber and cyan energy clouds spiraling into a central singularity. Deep black space is punctuated by tiny, sharp digital artifacts and lens flares. The lighting is high-contrast, moody, and intense, conveying a sense of immense power and dangerous beauty within a sci-fi game engine." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOVqS4niQmN5HUFiccQ6eZ-PcUdRLF-NzGURoPMcM_qmzEdfy-UTLISJKxBf5dRwmLaaW37zuxVo1M1eOjtKD1UHclcMd_bEe67EqpKgBPzBIokJPuQrf8cQTdaydcjV3elpvqfLVPZNr5o0XYa2IlYLG6iRBMDNoiRc44sd0LXVGGuDxYOSYcjsxQpfrQchCxpnhHwopHGtu79SKj8HolbzCMh32oK-hLC4gTGi_FDdAvtZfuCYT85k_hOVVm6qpaKn56uwFt0v70"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+<div class="absolute top-2 left-2 flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
+<span class="text-[8px] font-mono text-white/50">REC // CAM_01</span>
+</div>
+</div>
+<div class="p-3">
+<h5 class="text-[10px] text-on-surface uppercase font-bold tracking-widest">Zone: Sector_Void_7</h5>
+<p class="text-[9px] text-outline mt-1">Radiation levels rising. Proceed with caution.</p>
+</div>
+</div>
+<!-- Detailed Telemetry -->
+<div class="bg-slate-950/80 backdrop-blur-xl border border-white/10 p-panel-padding rounded-lg shadow-2xl">
+<h4 class="font-h3 text-[12px] uppercase tracking-tighter text-on-primary-container mb-4">Environment Scan</h4>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[10px]">
+<span class="text-on-surface-variant uppercase">Ambient Pressure</span>
+<span class="text-tertiary font-mono">0.0003 Pa</span>
+</div>
+<div class="flex justify-between items-center text-[10px]">
+<span class="text-on-surface-variant uppercase">Void Saturation</span>
+<span class="text-amber-500 font-mono">HIGH</span>
+</div>
+<div class="flex justify-between items-center text-[10px]">
+<span class="text-on-surface-variant uppercase">Quantum Decay</span>
+<span class="text-tertiary font-mono">0.02% / hr</span>
+</div>
+<div class="pt-2 border-t border-white/5">
+<div class="w-full bg-surface-container-high h-4 rounded flex overflow-hidden">
+<div class="h-full bg-emerald-500/50 w-3/4 flex items-center px-2 text-[8px] font-bold">STABLE</div>
+<div class="h-full bg-error/30 w-1/4"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Access Chips -->
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-high border border-tertiary/40 text-tertiary text-[9px] font-bold uppercase rounded">Shields: 100%</span>
+<span class="px-3 py-1 bg-surface-container-high border border-amber-500/40 text-amber-500 text-[9px] font-bold uppercase rounded">Engine: HOT</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline text-outline text-[9px] font-bold uppercase rounded">Comm: ENCRYPTED</span>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-20 pb-safe bg-slate-950/90 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(245,158,11,0.1)]">
+<a class="flex flex-col items-center justify-center text-slate-600 grayscale hover:bg-white/5 hover:text-amber-400 transition-all active:scale-90 cubic-bezier(0.34,1.56,0.64,1)" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-widest uppercase">Core</span>
+</a>
+<a class="flex flex-col items-center justify-center text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] scale-110 hover:bg-white/5 hover:text-amber-400 transition-all active:scale-90 cubic-bezier(0.34,1.56,0.64,1)" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="query_stats">query_stats</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-widest uppercase">Telemetry</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-600 grayscale hover:bg-white/5 hover:text-amber-400 transition-all active:scale-90 cubic-bezier(0.34,1.56,0.64,1)" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="psychology">psychology</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-widest uppercase">Neural</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-600 grayscale hover:bg-white/5 hover:text-amber-400 transition-all active:scale-90 cubic-bezier(0.34,1.56,0.64,1)" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="terminal">terminal</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-widest uppercase">Terminal</span>
+</a>
+</nav>
+<!-- Floating UI Element (Subtle Background Glow) -->
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-tertiary/5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+<div class="fixed top-1/4 right-0 w-[400px] h-[400px] bg-secondary/5 blur-[100px] rounded-full pointer-events-none -z-10"></div>
+</body></html>
