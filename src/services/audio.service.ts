@@ -7,18 +7,25 @@ import { Injectable } from '@angular/core';
 export class AudioService {
   private audioContext: AudioContext | null = null;
 
-  private initializeAudioContext() {
+  constructor() {}
+
+  private async ensureAudioContext(): Promise<void> {
     if (!this.audioContext) {
       try {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       } catch (e) {
-        console.error("Web Audio API is not supported in this browser");
+        console.warn('Web Audio API not supported');
+        return;
       }
+    }
+
+    if (this.audioContext.state === 'suspended') {
+      await this.audioContext.resume();
     }
   }
 
-  playSound(type: 'choice' | 'item' | 'achievement' | 'victory' | 'defeat'): void {
-    this.initializeAudioContext();
+  async playSound(type: 'choice' | 'item' | 'achievement' | 'victory' | 'defeat'): Promise<void> {
+    await this.ensureAudioContext();
     if (!this.audioContext) return;
 
     const oscillator = this.audioContext.createOscillator();
