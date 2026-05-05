@@ -39,12 +39,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: 'npm'
           
       - name: Install dependencies
         # Use npm install to create a lock file and install dependencies from package.json
-        run: npm install
+        run: npm install --legacy-peer-deps
         
       - name: Build
         # This now runs the 'build' script from package.json (i.e., 'vite build')
