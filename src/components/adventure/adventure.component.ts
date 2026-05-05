@@ -1,5 +1,5 @@
 
-import { ChangeDetectionStrategy, Component, effect, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, EventEmitter, OnInit, Output, signal, inject, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameState, Choice } from '../../models/gamestate.model';
 import { GeminiService } from '../../services/gemini.service';
@@ -10,6 +10,8 @@ import { AudioService } from '../../services/audio.service';
 import { TutorialService } from '../../services/tutorial.service';
 import { LoreCodexService } from '../../services/lore-codex.service';
 import { InventoryItem } from '../../models/inventory.model';
+import { PerformanceMonitorService } from '../../services/performance-monitor.service';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-adventure',
@@ -18,7 +20,7 @@ import { InventoryItem } from '../../models/inventory.model';
   templateUrl: './adventure.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdventureComponent implements OnInit {
+export class AdventureComponent implements OnInit, OnDestroy {
   @Output() gameStateChange = new EventEmitter<GameState>();
   @Output() portraitChange = new EventEmitter<string>();
 
@@ -52,6 +54,12 @@ export class AdventureComponent implements OnInit {
     'Destiny is being written...'
   ];
 
+  private performanceMonitor = inject(PerformanceMonitorService);
+  private analytics = inject(AnalyticsService);
+  private ngZone = inject(NgZone);
+  private perfLoopId?: number;
+  private perfLogInterval?: any;
+
   constructor(
     private geminiService: GeminiService,
     private achievementService: AchievementService,
@@ -60,6 +68,9 @@ export class AdventureComponent implements OnInit {
     private tutorialService: TutorialService,
     private loreCodexService: LoreCodexService
   ) {
+    // Start performance monitoring
+    this.startPerformanceLoop();
+
     effect(() => {
       const state = this.gameState();
       if (state) {
@@ -70,6 +81,26 @@ export class AdventureComponent implements OnInit {
 
   ngOnInit(): void {
     this.startGame();
+  }
+
+  ngOnDestroy(): void {
+    if (this.perfLoopId) cancelAnimationFrame(this.perfLoopId);
+    if (this.perfLogInterval) clearInterval(this.perfLogInterval);
+  }
+
+  private startPerformanceLoop() {
+    this.ngZone.runOutsideAngular(() => {
+      const loop = () => {
+        this.performanceMonitor.recordFrame();
+        this.perfLoopId = requestAnimationFrame(loop);
+      };
+      this.perfLoopId = requestAnimationFrame(loop);
+    });
+
+    // Log performance periodically
+    this.perfLogInterval = setInterval(() => {
+      this.analytics.logPerformance(this.performanceMonitor.getMetrics());
+    }, 60000);
   }
 
   async startGame(): Promise<void> {

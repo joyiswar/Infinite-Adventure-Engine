@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -7,18 +6,25 @@ import { Injectable } from '@angular/core';
 export class AudioService {
   private audioContext: AudioContext | null = null;
 
-  private initializeAudioContext() {
+  constructor() {}
+
+  private async ensureAudioContext(): Promise<void> {
     if (!this.audioContext) {
       try {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       } catch (e) {
-        console.error("Web Audio API is not supported in this browser");
+        console.warn('Web Audio API not supported');
+        return;
       }
+    }
+
+    if (this.audioContext.state === 'suspended') {
+      await this.audioContext.resume();
     }
   }
 
-  playSound(type: 'choice' | 'item' | 'achievement' | 'victory' | 'defeat'): void {
-    this.initializeAudioContext();
+  async playSound(type: 'choice' | 'item' | 'achievement' | 'victory' | 'defeat'): Promise<void> {
+    await this.ensureAudioContext();
     if (!this.audioContext) return;
 
     const oscillator = this.audioContext.createOscillator();
@@ -56,21 +62,17 @@ export class AudioService {
         break;
       case 'victory':
         gainNode.gain.setValueAtTime(0.08, this.audioContext.currentTime);
-        // C4
         oscillator.frequency.setValueAtTime(261.6, this.audioContext.currentTime);
-        // E4
         oscillator.frequency.setValueAtTime(329.6, this.audioContext.currentTime + 0.1);
-        // G4
         oscillator.frequency.setValueAtTime(392.0, this.audioContext.currentTime + 0.2);
-        // C5
         oscillator.frequency.setValueAtTime(523.2, this.audioContext.currentTime + 0.3);
         gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 1);
         break;
       case 'defeat':
         gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
         oscillator.type = 'sawtooth';
-        oscillator.frequency.setValueAtTime(110, this.audioContext.currentTime); // A2
-        oscillator.frequency.exponentialRampToValueAtTime(82.4, this.audioContext.currentTime + 1.5); // E2
+        oscillator.frequency.setValueAtTime(110, this.audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(82.4, this.audioContext.currentTime + 1.5);
         gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioContext.currentTime + 2);
         break;
     }
