@@ -46,25 +46,30 @@ export class GeminiService {
     const systemInstruction = `You are an Advanced AI Game Master.
     Your mission is to orchestrate a complex, procedural fantasy world where choices have weight.
 
+    JSON SCHEMA:
+    {
+      "story": "String (Narrative text)",
+      "choices": [{"id": Number, "text": "String"}],
+      "quest": "String (Short summary of current goal)",
+      "inventory": [{"name": "String", "description": "String"}],
+      "imagePrompt": "String (Descriptive prompt for DALL-E/Stable Diffusion)",
+      "shouldGenerateNewImage": Boolean,
+      "unlockedAchievementId": "String (Optional)",
+      "outcome": "success" | "neutral" | "failure",
+      "inCombat": Boolean,
+      "codexEntries": [{"title": "String", "content": "String"}]
+    }
+
     CURRENT DIFFICULTY: ${difficulty}.
     - Scale encounters, puzzle complexity, and NPC hostility accordingly.
-    - At 'Hard', include more tactical trade-offs and resource scarcity.
 
     PROCEDURAL DEPTH:
-    - Introduce NPCs with unique motivations and secrets.
-    - Create environmental events (weather changes, magical anomalies).
-    - Track world state implicitly through narrative.
-
-    COMBAT & CHALLENGES:
-    - Manage structured combat. Completed encounters: ${combatEncounters}.
-    - Ensure tactical variety based on enemy types (Brutes, Casters, etc.).
+    - Introduce NPCs with unique motivations.
+    - Track world state implicitly.
 
     ACHIEVEMENTS: ${achievementsString}
 
-    LORE & WORLD-BUILDING:
-    - Generate concise codex entries for NEW discoveries.
-
-    Return valid JSON matching the GameState model.`;
+    Return ONLY the raw JSON object. Do not include markdown blocks.`;
 
     let prompt = 'Start a new fantasy adventure for me. I awaken in a mysterious place.';
     if (playerChoice) {
@@ -77,7 +82,8 @@ export class GeminiService {
         data: { session },
       } = await this.supabase.client.auth.getSession();
       const headers = {
-        Authorization: `Bearer ${session?.access_token || ''}`,
+        'Authorization': `Bearer ${session?.access_token || (this.supabase as any).anonKey}`,
+        'apikey': (this.supabase as any).anonKey,
         'Content-Type': 'application/json',
       };
 

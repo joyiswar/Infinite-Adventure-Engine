@@ -4,6 +4,7 @@ import { InventoryItem } from '../../entities/inventory.model';
 import { Achievement } from '../../entities/achievement.model';
 import { CodexEntry } from '../../entities/codex.model';
 import { SupabaseService } from '../../systems/supabase-system.service';
+import { PlayGamesService } from '../../systems/play-games.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,7 +25,10 @@ export class SidebarComponent {
 
   user = signal<any>(null);
 
-  constructor(private supabase: SupabaseService) {
+  constructor(
+    private supabase: SupabaseService,
+    public playGames: PlayGamesService
+  ) {
     this.checkUser();
   }
 
@@ -50,5 +54,9 @@ export class SidebarComponent {
 
   isCodexNew(title: string): boolean {
     return this.newCodexEntry && this.lastAddedCodexTitle === title;
+  }
+
+  async linkPlayGames() {
+    await this.playGames.linkAccount();
   }
 }

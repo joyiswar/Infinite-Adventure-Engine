@@ -10,6 +10,7 @@ import { TutorialService } from '../../systems/tutorial-system.service';
 import { LoreCodexService } from '../../systems/codex-system.service';
 import { DifficultyScalingService } from '../../systems/difficulty-scaling.service';
 import { LeaderboardSystem } from '../../systems/leaderboard-system.service';
+import { PlayGamesService } from '../../systems/play-games.service';
 import { RenderingEngine } from '../../engine/rendering-engine.service';
 
 @Component({
@@ -61,6 +62,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     private tutorialService: TutorialService,
     private loreCodexService: LoreCodexService,
     private leaderboardSystem: LeaderboardSystem,
+    private playGames: PlayGamesService,
     private renderingEngine: RenderingEngine,
     public difficultyService: DifficultyScalingService
   ) {
@@ -234,6 +236,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     const saveData = this.getCurrentSaveData();
     if (saveData) {
       await this.saveGameService.save(slotId, saveData);
+      this.playGames.syncProgress(saveData);
       this.syncLeaderboard();
       this.closeModal();
     }
