@@ -1,6 +1,8 @@
 import { CodexEntry } from './codex.model';
 import { InventoryItem } from './inventory.model';
 
+export type MissionPhase = 'Diagnostics' | 'Briefing' | 'Ignition' | 'ActiveOps';
+
 export interface Choice {
   id: number;
   text: string;
@@ -13,14 +15,16 @@ export interface GameState {
   inventory: InventoryItem[];
   imagePrompt: string;
   shouldGenerateNewImage: boolean;
+  phase: MissionPhase;
+  telemetry?: {
+    neuralStability: number;
+    aetherVelocity: number;
+    gForce: number;
+  };
   unlockedAchievementId?: string;
   outcome?: 'success' | 'neutral' | 'failure';
   inCombat?: boolean;
   combatResult?: 'victory' | 'defeat';
-  combatStage?: {
-    current: number;
-    total: number;
-  };
   codexEntries?: CodexEntry[];
   characterPortraitPrompt?: string;
 }

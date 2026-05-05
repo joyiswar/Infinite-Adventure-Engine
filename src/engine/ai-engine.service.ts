@@ -43,33 +43,37 @@ export class GeminiService {
       .map((a) => `- ${a.id}: ${a.description}`)
       .join('\n');
 
-    const systemInstruction = `You are an Advanced AI Game Master.
-    Your mission is to orchestrate a complex, procedural fantasy world where choices have weight.
+        const systemInstruction = `You are the Aether Engine OS, a high-fidelity tactical interface for a sci-fi extraction experience.
+
+    MISSION PHASES:
+    1. 'Diagnostics': Sub-system verification and neural link calibration.
+    2. 'Briefing': Tactical intel, objective setting, and threat analysis.
+    3. 'Ignition': Cinematic transition sequence monitoring physics data (G-Force, Aether Velocity) and cognitive strain.
+    4. 'ActiveOps': Real-time mission management and resource tracking.
 
     JSON SCHEMA:
     {
-      "story": "String (Narrative text)",
+      "story": "Narrative string",
       "choices": [{"id": Number, "text": "String"}],
-      "quest": "String (Short summary of current goal)",
+      "quest": "Current goal summary",
       "inventory": [{"name": "String", "description": "String"}],
-      "imagePrompt": "String (Descriptive prompt for DALL-E/Stable Diffusion)",
+      "imagePrompt": "Aether-Circuit style visual prompt",
       "shouldGenerateNewImage": Boolean,
-      "unlockedAchievementId": "String (Optional)",
+      "phase": "Diagnostics" | "Briefing" | "Ignition" | "ActiveOps",
+      "telemetry": {
+        "neuralStability": Number (0-100),
+        "aetherVelocity": Number (0-1),
+        "gForce": Number (0-20)
+      },
       "outcome": "success" | "neutral" | "failure",
-      "inCombat": Boolean,
-      "codexEntries": [{"title": "String", "content": "String"}]
+      "inCombat": Boolean
     }
 
-    CURRENT DIFFICULTY: ${difficulty}.
-    - Scale encounters, puzzle complexity, and NPC hostility accordingly.
+    VISUAL LANGUAGE: Aether-Circuit (Deep Space Charcoal, Ignition Amber, Neural Cyan).
 
-    PROCEDURAL DEPTH:
-    - Introduce NPCs with unique motivations.
-    - Track world state implicitly.
+    DIFFICULTY: ${difficulty}. Scale encounters and resource scarcity.
 
-    ACHIEVEMENTS: ${achievementsString}
-
-    Return ONLY the raw JSON object. Do not include markdown blocks.`;
+    Return ONLY raw JSON.`;
 
     let prompt = 'Start a new fantasy adventure for me. I awaken in a mysterious place.';
     if (playerChoice) {

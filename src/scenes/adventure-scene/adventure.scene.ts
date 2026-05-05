@@ -12,6 +12,7 @@ import { DifficultyScalingService } from '../../systems/difficulty-scaling.servi
 import { LeaderboardSystem } from '../../systems/leaderboard-system.service';
 import { PlayGamesService } from '../../systems/play-games.service';
 import { RenderingEngine } from '../../engine/rendering-engine.service';
+import { TelemetrySystem } from '../../systems/telemetry-system.service';
 
 @Component({
   selector: 'app-adventure',
@@ -23,13 +24,14 @@ import { RenderingEngine } from '../../engine/rendering-engine.service';
 export class AdventureComponent implements OnInit, AfterViewInit {
   @Output() gameStateChange = new EventEmitter<GameState>();
   @Output() portraitChange = new EventEmitter<string>();
+  @Output() toggleSidebar = new EventEmitter<void>();
   @ViewChild('canvasContainer') canvasContainer!: ElementRef;
 
   gameState = signal<GameState | null>(null);
   currentImage = signal<string>('');
   characterPortraitUrl = signal<string>('');
   isLoading = signal<boolean>(true);
-  loadingMessage = signal<string>('The mists of fate are swirling...');
+  loadingMessage = signal<string>('Establishing Neural Link...');
   showVictoryBanner = signal(false);
   showDefeatBanner = signal(false);
   showCombatTutorial = signal(false);
@@ -64,6 +66,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     private leaderboardSystem: LeaderboardSystem,
     private playGames: PlayGamesService,
     private renderingEngine: RenderingEngine,
+    public telemetrySystem: TelemetrySystem,
     public difficultyService: DifficultyScalingService
   ) {
     effect(() => {
@@ -88,7 +91,8 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     this.isLoading.set(true);
     this.updateLoadingMessage();
     const initialState = await this.geminiService.generateStorySegment(undefined, this.difficultyService.currentDifficulty(), this.combatEncounters());
-    this.gameState.set(initialState);
+    this.processNewState(initialState);
+
     const initialImage = await this.geminiService.generateImage(initialState.imagePrompt);
     if (initialImage) {
       this.currentImage.set(initialImage);
@@ -150,7 +154,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
       this.loreCodexService.addEntries(newState.codexEntries);
     }
 
-    this.gameState.set(newState);
+    this.processNewState(newState);
     this.difficultyService.update(newState.outcome);
 
     if (newState.inCombat && !this.tutorialService.hasSeenCombatTutorial()) {
@@ -184,6 +188,18 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     this.choiceCounter++;
     if (this.choiceCounter % this.autosaveInterval === 0) {
       this.handleAutosave();
+    }
+  }
+
+  private processNewState(newState: GameState) {
+    this.gameState.set(newState);
+    console.log('Transitioned to phase:', newState.phase);
+
+    // Update telemetry if provided by AI
+    if (newState.telemetry) {
+        this.telemetrySystem.neuralStability.set(newState.telemetry.neuralStability);
+        this.telemetrySystem.aetherVelocity.set(newState.telemetry.aetherVelocity);
+        this.telemetrySystem.gForce.set(newState.telemetry.gForce);
     }
   }
 
@@ -263,7 +279,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
       this.portraitChange.emit(this.characterPortraitUrl());
       this.geminiService.setStoryHistory(saveData.storyHistory);
       this.achievementService.achievements.set(saveData.achievements);
-      this.difficulty.set(saveData.difficulty);
+      this.difficultyService.currentDifficulty.set(saveData.difficulty);
       this.combatEncounters.set(saveData.combatEncounters ?? 0);
       this.loreCodexService.codex.set(saveData.codex ?? []);
 
