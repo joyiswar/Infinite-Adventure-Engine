@@ -86,7 +86,7 @@ export class GeminiService {
         data: { session },
       } = await this.supabase.client.auth.getSession();
       const headers = {
-        'Authorization': `Bearer ${session?.access_token || (this.supabase as any).anonKey}`,
+        'Authorization': `Bearer ${session?.access_token || this.supabase.anonKey}`,
         'apikey': (this.supabase as any).anonKey,
         'Content-Type': 'application/json',
       };

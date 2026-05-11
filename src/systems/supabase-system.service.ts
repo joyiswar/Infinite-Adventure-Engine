@@ -16,6 +16,7 @@ export class SupabaseService {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZWRzY2p6bGV6dW1jZWN6ZnJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2OTI2NDgsImV4cCI6MjA5MzI2ODY0OH0.JOarma-bj8-ojSaB175krXGtqA7ni3OLTZdcLVpdunM';
     this.supabase = createClient(supabaseUrl, supabaseKey);
     this._anonKey = supabaseKey;
+    this._anonKey = supabaseKey;
   }
 
   get anonKey() { return this._anonKey; }
