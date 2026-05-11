@@ -44,7 +44,7 @@
                         <circle class="text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]" cx="96" cy="96" r="88" fill="transparent" stroke="currentColor" stroke-width="8" stroke-dasharray="552.9" [style.stroke-dashoffset]="552.9 * (1 - telemetrySystem.syncLevel() / 100)" />
                       </svg>
                       <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl font-bold text-slate-100 leading-none">{{ telemetrySystem.syncLevel() }}%</span>
+                        <span class="text-4xl font-bold text-slate-100 leading-none">{{ telemetrySystem.syncLevel() | number:'1.0-0' }}%</span>
                         <span class="text-[8px] font-bold text-cyan-400 uppercase tracking-[0.3em] mt-1">STABILITY</span>
                       </div>
                     </div>
