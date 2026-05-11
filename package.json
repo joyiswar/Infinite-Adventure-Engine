@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "postinstall": "sed -i 's/defaultClientConditions/[]/g' node_modules/@analogjs/vite-plugin-angular/src/lib/angular-vite-plugin.js && sed -i 's/import { normalizePath, preprocessCSS, \\[\\]/import { normalizePath, preprocessCSS/g' node_modules/@analogjs/vite-plugin-angular/src/lib/angular-vite-plugin.js"
   },
   "dependencies": {
     "@angular/common": "18.2.14",
