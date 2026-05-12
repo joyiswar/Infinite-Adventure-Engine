@@ -1,16 +1,15 @@
-
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { AdventureComponent } from './components/adventure/adventure.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { GameState } from './models/gamestate.model';
-import { AchievementService } from './services/achievement.service';
-import { Achievement } from './models/achievement.model';
+import { AdventureComponent } from './scenes/adventure-scene/adventure.scene';
+import { SidebarComponent } from './ui/sidebar-panel/sidebar.component';
+import { GameState } from './entities/gamestate.model';
+import { AchievementService } from './systems/achievement-system.service';
+import { Achievement } from './entities/achievement.model';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { AudioService } from './services/audio.service';
-import { LoreCodexService } from './services/lore-codex.service';
-import { CodexEntry } from './models/codex.model';
-import { InventoryItem } from './models/inventory.model';
+import { AudioService } from './systems/audio-system.service';
+import { LoreCodexService } from './systems/codex-system.service';
+import { CodexEntry } from './entities/codex.model';
+import { InventoryItem } from './entities/inventory.model';
 
 interface Toast {
   title: string;
@@ -26,11 +25,11 @@ interface Toast {
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Infinite Adventure Engine';
-  
+
   inventory = signal<InventoryItem[]>([]);
   quest = signal<string>('Your quest has not yet been revealed.');
   characterPortraitUrl = signal<string>('');
-  
+
   unlockedAchievements = signal<Achievement[]>([]);
   newAchievementUnlocked = signal(false);
   lastUnlockedAchievementId = signal<string | null>(null);
@@ -42,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private codexSub!: Subscription;
 
   toast = signal<Toast>({ title: '', message: '', show: false });
+  isSidebarOpen = signal(false);
 
   constructor(
     private achievementService: AchievementService,
@@ -52,12 +52,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.unlockedAchievements.set(this.achievementService.getUnlockedAchievements());
     this.codex.set(this.loreCodexService.codex());
-    
+
     this.achievementSub = this.achievementService.onAchievementUnlocked.subscribe(achievement => {
       this.unlockedAchievements.set(this.achievementService.getUnlockedAchievements());
       this.showToast('Achievement Unlocked!', achievement.name);
       this.audioService.playSound('achievement');
-      
+
       this.lastUnlockedAchievementId.set(achievement.id);
       this.newAchievementUnlocked.set(true);
       setTimeout(() => this.newAchievementUnlocked.set(false), 1500);
@@ -84,10 +84,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this.quest.set(newState.quest);
   }
 
+  onItemDetail(item: InventoryItem) {
+    this.showToast(item.name, item.description);
+  }
+
   onPortraitChange(url: string) {
     this.characterPortraitUrl.set(url);
   }
-  
+
+  toggleSidebar() {
+    this.isSidebarOpen.update(v => !v);
+  }
+
   private showToast(title: string, message: string): void {
     this.toast.set({ title, message, show: true });
     setTimeout(() => {

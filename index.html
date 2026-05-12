@@ -1,94 +1,151 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Infinite Adventure Engine</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0F1115">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <title>AETHER ENGINE | Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#31353c",
+            "surface-container-lowest": "#0a0e15",
+            "primary-container": "#0f1115",
+            "surface-tint": "#c6c6cc",
+            "surface": "#0f141a",
+            "on-surface-variant": "#c6c6cb",
+            "on-background": "#dfe2ec",
+            "surface-container-high": "#262a31",
+            "on-error-container": "#ffdad6",
+            "secondary": "#ffdb9d",
+            "on-secondary-fixed-variant": "#5e4200",
+            "outline-variant": "#45474b",
+            "on-error": "#690005",
+            "on-tertiary": "#00363a",
+            "on-surface": "#dfe2ec",
+            "secondary-container": "#feb700",
+            "primary-fixed": "#e2e2e8",
+            "tertiary-container": "#001416",
+            "surface-container": "#1c2027",
+            "background": "#0f141a",
+            "on-secondary-fixed": "#271900",
+            "secondary-fixed": "#ffdea8",
+            "on-secondary": "#412d00",
+            "tertiary-fixed": "#7df4ff",
+            "error-container": "#93000a",
+            "inverse-surface": "#dfe2ec",
+            "on-primary-fixed": "#1a1c20",
+            "tertiary-fixed-dim": "#00dbe9",
+            "surface-bright": "#353941",
+            "on-secondary-container": "#6b4b00",
+            "tertiary": "#00dbe9",
+            "primary-fixed-dim": "#c6c6cc",
+            "outline": "#909095",
+            "on-tertiary-container": "#008a93",
+            "on-tertiary-fixed-variant": "#004f54",
+            "primary": "#c6c6cc",
+            "secondary-fixed-dim": "#ffba20",
+            "inverse-on-surface": "#2d3138",
+            "error": "#ffb4ab",
+            "on-primary-fixed-variant": "#45474b",
+            "on-primary-container": "#7b7c82",
+            "on-primary": "#2f3035",
+            "surface-container-low": "#181c23",
+            "surface-container-highest": "#31353c",
+            "on-tertiary-fixed": "#002022",
+            "inverse-primary": "#5d5e63",
+            "surface-dim": "#0f141a",
+            "charcoal": "#0F1115",
+            "amber-ignition": "#F59E0B",
+            "cyan-neural": "#22D3EE"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["Space Mono", "monospace"],
+            "space-grotesk": ["Space Grotesk", "sans-serif"],
+            "serif-story": ["IM Fell English", "serif"],
+            "jetbrains": ["JetBrains Mono", "monospace"]
+          },
+          animation: {
+            "spin-slow": "spin 3s linear infinite",
+            "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+            "scan": "scan 2s ease-in-out infinite",
+            "shimmer": "shimmer 2s infinite"
+          },
+          keyframes: {
+            scan: {
+              '0%': { transform: 'translateY(0)' },
+              '100%': { transform: 'translateY(64px)' }
+            },
+            shimmer: {
+              '0%': { 'background-position': '200% 0' },
+              '100%': { 'background-position': '-200% 0' }
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      background-color: #0f141a;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
     }
-    .font-serif-story {
-      font-family: 'IM Fell English', serif;
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-panel {
+      background: rgba(30, 34, 41, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 191, 0, 0.1);
+    }
+    .amber-glow-text {
+      text-shadow: 0 0 8px rgba(255, 191, 0, 0.5);
+    }
+    .runic-noise {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.05;
+      pointer-events: none;
+    }
+    .scanline {
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #00dbe9;
+      border-radius: 10px;
     }
     .toast-animate {
       animation: slide-in-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     }
-    .glow-animation {
-      animation: glow 1.5s ease-in-out;
-    }
-    .victory-animate {
-      animation: victory-fade-in-out 3s ease-in-out both;
-    }
-    .defeat-animate {
-      animation: defeat-fade-in-out 4s ease-out both;
-    }
-    .achievement-pop-in {
-      animation: achievement-pop 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    }
-    .tutorial-fade-in {
-      animation: fade-in 0.5s ease-out both;
-    }
-
     @keyframes slide-in-bottom {
       0% { transform: translateY(100px); opacity: 0; }
       100% { transform: translateY(0); opacity: 1; }
     }
-
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 5px rgba(252, 211, 77, 0.3); }
-      50% { text-shadow: 0 0 20px rgba(252, 211, 77, 0.7); }
-    }
-
-    @keyframes victory-fade-in-out {
-      0%, 100% { opacity: 0; transform: scale(0.8); }
-      10%, 90% { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes defeat-fade-in-out {
-      0% { opacity: 0; transform: scale(1.1); }
-      20% { opacity: 1; transform: scale(1); }
-      80% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(0.95); }
-    }
-
-    @keyframes achievement-pop {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    @keyframes fade-in {
-      0% { opacity: 0; transform: scale(0.95); }
-      100% { opacity: 1; transform: scale(1); }
-    }
   </style>
-<script type="importmap">
-{
-  "imports": {
-    "rxjs": "https://esm.sh/rxjs@^7.8.2?conditions=es2015",
-    "rxjs/operators": "https://esm.sh/rxjs@^7.8.2/operators?conditions=es2015",
-    "rxjs/ajax": "https://esm.sh/rxjs@^7.8.2/ajax?conditions=es2015",
-    "rxjs/webSocket": "https://esm.sh/rxjs@^7.8.2/webSocket?conditions=es2015",
-    "rxjs/testing": "https://esm.sh/rxjs@^7.8.2/testing?conditions=es2015",
-    "rxjs/fetch": "https://esm.sh/rxjs@^7.8.2/fetch?conditions=es2015",
-    "@angular/compiler": "https://esm.sh/@angular/compiler@^21.1.0?external=rxjs",
-    "@angular/platform-browser": "https://esm.sh/@angular/platform-browser@^21.1.0?external=rxjs",
-    "@angular/common/http": "https://esm.sh/@angular/common@^21.1.0/http?external=rxjs",
-    "@angular/core": "https://esm.sh/@angular/core@^21.1.0?external=rxjs",
-    "@angular/common": "https://esm.sh/@angular/common@^21.1.0?external=rxjs",
-    "@google/genai": "https://esm.sh/@google/genai@^1.36.0?external=rxjs",
-    "vite": "https://esm.sh/vite@^7.3.1?external=rxjs",
-    "@analogjs/vite-plugin-angular": "https://esm.sh/@analogjs/vite-plugin-angular@^2.2.2?external=rxjs"
-  }
-}
-</script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://apis.google.com/js/api.js"></script>
 </head>
-<body class="bg-slate-900 text-slate-200">
+<body class="bg-background text-on-background font-sans">
   <app-root></app-root>
   <script type="module" src="/index.tsx"></script>
 </body>

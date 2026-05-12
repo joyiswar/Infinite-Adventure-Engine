@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#0f1115",
+                    "surface": "#0f141a",
+                    "tertiary-fixed-dim": "#00dbe9",
+                    "on-primary-fixed": "#1a1c20",
+                    "secondary-fixed-dim": "#ffba20",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "on-primary-fixed-variant": "#45474b",
+                    "tertiary-fixed": "#7df4ff",
+                    "error": "#ffb4ab",
+                    "surface-bright": "#353941",
+                    "on-secondary-container": "#6b4b00",
+                    "surface-tint": "#c6c6cc",
+                    "surface-container-lowest": "#0a0e15",
+                    "on-error": "#690005",
+                    "inverse-on-surface": "#2d3138",
+                    "on-tertiary": "#00363a",
+                    "secondary-fixed": "#ffdea8",
+                    "on-secondary": "#412d00",
+                    "on-surface": "#dfe2ec",
+                    "on-primary-container": "#7b7c82",
+                    "secondary-container": "#feb700",
+                    "surface-container": "#1c2027",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "on-tertiary-container": "#008a93",
+                    "surface-dim": "#0f141a",
+                    "on-primary": "#2f3035",
+                    "on-background": "#dfe2ec",
+                    "tertiary-container": "#001416",
+                    "surface-container-high": "#262a31",
+                    "background": "#0f141a",
+                    "surface-variant": "#31353c",
+                    "tertiary": "#00dbe9",
+                    "primary": "#c6c6cc",
+                    "surface-container-highest": "#31353c",
+                    "outline-variant": "#45474b",
+                    "secondary": "#ffdb9d",
+                    "inverse-surface": "#dfe2ec",
+                    "inverse-primary": "#5d5e63",
+                    "on-surface-variant": "#c6c6cb",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#c6c6cc",
+                    "on-tertiary-fixed": "#002022",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-low": "#181c23",
+                    "on-secondary-fixed": "#271900",
+                    "outline": "#909095",
+                    "primary-fixed": "#e2e2e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "24px",
+                    "unit": "4px",
+                    "panel-padding": "12px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "h3": ["Space Grotesk"],
+                    "label-sm": ["Inter"],
+                    "h2": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "h1": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 34, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .circuit-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 219, 233, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .runic-glow {
+            text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+        }
+        .cyber-border-amber {
+            border-image: linear-gradient(to bottom, #ffba20, transparent) 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen circuit-bg pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 z-50 w-full bg-[#1E2229]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4_20px_rgba(0,0,0,0.5)] flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-secondary-fixed-dim p-0.5 overflow-hidden">
+<img alt="Operative HUD Avatar" class="w-full h-full object-cover" data-alt="A cinematic close-up of a futuristic cybernetic operative with glowing amber eye implants and subtle circuitry patterns etched onto their skin. The lighting is dramatic and low-key, with cold cyan rim light contrasting against warm amber focal points. The aesthetic is high-fantasy cyberpunk, featuring intricate mechanical details and a dark, obsidian-glass texture in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDftBrwGGXXyudp_gEPmksgDrqNurxsQ3AwAu_emnkDXib1fSPWxVODZWeLFGQx8JTacJn9aHBf7kwELYI0x-OXEJCcvDbxdr-Xk7C1e1Moz4-LFdvJnPWqdVF9gKFs9_gr4at9JlD1R0AKNomvIglThu8ycOvNTa-O2k0uLR_ufdHsO2xV6ziZILJKPafFzsEdavsXfnwEvmRUmrkQuVpZ_31vFyT215d9W76WbIOPKatJqdYOJJwRM0K2ItoxmETHYRN7imeBz3M6"/>
+</div>
+<h1 class="font-space-grotesk tracking-widest uppercase text-xl font-black text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]">AETHER ENGINE</h1>
+</div>
+<button class="active:scale-95 transition-transform hover:text-cyan-400 transition-colors duration-300">
+<span class="material-symbols-outlined text-amber-500">settings</span>
+</button>
+</header>
+<main class="pt-24 px-6 max-w-5xl mx-auto">
+<!-- Hero Stats Section -->
+<section class="glass-panel rounded-xl p-8 mb-8 border-amber-500/30 overflow-hidden relative">
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary-fixed-dim/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-end md:items-center gap-6">
+<div>
+<p class="font-label-sm text-tertiary-fixed-dim mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">terminal</span>
+                        OPERATIVE PROFILE: ACH-77
+                    </p>
+<h2 class="font-h1 text-h1 text-secondary-fixed-dim runic-glow mb-2">RANKS &amp; ARCHIVES</h2>
+<p class="font-body-md text-on-surface-variant max-w-md">Synchronizing neural link with the Aether core. All tactical achievements and field mastery metrics are displayed below.</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-on-surface-variant uppercase">Total Score</span>
+<div class="flex items-baseline gap-2">
+<span class="font-h2 text-h2 text-secondary-fixed-dim">12,450</span>
+<span class="font-label-sm text-tertiary-fixed-dim">PTS</span>
+</div>
+</div>
+</div>
+<!-- Progress Summary -->
+<div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container/50 border border-white/5 p-4 rounded">
+<span class="font-label-sm text-on-surface-variant block mb-1">COMPLETION</span>
+<span class="font-h3 text-h3 text-tertiary">68%</span>
+</div>
+<div class="bg-surface-container/50 border border-white/5 p-4 rounded">
+<span class="font-label-sm text-on-surface-variant block mb-1">LEGENDARY</span>
+<span class="font-h3 text-h3 text-secondary-fixed-dim">12 / 24</span>
+</div>
+<div class="bg-surface-container/50 border border-white/5 p-4 rounded">
+<span class="font-label-sm text-on-surface-variant block mb-1">UNLOCKED</span>
+<span class="font-h3 text-h3 text-on-surface">142</span>
+</div>
+<div class="bg-surface-container/50 border border-white/5 p-4 rounded">
+<span class="font-label-sm text-on-surface-variant block mb-1">WORLD RANK</span>
+<span class="font-h3 text-h3 text-tertiary">#402</span>
+</div>
+</div>
+</section>
+<!-- Achievement List (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Featured Achievement -->
+<div class="md:col-span-8 glass-panel rounded-xl p-6 border-l-4 border-l-secondary-fixed-dim relative group overflow-hidden">
+<div class="flex flex-col md:flex-row gap-6 items-start">
+<div class="w-24 h-24 flex-shrink-0 bg-secondary-fixed-dim/10 rounded-lg flex items-center justify-center border border-secondary-fixed-dim/30">
+<span class="material-symbols-outlined text-[48px] text-secondary-fixed-dim" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-h3 text-h3 text-on-surface">The Weaver of Fate</h3>
+<span class="font-label-sm text-secondary-fixed-dim bg-secondary-fixed-dim/10 px-2 py-1 rounded">PLATINUM</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-6">Complete all major story arcs across the fragmented timelines of the Aether Engine without a single core failure.</p>
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm text-tertiary-fixed-dim uppercase">
+<span>Timeline Stability</span>
+<span>85%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed-dim w-[85%] shadow-[0_0_8px_#ffba20]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Card 1 -->
+<div class="md:col-span-4 glass-panel rounded-xl p-6 border-t-2 border-t-tertiary relative flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-[32px] text-tertiary">shield</span>
+<span class="font-label-sm text-tertiary-fixed-dim">COMPLETED</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Iron Bastion</h3>
+<p class="text-on-surface-variant text-body-md">Deflected 10,000 incoming kinetic projectiles with the Aether Shield.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+<span class="font-label-sm text-on-surface-variant">+500 PTS</span>
+<span class="material-symbols-outlined text-tertiary">check_circle</span>
+</div>
+</div>
+<!-- Achievement Card 3 -->
+<div class="md:col-span-4 glass-panel rounded-xl p-6 border border-white/10 hover:border-secondary-fixed-dim/50 transition-colors">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-white/5 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim">inventory_2</span>
+</div>
+<div>
+<h4 class="font-body-lg font-bold text-on-surface">Vault Raider</h4>
+<span class="font-label-sm text-on-surface-variant">GOLD</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-4">Recover 50 ancient artifacts from the Deep Engine sector.</p>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed-dim w-[40%]"></div>
+</div>
+<div class="mt-2 flex justify-between font-label-sm text-on-surface-variant">
+<span>20 / 50</span>
+<span>40%</span>
+</div>
+</div>
+<!-- Achievement Card 4 -->
+<div class="md:col-span-4 glass-panel rounded-xl p-6 border border-white/10 hover:border-secondary-fixed-dim/50 transition-colors">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-white/5 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim">menu_book</span>
+</div>
+<div>
+<h4 class="font-body-lg font-bold text-on-surface">Code Breaker</h4>
+<span class="font-label-sm text-on-surface-variant">SILVER</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-4">Decrypt the encryption sequences of 10 rogue AI terminals.</p>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed-dim w-[90%] shadow-[0_0_8px_#ffba20]"></div>
+</div>
+<div class="mt-2 flex justify-between font-label-sm text-on-surface-variant">
+<span>9 / 10</span>
+<span>90%</span>
+</div>
+</div>
+<!-- Achievement Card 5 -->
+<div class="md:col-span-4 glass-panel rounded-xl p-6 border border-white/10 opacity-50 grayscale hover:grayscale-0 transition-all">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-white/5 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+<div>
+<h4 class="font-body-lg font-bold text-on-surface">Ascension</h4>
+<span class="font-label-sm text-on-surface-variant">MYTHIC</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-4">Reach the terminal boundary of the Aether Engine core.</p>
+<div class="flex justify-center py-2">
+<span class="font-label-sm text-error uppercase">Data Encrypted</span>
+</div>
+</div>
+<!-- Recent Activity Panel -->
+<div class="md:col-span-12 glass-panel rounded-xl p-6 border border-tertiary/20">
+<h3 class="font-label-sm text-tertiary mb-4 uppercase tracking-widest">Recent Node Synchronizations</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between py-2 border-b border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary-fixed-dim">bolt</span>
+<div>
+<span class="block text-on-surface font-medium">First Strike</span>
+<span class="text-xs text-on-surface-variant">Eliminated a hostile drone with a precision surge.</span>
+</div>
+</div>
+<span class="text-xs text-tertiary-fixed-dim">2h ago</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary-fixed-dim">database</span>
+<div>
+<span class="block text-on-surface font-medium">Data Miner</span>
+<span class="text-xs text-on-surface-variant">Extracted 50GB of core lore fragments.</span>
+</div>
+</div>
+<span class="text-xs text-tertiary-fixed-dim">5h ago</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-[#0F1115]/90 backdrop-blur-2xl flex justify-around items-center px-4 border-t border-amber-500/20 shadow-[0_-4px_24px_rgba(0,0,0,0.8)] z-50">
+<a class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 transition-all duration-150 active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter">Story</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 transition-all duration-150 active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter">Hero</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 transition-all duration-150 active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter">Vault</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-cyan-300 hover:opacity-100 transition-all duration-150 active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter">Journal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-amber-500 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] bg-amber-500/5 rounded-t-lg transition-all duration-150 active:translate-y-0.5" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-space-grotesk text-[10px] uppercase font-bold tracking-tighter">Ranks</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,142 @@
+<aside class="flex h-full w-full flex-col z-40 bg-[#0F1115] border-r border-amber-500/20 shadow-2xl relative backdrop-blur-xl transition-all" style="background: rgba(15, 20, 26, 0.95);">
+  <div class="runic-noise absolute inset-0 opacity-10 pointer-events-none"></div>
+
+  <!-- Identity/Avatar Section -->
+  <div class="p-6 sm:p-8 flex flex-col items-center border-b border-amber-500/10 relative overflow-hidden">
+    <!-- System Status Badge -->
+    <div class="absolute top-4 right-4 flex items-center gap-1.5 opacity-60">
+      <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+      <span class="text-[8px] font-mono tracking-widest text-amber-500 uppercase">OS.LINKED</span>
+    </div>
+
+    <!-- Avatar HUD Container -->
+    <div class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
+      <!-- Progress Rings -->
+      <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 176 176">
+        <circle cx="88" cy="88" r="82" fill="transparent" stroke="rgba(255, 191, 0, 0.05)" stroke-width="2"></circle>
+        <circle class="drop-shadow-[0_0_8px_rgba(255,191,0,0.6)] transition-all duration-1000" cx="88" cy="88" r="82" fill="transparent" stroke="#ffbf00" stroke-dasharray="515" [style.stroke-dashoffset]="515 * (1 - telemetry.missionCompletion() / 100)" stroke-linecap="round" stroke-width="4"></circle>
+
+        <circle cx="88" cy="88" r="74" fill="transparent" stroke="rgba(0, 219, 233, 0.05)" stroke-width="2"></circle>
+        <circle class="drop-shadow-[0_0_8px_rgba(0,219,233,0.6)] transition-all duration-1000" cx="88" cy="88" r="74" fill="transparent" stroke="#00dbe9" stroke-dasharray="465" [style.stroke-dashoffset]="465 * (1 - telemetry.syncLevel() / 100)" stroke-linecap="round" stroke-width="3"></circle>
+      </svg>
+
+      <!-- Tech Brackets -->
+      <div class="absolute inset-0 border border-amber-500/20 rounded-full animate-pulse-slow"></div>
+
+      <!-- Inner Avatar -->
+      <div class="relative w-24 h-24 sm:w-30 sm:h-30 rounded-full p-1 bg-slate-900 border border-white/10 shadow-inner overflow-hidden">
+        @if (characterPortraitUrl) {
+          <img [src]="characterPortraitUrl" alt="Operative" class="w-full h-full object-cover">
+        } @else {
+           <div class="w-full h-full flex items-center justify-center bg-slate-800">
+             <span class="material-symbols-outlined text-4xl text-amber-500/50">person</span>
+           </div>
+        }
+      </div>
+
+      <!-- Stats Floating Readouts -->
+      <div class="absolute -top-1 right-0 bg-slate-950 border border-amber-500/40 px-2 py-0.5 rounded backdrop-blur-md shadow-lg">
+        <span class="text-[9px] font-mono font-black text-amber-500">LVL {{ telemetry.level() }}</span>
+      </div>
+      <div class="absolute -bottom-1 left-0 bg-slate-950 border border-cyan-500/40 px-2 py-0.5 rounded backdrop-blur-md shadow-lg">
+        <span class="text-[8px] font-mono text-cyan-400">SYNC {{ telemetry.syncLevel() | number:'1.0-0' }}%</span>
+      </div>
+    </div>
+
+    <!-- Identity Section -->
+    <div class="mt-6 w-full text-center relative">
+      <div class="mb-1">
+        <span class="text-[7px] font-mono text-slate-500 tracking-[0.4em] uppercase">OPERATIVE IDENT</span>
+      </div>
+      <h2 class="font-h3 text-slate-100 uppercase tracking-[0.15em] text-lg sm:text-xl truncate px-4">
+        {{ user() ? (user().email?.split('@')[0] || 'Unknown') : 'GUEST_USER' }}
+      </h2>
+      <div class="flex items-center justify-center gap-2 mt-2">
+        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500/30"></div>
+        <span class="text-amber-500 uppercase text-[9px] font-bold tracking-[0.2em] whitespace-nowrap">{{ telemetry.rank() }}</span>
+        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500/30"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Sections -->
+  <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-8 custom-scrollbar">
+    <!-- Auth Controller -->
+    <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+      @if (!user()) {
+        <button (click)="login()" class="w-full py-3 bg-white hover:bg-slate-100 text-slate-900 rounded-lg transition-all shadow-xl flex items-center justify-center gap-3 group active:scale-[0.98]">
+           <svg class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.16H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.84l3.66-2.75z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.16l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"/>
+           </svg>
+           <span class="text-xs font-black uppercase tracking-widest">Authorize via Cloud</span>
+        </button>
+      } @else {
+        <button (click)="logout()" class="w-full py-2.5 border border-red-500/30 text-red-500 rounded-lg text-[9px] uppercase font-black tracking-[0.3em] hover:bg-red-500/10 transition-all flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-sm">logout</span>
+          Terminate Uplink
+        </button>
+      }
+    </div>
+
+    <!-- Active Objectives -->
+    <div class="space-y-4">
+      <div class="flex justify-between items-end">
+        <h3 class="text-amber-500/60 text-[10px] font-black uppercase tracking-[0.2em]">Active Directives</h3>
+        <span class="text-amber-500 font-mono text-[10px]">{{ telemetry.missionCompletion() | number:'1.0-0' }}%</span>
+      </div>
+      <div class="bg-slate-900/60 border border-amber-500/10 p-4 rounded-xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
+        <p class="text-xs text-slate-100 font-bold uppercase tracking-tight leading-relaxed">{{ quest || 'AWAITING MISSION DATA...' }}</p>
+      </div>
+    </div>
+
+    <!-- Tactical Inventory -->
+    <div>
+      <h3 class="text-slate-500 mb-4 uppercase tracking-[0.3em] text-[10px] font-black">Cargo Matrix</h3>
+      <div class="grid grid-cols-4 gap-2">
+        @for (item of inventory; track item.name) {
+          <div (click)="showItemDetail(item)" class="aspect-square bg-slate-800/40 border border-amber-500/20 flex items-center justify-center group cursor-pointer hover:bg-amber-500/10 transition-all rounded-lg" [title]="item.description">
+             <span class="material-symbols-outlined text-amber-500 text-lg group-hover:scale-110 transition-transform">inventory_2</span>
+          </div>
+        }
+        @for (i of [1,2,3,4,5,6,7,8].slice(inventory?.length || 0); track i) {
+          <div class="aspect-square bg-slate-950/40 border border-white/5 flex items-center justify-center rounded-lg">
+            <div class="w-1 h-1 bg-white/5 rounded-full"></div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Service Integrations -->
+    <div class="pt-4 border-t border-white/5 space-y-4">
+       <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-amber-500/50 text-base">cloud_sync</span>
+          <h3 class="text-slate-500 uppercase tracking-[0.2em] text-[9px] font-bold">Protocol Status</h3>
+       </div>
+       <div class="bg-slate-900/80 border border-white/5 p-4 rounded-xl space-y-4">
+          <div class="flex justify-between items-center">
+             <div class="flex flex-col">
+               <span class="text-[7px] text-slate-500 uppercase font-mono">Sync Relay</span>
+               <span class="text-[9px] text-slate-300 font-bold uppercase tracking-tighter">
+                  {{ playGames.isConnected() ? 'CHANNEL_SYNCED' : 'OFFLINE' }}
+               </span>
+             </div>
+             <div class="w-2.5 h-2.5 rounded-full bg-green-500/80 shadow-[0_0_10px_rgba(34,197,94,0.4)]" [class.bg-slate-700]="!playGames.isConnected()" [class.animate-pulse]="playGames.isConnected()"></div>
+          </div>
+          <button (click)="linkPlayGames()" class="w-full bg-amber-500/5 border border-amber-500/20 text-amber-500 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] hover:bg-amber-500/10 transition-all active:scale-95">
+            {{ playGames.isConnected() ? 'Protocol Active' : 'Initialize Sync' }}
+          </button>
+       </div>
+    </div>
+  </div>
+
+  <!-- Bottom Decorations -->
+  <div class="p-6 border-t border-white/5 flex justify-around opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+    <span class="material-symbols-outlined text-amber-500 cursor-help" title="Medals of Honor">military_tech</span>
+    <span class="material-symbols-outlined text-amber-500 cursor-help" title="Achievement Rating">star</span>
+    <span class="material-symbols-outlined text-amber-500 cursor-help" title="Identity Verified">verified</span>
+  </div>
+</aside>

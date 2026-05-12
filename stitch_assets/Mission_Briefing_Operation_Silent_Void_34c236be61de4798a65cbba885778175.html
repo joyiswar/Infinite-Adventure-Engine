@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Engine - Mission Briefing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#181c23",
+                        "on-secondary-fixed": "#271900",
+                        "inverse-primary": "#5d5e63",
+                        "surface-variant": "#31353c",
+                        "primary": "#c6c6cc",
+                        "surface-bright": "#353941",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#7df4ff",
+                        "surface": "#0f141a",
+                        "surface-dim": "#0f141a",
+                        "outline-variant": "#45474b",
+                        "tertiary-container": "#001416",
+                        "secondary": "#ffdb9d",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#0a0e15",
+                        "secondary-container": "#feb700",
+                        "background": "#0f141a",
+                        "on-primary-fixed": "#1a1c20",
+                        "inverse-surface": "#dfe2ec",
+                        "on-tertiary": "#00363a",
+                        "primary-container": "#0f1115",
+                        "on-primary-container": "#7b7c82",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed": "#e2e2e8",
+                        "on-secondary": "#412d00",
+                        "outline": "#909095",
+                        "primary-fixed-dim": "#c6c6cc",
+                        "on-tertiary-container": "#008a93",
+                        "on-primary-fixed-variant": "#45474b",
+                        "on-background": "#dfe2ec",
+                        "tertiary-fixed-dim": "#00dbe9",
+                        "on-surface-variant": "#c6c6cb",
+                        "on-primary": "#2f3035",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "secondary-fixed-dim": "#ffba20",
+                        "on-secondary-container": "#6b4b00",
+                        "tertiary": "#00dbe9",
+                        "surface-container-highest": "#31353c",
+                        "surface-container-high": "#262a31",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "on-surface": "#dfe2ec",
+                        "on-tertiary-fixed": "#002022",
+                        "surface-tint": "#c6c6cc",
+                        "surface-container": "#1c2027",
+                        "secondary-fixed": "#ffdea8",
+                        "inverse-on-surface": "#2d3138"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "panel-padding": "12px",
+                        "margin": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h3": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "h2": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "space-grotesk": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanline {
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .circuit-bg {
+            background-image: radial-gradient(#06b6d4 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.05;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-secondary-container/30">
+<!-- Grid Background -->
+<div class="fixed inset-0 circuit-bg pointer-events-none"></div>
+<div class="fixed inset-0 scanline pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-4 h-16 bg-slate-900/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-secondary/50 bg-surface-container overflow-hidden">
+<img alt="Operative Profile" class="w-full h-full object-cover" data-alt="A close-up portrait of a futuristic operative in a high-tech dark visor and obsidian tactical gear. The lighting is dominated by amber and cyan digital reflections dancing on the metallic surface of the armor. The style is gritty cyberpunk with high-fidelity textures and a sense of dark fantasy professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjT7H5HO8XIDckYTdm4uXNcONQG9Fk72nfptXSIkX-O5j_C-eT0mmW902R1kyufy1A4qQ7k2bVpc0q907RNgdH_KZ-sqbLtqd8Pj3uN_RI1BmXD9LIJXKs5PxZyzTQyVBIsdOuhhJW4slKdLXeWwgUucBzktiScypucbQGPvzyFNMH_6lZMnOYwQEYpH_Xz9z0oby6FzlmZJ_ki93dN3PGWbUzhzfZXauyIy6eBnwbBZYWt7lH1Hva4cylhBmGtU02HMVLXFZbs0dJ"/>
+</div>
+<h1 class="text-xl font-bold text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)] font-space-grotesk tracking-wider uppercase">AETHER ENGINE</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-slate-400 font-space-grotesk tracking-widest text-xs uppercase hidden md:block">System Status: Nominal</span>
+<button class="p-2 text-amber-500 hover:bg-amber-500/10 hover:text-amber-300 transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+</button>
+</div>
+</header>
+<main class="pt-16 pb-24 max-w-7xl mx-auto px-gutter md:px-margin">
+<!-- Hero Header Section -->
+<section class="relative mt-gutter rounded-xl overflow-hidden border border-white/10 h-[400px] shadow-2xl">
+<img class="w-full h-full object-cover opacity-60" data-alt="A sprawling cinematic view of a rain-slicked cyberpunk megacity at night, illuminated by towering holographic advertisements and dense neon signs in amber and electric cyan. Flying vehicles leave light trails through the vertical architecture. The atmosphere is heavy with mist and technological decay, captured in a high-contrast digital art style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGwzkq9tV-KLsvnCuJ17T3xI1hj4NrjhKkqZhSUJpvzTrbaZteqF3IH0dy2B7FxifvmQ2-hAQnetNqfeMA2uD5z2GMVCwxbnSTj2KgvJPsL5ybTB-3k_231rfamZO_Dor409WPphGu9pv00xwdQmYy_DjbNM_o-6lJglPIUvePpQrDzFAS0p7bbf2C9slkGIALIdCGOiHa4IX0yDZksMqPXIRyn0CFd1ocIXikKfQCYELFZlB2AZePjwUDT6Uldg2Jp8oTotPkVeNM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+<div class="absolute bottom-margin left-margin right-margin">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-tertiary-container border border-tertiary/30 mb-4">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-space-grotesk text-label-sm text-tertiary tracking-widest uppercase">CLASSIFIED - LEVEL 4</span>
+</div>
+<h2 class="font-h1 text-h1 text-secondary uppercase drop-shadow-lg mb-2">OPERATION: SILENT VOID</h2>
+<div class="flex items-center gap-6 text-on-surface-variant font-space-grotesk text-label-sm tracking-widest">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span> SECTOR 4 - ARCHIVE-7</span>
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> TIME: 04:00 ZULU</span>
+</div>
+</div>
+</section>
+<!-- Briefing Body -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mt-margin">
+<!-- Intel Section -->
+<div class="lg:col-span-7 space-y-gutter">
+<div class="bg-surface-container-high/80 backdrop-blur-xl border border-white/10 rounded-xl p-panel-padding">
+<div class="flex items-center gap-2 mb-gutter border-b border-white/5 pb-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="description">description</span>
+<h3 class="font-h3 text-h3 text-on-surface uppercase tracking-tight">Tactical Intel</h3>
+</div>
+<div class="h-64 overflow-y-auto pr-2 custom-scrollbar text-on-surface-variant font-body-md leading-relaxed space-y-4">
+<p>Our deep-net crawlers have flagged a massive data spike originating from Archive-7, a decommissioned high-security vault deep within the neon slums of Sector 4. Internal schematics suggest the vault houses a pre-collapse Aether Core, capable of powering local grid clusters for decades.</p>
+<p>Atmospheric conditions are sub-optimal; heavy acid rain will interfere with long-range communications. You are to operate under radio silence once inside the perimeter. The facility is guarded by automated sentinel units and a residual corporate security detail.</p>
+<p>Prioritize stealth over confrontation. If the Core's containment is breached, you will have exactly three minutes before the structural fail-safes initiate a thermal purge of the entire sub-level.</p>
+<div class="p-3 bg-secondary/5 border-l-2 border-secondary font-mono text-[12px] text-secondary/80">
+                            DECRYPTION LOG [UUID: 882-X]: Peripheral firewall shows vulnerability at North-Gate Junction. Signal jammer recommended.
+                        </div>
+</div>
+</div>
+<!-- Primary Objectives -->
+<div class="bg-surface-container-high/80 backdrop-blur-xl border border-white/10 rounded-xl p-panel-padding">
+<div class="flex items-center gap-2 mb-gutter border-b border-white/5 pb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="fact_check">fact_check</span>
+<h3 class="font-h3 text-h3 text-on-surface uppercase tracking-tight">Primary Objectives</h3>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors group cursor-pointer border border-white/5">
+<div class="w-6 h-6 rounded border-2 border-tertiary flex items-center justify-center text-tertiary group-hover:bg-tertiary/10">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock_open">lock_open</span>
+</div>
+<span class="font-space-grotesk text-body-lg text-on-surface uppercase tracking-wide">Bypass Perimeter Security</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors group cursor-pointer border border-white/5">
+<div class="w-6 h-6 rounded border-2 border-secondary flex items-center justify-center text-secondary group-hover:bg-secondary/10">
+<span class="material-symbols-outlined text-[18px]" data-icon="database">database</span>
+</div>
+<span class="font-space-grotesk text-body-lg text-on-surface uppercase tracking-wide">Extract Encrypted Core</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors group cursor-pointer border border-white/5">
+<div class="w-6 h-6 rounded border-2 border-tertiary flex items-center justify-center text-tertiary group-hover:bg-tertiary/10">
+<span class="material-symbols-outlined text-[18px]" data-icon="flight_takeoff">flight_takeoff</span>
+</div>
+<span class="font-space-grotesk text-body-lg text-on-surface uppercase tracking-wide">Exfiltrate via Sector 4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Intel Visuals & Rewards -->
+<div class="lg:col-span-5 space-y-gutter">
+<!-- Intel Visuals -->
+<div class="bg-surface-container-high/80 backdrop-blur-xl border border-white/10 rounded-xl p-panel-padding">
+<div class="flex justify-between items-center mb-gutter border-b border-white/5 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="grid_view">grid_view</span>
+<h3 class="font-h3 text-h3 text-on-surface uppercase tracking-tight">Intel Visuals</h3>
+</div>
+<span class="font-space-grotesk text-[10px] text-tertiary/60 animate-pulse">LIVE DRONE FEED...</span>
+</div>
+<div class="relative rounded-lg overflow-hidden border border-tertiary/20 aspect-video">
+<img class="w-full h-full object-cover filter saturate-0 contrast-150" data-alt="A technical wireframe drone view looking down at a complex industrial circuit-like structural facility layout. The image is stylized in monochromatic cyan tones with digital HUD elements, distance markers, and scanning lines overlaid. The lighting mimics a thermal or infrared camera sensor in a high-tech espionage setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZhJpFDcyzPNOtCJJ4vah63Bqq-wYaXCA6KSNRLre_w78-dLcxAk2uBUFEn5_km5YCuKMVZ3JIb1gcv0tHIU-nGbXM3nWypUboB8MyLwsjJfzXVI_NdOS7xwsMhv5TqIPc4d_QmH95PWcAVGsgkvJXAOwLu1w-la-ydZVA_6ZJFsyDf_zwxSqcxeeBDsi9BMj3lKInsNHgiAtdxG5xYVQUKtUl7Z9D-9bTq8E750UWwnpJoXr5Y6KKtnVYNRUGU9Jd1ta0eFgV1bDi"/>
+<div class="absolute inset-0 bg-tertiary/10 mix-blend-overlay"></div>
+<div class="absolute top-2 right-2 flex flex-col gap-1">
+<div class="w-1 h-1 rounded-full bg-error animate-ping"></div>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-2">
+<div class="h-20 rounded bg-surface-container border border-white/5 overflow-hidden">
+<img class="w-full h-full object-cover opacity-50" data-alt="A macro digital readout of flowing global data packets and neural networks represented as glowing cyan spheres and connecting threads. The background is deep obsidian glass. The aesthetic is focused on high-speed information transfer and digital surveillance technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAfkrDV7tdn7gO_GqdwDTOIzaX2l052GbkD5YimBKdl6YxUm5JWDxQGMLZV2r_qLd1L4A9EmCwpsGN3RJFAS4pR3WHN7JPRR1znp7wox6QOB-6jE_l6ywynrqwhwZMkGqno_0g5HVNicuZ1X3V8ucC2f6gZiKY6_zuquu6HHZ1FRuUibHmXr3piK4TGu1USVK1CADhbx8Spn5ZlAn-Y5u6nQgXZJRzWaTtzENELyVhURZvXDSRFKYBvLDfkzAZDfLgRZkyDqNUjSX0"/>
+</div>
+<div class="h-20 rounded bg-surface-container border border-white/5 overflow-hidden">
+<img class="w-full h-full object-cover opacity-50" data-alt="Close-up of a futuristic high-tech microchip with glowing amber energy channels carved into its dark metallic surface. The component looks ancient yet advanced, with runic industrial geometry etched into its core. The lighting is cinematic with a focus on tactile metallic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDzHJm-AdTD7TL8emFtynL6XIj57XRgOZ8JdiK5XzzuTRKeci-sGoovsLNiDEQB2zFHE7-k3-PbrVnPQ3nIZtfKWzSun1TtYlar2favtIkL6CQkMiDN6NLCzkU7TUnR3xurPzeiRM9Vw2LyxK9cFqnwWNfyIzuVoD7oEk88N66RQ7o9KUPE64mnyFPuCR2zGWX3vviaGxbMYI8_5uxlTN0j6qhyTcefbG-cmDEeDeHTAyxy_fvBo6e7MjHGWhYFBACUdriQ9I-y21X"/>
+</div>
+</div>
+</div><!-- Enemy Intel Section -->
+<div class="bg-surface-container-high/80 backdrop-blur-xl border border-white/10 rounded-xl p-panel-padding">
+<div class="flex items-center gap-2 mb-gutter border-b border-white/5 pb-2">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+<h3 class="font-h3 text-h3 text-on-surface uppercase tracking-tight">Enemy Intel</h3>
+</div>
+<div class="space-y-3">
+<!-- Profile 1: Sentry Drone -->
+<div class="p-3 rounded-lg bg-surface-container border border-tertiary/20 shadow-[0_0_10px_rgba(125,244,255,0.05)] relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="flight">flight</span>
+<h4 class="font-space-grotesk font-bold text-on-surface text-sm uppercase tracking-wider">Sentry Drone - Mark IV</h4>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] bg-tertiary/10 text-tertiary border border-tertiary/30 animate-pulse">ACTIVE</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-[11px] font-space-grotesk uppercase tracking-tighter">
+<div class="text-on-surface-variant">Flight: <span class="text-on-surface">Erratic</span></div>
+<div class="text-on-surface-variant">Weaponry: <span class="text-on-surface">EMP Pulse</span></div>
+</div>
+</div>
+<!-- Profile 2: Sentinel Unit -->
+<div class="p-3 rounded-lg bg-surface-container border border-secondary/20 shadow-[0_0_10px_rgba(255,219,157,0.05)] relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="shield">shield</span>
+<h4 class="font-space-grotesk font-bold text-on-surface text-sm uppercase tracking-wider">Sentinel Unit</h4>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary/10 text-secondary border border-secondary/30">REINFORCING</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-[11px] font-space-grotesk uppercase tracking-tighter">
+<div class="text-on-surface-variant">Armor: <span class="text-on-surface">Heavy Plating</span></div>
+<div class="text-on-surface-variant">Weakness: <span class="text-on-surface">Core Overheat</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Rewards Section -->
+<div class="bg-surface-container-high/80 backdrop-blur-xl border border-white/10 rounded-xl p-panel-padding">
+<div class="flex items-center gap-2 mb-gutter border-b border-white/5 pb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="military_tech">military_tech</span>
+<h3 class="font-h3 text-h3 text-on-surface uppercase tracking-tight">Mission Rewards</h3>
+</div>
+<div class="flex justify-between items-center gap-4">
+<div class="flex-1 bg-surface-container-lowest border border-white/5 p-3 rounded-lg text-center group hover:border-secondary/30 transition-all">
+<span class="material-symbols-outlined text-secondary block text-3xl mb-1 group-hover:scale-110 transition-transform" data-icon="currency_exchange">currency_exchange</span>
+<span class="block font-space-grotesk text-h3 text-secondary">5,000</span>
+<span class="block text-label-sm text-on-surface-variant uppercase">Credits</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-white/5 p-3 rounded-lg text-center group hover:border-tertiary/30 transition-all">
+<span class="material-symbols-outlined text-tertiary block text-3xl mb-1 group-hover:scale-110 transition-transform" data-icon="bolt">bolt</span>
+<span class="block font-space-grotesk text-h3 text-tertiary">1,200</span>
+<span class="block text-label-sm text-on-surface-variant uppercase">XP</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-white/5 p-3 rounded-lg text-center group hover:border-secondary/30 transition-all">
+<span class="material-symbols-outlined text-secondary block text-3xl mb-1 group-hover:scale-110 transition-transform" data-icon="memory">memory</span>
+<span class="block font-space-grotesk text-h3 text-secondary">01</span>
+<span class="block text-label-sm text-on-surface-variant uppercase">Rare Part</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Button Container -->
+<div class="mt-margin mb-8">
+<button class="w-full relative group overflow-hidden bg-secondary hover:bg-secondary-container text-on-secondary-fixed font-space-grotesk font-bold py-6 px-12 rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_40px_rgba(251,191,36,0.6)] active:scale-95">
+<div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_2s_infinite] pointer-events-none"></div>
+<div class="relative flex items-center justify-center gap-4 text-h2 tracking-[0.2em]">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+                    INITIATE DEPLOYMENT
+                    <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Scanning Effect Overlay -->
+<div class="absolute top-0 left-0 w-full h-1 bg-white/20 animate-[scan_2s_ease-in-out_infinite]"></div>
+</button>
+<p class="text-center mt-4 font-space-grotesk text-label-sm text-on-surface-variant/60 tracking-[0.3em] uppercase">Confirming tactical readiness... sync complete.</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe bg-[#0F1115]/90 backdrop-blur-2xl border-t border-cyan-500/30 shadow-[0_-4px_15px_rgba(6,182,212,0.15)] h-20">
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-2 hover:bg-cyan-500/5 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">Terminal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-amber-500 bg-amber-500/10 rounded-t-lg border-t-2 border-amber-500 px-4 py-2 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="assignment" style="font-variation-settings: 'FILL' 1;">assignment</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">Briefing</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-2 hover:bg-cyan-500/5 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">Arsenal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-400 px-4 py-2 hover:bg-cyan-500/5 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+<span class="font-space-grotesk text-[10px] font-bold uppercase tracking-widest mt-1">Nexus</span>
+</a>
+</nav>
+<style>
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(64px); }
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #06b6d4;
+            border-radius: 10px;
+        }
+    </style>
+</body></html>

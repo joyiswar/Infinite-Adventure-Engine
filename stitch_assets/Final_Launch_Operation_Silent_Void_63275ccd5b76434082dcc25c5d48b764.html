@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Engine - Final Launch Sequence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@400;600&amp;family=Space+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#00dbe9",
+                    "secondary": "#ffdb9d",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#0f141a",
+                    "surface-bright": "#353941",
+                    "surface-variant": "#31353c",
+                    "secondary-container": "#feb700",
+                    "secondary-fixed-dim": "#ffba20",
+                    "on-tertiary-container": "#008a93",
+                    "primary": "#c6c6cc",
+                    "primary-fixed": "#e2e2e8",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "outline-variant": "#45474b",
+                    "error-container": "#93000a",
+                    "outline": "#909095",
+                    "secondary-fixed": "#ffdea8",
+                    "on-tertiary-fixed": "#002022",
+                    "on-primary-fixed": "#1a1c20",
+                    "on-secondary-container": "#6b4b00",
+                    "surface-tint": "#c6c6cc",
+                    "on-tertiary": "#00363a",
+                    "on-primary-fixed-variant": "#45474b",
+                    "on-primary-container": "#7b7c82",
+                    "inverse-on-surface": "#2d3138",
+                    "surface": "#0f141a",
+                    "on-surface-variant": "#c6c6cb",
+                    "surface-container-highest": "#31353c",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#001416",
+                    "surface-container": "#1c2027",
+                    "tertiary-fixed": "#7df4ff",
+                    "surface-container-high": "#262a31",
+                    "background": "#0f141a",
+                    "surface-container-lowest": "#0a0e15",
+                    "primary-container": "#0f1115",
+                    "on-surface": "#dfe2ec",
+                    "primary-fixed-dim": "#c6c6cc",
+                    "inverse-primary": "#5d5e63",
+                    "on-secondary-fixed": "#271900",
+                    "on-primary": "#2f3035",
+                    "tertiary-fixed-dim": "#00dbe9",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "on-secondary": "#412d00",
+                    "surface-container-low": "#181c23",
+                    "on-error": "#690005",
+                    "on-background": "#dfe2ec",
+                    "inverse-surface": "#dfe2ec"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "margin": "24px",
+                    "panel-padding": "12px"
+            },
+            "fontFamily": {
+                    "h1": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "h3": ["Space Grotesk"],
+                    "h2": ["Space Grotesk"],
+                    "mono": ["Space Mono"]
+            },
+            "fontSize": {
+                    "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "h3": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #0f141a; }
+        .glass-panel {
+            background: rgba(30, 34, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .scanlines {
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .radial-glow {
+            background: radial-gradient(circle at center, rgba(0, 219, 233, 0.15) 0%, transparent 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="dark font-body-md text-on-surface overflow-hidden h-screen flex flex-col relative">
+<div class="absolute inset-0 scanlines opacity-30 z-50"></div>
+<div class="absolute inset-0 radial-glow z-0"></div>
+<!-- TopAppBar -->
+<header class="z-40 bg-[#0F1115]/80 backdrop-blur-lg border-b border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex justify-between items-center w-full px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-500" data-icon="terminal">terminal</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-xs font-bold text-amber-500 dark:text-amber-400 drop-shadow-[0_0_5px_rgba(245,158,11,0.5)]">
+                AETHER_OS_v1.0
+            </span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-4">
+<span class="text-slate-500 font-label-sm uppercase hover:text-cyan-400 transition-colors cursor-pointer">Diagnostics</span>
+<span class="text-slate-500 font-label-sm uppercase hover:text-cyan-400 transition-colors cursor-pointer">Network</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 hover:text-cyan-400 transition-all cursor-pointer" data-icon="settings_input_component">settings_input_component</span>
+</div>
+</header>
+<main class="flex-1 flex flex-col p-gutter relative z-10 overflow-hidden">
+<!-- Top Telemetry Row -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-gutter">
+<div class="glass-panel p-panel-padding rounded-lg border-secondary/20 flex flex-col gap-1">
+<span class="text-[10px] text-primary/60 font-label-sm uppercase tracking-widest">Engine Pressure</span>
+<span class="text-h3 font-h3 text-secondary tracking-wider drop-shadow-[0_0_8px_rgba(255,219,157,0.4)]">NOMINAL</span>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-2">
+<div class="bg-tertiary h-full w-[65%]" style="box-shadow: 0 0 10px #00dbe9;"></div>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-lg border-secondary/20 flex flex-col gap-1">
+<span class="text-[10px] text-primary/60 font-label-sm uppercase tracking-widest">Core Temp</span>
+<span class="text-h3 font-h3 text-secondary tracking-wider drop-shadow-[0_0_8px_rgba(255,219,157,0.4)]">STABLE</span>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-2">
+<div class="bg-tertiary h-full w-[42%]" style="box-shadow: 0 0 10px #00dbe9;"></div>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-lg border-secondary/20 flex flex-col gap-1">
+<span class="text-[10px] text-primary/60 font-label-sm uppercase tracking-widest">Aether Flow</span>
+<span class="text-h3 font-h3 text-secondary tracking-wider drop-shadow-[0_0_8px_rgba(255,219,157,0.4)]">100%</span>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-2">
+<div class="bg-tertiary h-full w-full" style="box-shadow: 0 0 10px #00dbe9;"></div>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-lg border-secondary/20 flex flex-col gap-1">
+<span class="text-[10px] text-primary/60 font-label-sm uppercase tracking-widest">Stabilizer</span>
+<span class="text-h3 font-h3 text-secondary tracking-wider drop-shadow-[0_0_8px_rgba(255,219,157,0.4)]">ACTIVE</span>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-2">
+<div class="bg-tertiary h-full w-[88%]" style="box-shadow: 0 0 10px #00dbe9;"></div>
+</div>
+</div>
+</div>
+<!-- Central Void Core and System Log -->
+<div class="flex-1 grid grid-cols-12 gap-gutter overflow-hidden">
+<!-- Left Side Log -->
+<div class="col-span-12 md:col-span-3 flex flex-col gap-gutter">
+<div class="glass-panel flex-1 rounded-lg p-panel-padding border-tertiary/10 relative overflow-hidden">
+<div class="flex items-center gap-2 mb-4 border-b border-tertiary/20 pb-2">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="description">description</span>
+<span class="text-[10px] font-mono text-tertiary uppercase">Boot_Sequence_Log</span>
+</div>
+<div class="font-mono text-[11px] leading-relaxed text-tertiary/70 space-y-1">
+<p>&gt; Initializing Aether Coils...</p>
+<p class="text-tertiary">&gt; [OK] Coils Active</p>
+<p>&gt; Calibrating Void Shunt...</p>
+<p>&gt; System checks... <span class="text-secondary font-bold">PASS</span></p>
+<p>&gt; Fueling... <span class="text-secondary font-bold">COMPLETE</span></p>
+<p>&gt; Pressure test: 104.2psi</p>
+<p>&gt; Flow rate: 450L/sec</p>
+<p>&gt; Cooling cycle: Prime</p>
+<p class="animate-pulse text-tertiary">&gt; Awaiting authorization...</p>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+</div>
+</div>
+<!-- Central Visual -->
+<div class="col-span-12 md:col-span-9 glass-panel rounded-lg border-tertiary/20 relative flex flex-col items-center justify-center group">
+<div class="absolute inset-0 overflow-hidden rounded-lg opacity-40">
+<img class="w-full h-full object-cover mix-blend-overlay" data-alt="A highly detailed close-up of a futuristic reactor core featuring swirling cyan energy and intricate digital technical schematics projected onto floating obsidian glass plates. The lighting is dramatic and moody, dominated by vibrant cyan glows and dark shadows, creating a high-performance, dark-fantasy game engine atmosphere. Complex runic geometry and modern digital circuitry interweave across the circular energy chamber." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkCC458sHW8PVAph7y6FyxgJRps7ap8RkrJ7vD3UyNlVaulX8GR_JNnODSCUPo2-HikTTci9SkfJlxj7oJg4ZmzcUd0zBaoJz8Jll044DFuK-8GSTJgiy7RAa1KU3MjC-H-kNfRSpQBRzDFChN7tGLPQ5NjbDNOY7eL234ljWdX8Rnv-qPiB9K9P-MXiD1Mpncuitpy4PKMKiSWFVYJodtnqVyyHLUoa5ZBPxT-F6gVCpP-POx7qBs_n_7AjRjLkqcOO6ELYJEtjcD"/>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-8">
+<!-- The Reactor Graphics -->
+<div class="relative w-64 h-64 flex items-center justify-center">
+<!-- Outer Rings -->
+<div class="absolute inset-0 border-2 border-tertiary/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+<div class="absolute inset-4 border border-tertiary/40 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+<div class="absolute inset-8 border-4 border-dashed border-tertiary/30 rounded-full"></div>
+<!-- Core Energy -->
+<div class="w-32 h-32 rounded-full bg-tertiary/20 shadow-[0_0_50px_rgba(0,219,233,0.5)] flex items-center justify-center border border-tertiary">
+<span class="material-symbols-outlined text-6xl text-tertiary animate-pulse" data-icon="blur_on">blur_on</span>
+</div>
+<!-- HUD Crosshairs -->
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 w-1 h-8 bg-tertiary"></div>
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-1 h-8 bg-tertiary"></div>
+<div class="absolute top-1/2 -left-4 -translate-y-1/2 h-1 w-8 bg-tertiary"></div>
+<div class="absolute top-1/2 -right-4 -translate-y-1/2 h-1 w-8 bg-tertiary"></div>
+</div>
+<div class="text-center space-y-2">
+<h2 class="font-h2 text-h2 text-on-surface tracking-[0.3em] uppercase">Void Core</h2>
+<p class="text-tertiary font-mono text-xs tracking-widest uppercase opacity-80">Sync Status: Synchronized (99.8%)</p>
+</div>
+</div>
+<!-- Subtle Schematic Overlays -->
+<div class="absolute bottom-4 right-6 text-right font-mono text-[10px] text-tertiary/40">
+<p>ARCANE_PROTOCOL_ENFORCED</p>
+<p>ENGINE_HASH: 0x88FF12BC</p>
+</div>
+</div>
+</div>
+<!-- Launch Terminal Area -->
+<div class="mt-gutter mb-20">
+<div class="flex flex-col items-center gap-4 max-w-2xl mx-auto">
+<button class="w-full group relative overflow-hidden py-8 px-12 bg-secondary rounded-lg transition-all active:scale-95 duration-300 shadow-[0_0_30px_rgba(255,219,157,0.3)] hover:shadow-[0_0_50px_rgba(255,219,157,0.6)]">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+<div class="relative z-10 flex flex-col items-center gap-1">
+<span class="font-h1 text-h1 text-[#0f141a] uppercase tracking-[0.5em] font-black italic">IGNITE</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#0f141a] text-lg" data-icon="lock_open" data-weight="fill">lock_open</span>
+<span class="text-[10px] font-bold text-[#0f141a] tracking-widest uppercase">Tactical Authorization Confirmed</span>
+</div>
+</div>
+</button>
+<div class="flex gap-12 text-[10px] text-primary/40 font-mono tracking-tighter">
+<span>SECURITY_CLEARANCE: LEVEL_V</span>
+<span>TIMESTAMP: 2044.11.23_04:00:12</span>
+<span>ENCRYPTION: AES_256_QUANTUM</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-[#1E2229]/60 backdrop-blur-2xl border-t border-cyan-500/30 shadow-[0_-10px_30px_rgba(6,182,212,0.15)] flex justify-around items-center px-8 py-4">
+<div class="flex flex-col items-center gap-1 group cursor-pointer transition-all duration-300 text-slate-600 opacity-50 hover:text-amber-400 hover:opacity-100">
+<span class="material-symbols-outlined text-2xl" data-icon="grid_view">grid_view</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-tighter">DASHBOARD</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer transition-all duration-300 text-slate-600 opacity-50 hover:text-amber-400 hover:opacity-100">
+<span class="material-symbols-outlined text-2xl" data-icon="shield">shield</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-tighter">DEFENSE</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer transition-all duration-300 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] scale-110">
+<span class="material-symbols-outlined text-2xl" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-tighter">LAUNCH</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer transition-all duration-300 text-slate-600 opacity-50 hover:text-amber-400 hover:opacity-100">
+<span class="material-symbols-outlined text-2xl" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-tighter">SYSTEM</span>
+</div>
+</nav>
+</body></html>
