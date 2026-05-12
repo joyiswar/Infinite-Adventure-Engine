@@ -84,6 +84,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.quest.set(newState.quest);
   }
 
+  onItemDetail(item: InventoryItem) {
+    this.showToast(item.name, item.description);
+  }
+
   onPortraitChange(url: string) {
     this.characterPortraitUrl.set(url);
   }

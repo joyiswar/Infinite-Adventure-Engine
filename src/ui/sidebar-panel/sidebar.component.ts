@@ -1,10 +1,11 @@
-import { Component, Input, computed } from '@angular/core';
+import { Component, Input, computed, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InventoryItem } from '../../entities/inventory.model';
 import { Achievement } from '../../entities/achievement.model';
 import { CodexEntry } from '../../entities/codex.model';
 import { SupabaseService } from '../../systems/supabase-system.service';
 import { PlayGamesService } from '../../systems/play-games.service';
+import { TelemetrySystem } from '../../systems/telemetry-system.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,11 +24,14 @@ export class SidebarComponent {
   @Input() lastAddedCodexTitle: string | null = null;
   @Input() characterPortraitUrl: string = '';
 
+  @Output() itemDetail = new EventEmitter<InventoryItem>();
+
   user = computed(() => this.supabase.currentUser());
 
   constructor(
     private supabase: SupabaseService,
-    public playGames: PlayGamesService
+    public playGames: PlayGamesService,
+    public telemetry: TelemetrySystem
   ) {}
 
   async login() {
@@ -39,12 +43,8 @@ export class SidebarComponent {
     window.location.reload();
   }
 
-  isAchievementNew(id: string): boolean {
-    return this.newAchievement && this.lastUnlockedId === id;
-  }
-
-  isCodexNew(title: string): boolean {
-    return this.newCodexEntry && this.lastAddedCodexTitle === title;
+  showItemDetail(item: InventoryItem) {
+    this.itemDetail.emit(item);
   }
 
   async linkPlayGames() {

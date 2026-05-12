@@ -10,12 +10,6 @@ import { SupabaseService } from '../systems/supabase-system.service';
 })
 export class GeminiService {
   private storyHistory: string[] = [];
-  private readonly achievementsToAward = [
-    { id: 'treasure-hunter', description: 'Acquire your first item.' },
-    { id: 'pathfinder', description: 'Discover a hidden location or secret path.' },
-    { id: 'risky-business', description: 'Make a particularly daring, unusual, or clever choice.' },
-    { id: 'giant-slayer', description: 'Defeat a powerful foe or overcome a great challenge.' },
-  ];
 
   constructor(
     private http: HttpClient,
@@ -39,55 +33,41 @@ export class GeminiService {
     difficulty: Difficulty = 'Normal',
     combatEncounters: number = 0,
   ): Promise<GameState> {
-    const systemInstruction = `You are the Aether Engine OS, a high-fidelity tactical interface for a sci-fi extraction experience.
+    const systemInstruction = `You are the Aether Engine GM, driving a high-fidelity 'Aether OS' tactical experience.
 
-    MISSION PHASES:
-    1. 'Diagnostics': Sub-system verification and neural link calibration.
-    2. 'Briefing': Tactical intel, objective setting, and threat analysis.
-    3. 'Ignition': Cinematic transition sequence monitoring physics data (G-Force, Aether Velocity) and cognitive strain.
-    4. 'ActiveOps': Real-time mission management and resource tracking.
+    MISSION CONTROL RULES:
+    1. CURRENT_PHASE must transition logically: 'Diagnostics' -> 'Briefing' -> 'Ignition' -> 'ActiveOps'.
+    2. Respond with ONLY valid JSON.
+    3. Inject technical telemetry for every state.
 
     JSON SCHEMA:
     {
-      "story": "Narrative string",
-      "choices": [{"id": Number, "text": "String"}],
-      "quest": "Current goal summary",
-      "inventory": [{"name": "String", "description": "String"}],
-      "imagePrompt": "Aether-Circuit style visual prompt",
-      "shouldGenerateNewImage": Boolean,
+      "story": "Atmospheric narrative",
+      "choices": [{"id": 1, "text": "Choice A"}],
+      "quest": "Strategic objective",
+      "inventory": [{"name": "Item", "description": "Desc"}],
+      "imagePrompt": "Aether-Circuit cinematic visual style",
+      "shouldGenerateNewImage": true,
       "phase": "Diagnostics" | "Briefing" | "Ignition" | "ActiveOps",
       "telemetry": {
-        "neuralStability": Number (0-100),
-        "aetherVelocity": Number (0-1),
-        "gForce": Number (0-20)
+        "neuralStability": 0-100,
+        "aetherVelocity": 0-1,
+        "gForce": 0-20
       },
       "outcome": "success" | "neutral" | "failure",
-      "inCombat": Boolean,
-      "codexEntries": [{"title": "String", "content": "String"}],
-      "unlockedAchievementId": "String (optional)"
-    }
+      "inCombat": boolean,
+      "codexEntries": [{"title": "Entry", "content": "Text"}],
+      "characterPortraitPrompt": "Portrait prompt (optional)"
+    }`;
 
-    VISUAL LANGUAGE: Aether-Circuit (Deep Space Charcoal, Ignition Amber, Neural Cyan).
+    let prompt = playerChoice
+      ? `PLAYER CHOICE: ${playerChoice}. Continue the operation. History:\n${this.storyHistory.join('\n')}`
+      : 'INITIALIZE MISSION: Diagnostics sequence required.';
 
-    DIFFICULTY: ${difficulty}. Scale encounters and resource scarcity.
-
-    Return ONLY raw JSON.`;
-
-    let prompt = 'Start a new fantasy adventure for me. I awaken in a mysterious place.';
-    if (playerChoice) {
-      this.storyHistory.push(`Player chose: ${playerChoice}`);
-      prompt = `Continue the story based on the player's last choice. The story so far:\n${this.storyHistory.join('\n')}`;
-    }
-
-    // Client-side retry logic for network transient errors
     let lastError;
     for (let i = 0; i < 2; i++) {
       try {
-        const {
-          data: { session },
-        } = await this.supabase.client.auth.getSession();
-
-        // Ensure apikey is passed in headers for anonymous access or verified access
+        const { data: { session } } = await this.supabase.client.auth.getSession();
         const headers = {
           'Authorization': `Bearer ${session?.access_token || this.supabase.anonKey}`,
           'apikey': this.supabase.anonKey,
@@ -97,46 +77,35 @@ export class GeminiService {
         const response = await firstValueFrom(
           this.http.post<any>(
             this.edgeFunctionUrl,
-            {
-              action: 'generateStory',
-              payload: { prompt, systemInstruction },
-            },
+            { action: 'generateStory', payload: { prompt, systemInstruction } },
             { headers },
           ),
         );
 
         const gameState = response as GameState;
-        this.storyHistory.push(`Story continued: ${gameState.story}`);
-        if (this.storyHistory.length > 20) {
-          this.storyHistory = this.storyHistory.slice(-20);
-        }
+        this.storyHistory.push(`LOG: ${gameState.story.substring(0, 100)}`);
+        if (this.storyHistory.length > 20) this.storyHistory.shift();
         return gameState;
       } catch (error) {
         lastError = error;
-        console.warn(`GeminiService attempt ${i + 1} failed: ${error.message}`);
         await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
       }
     }
-
-    console.error('All attempts to generate story segment failed:', lastError);
     return this.getFallbackState();
   }
 
-  async generateImage(prompt: string): Promise<string | null> {
-    return null;
-  }
+  async generateImage(prompt: string): Promise<string | null> { return null; }
 
   private getFallbackState(): GameState {
     return {
-      story: 'Neural link interrupted. Re-establishing connection through fallback sub-systems...',
-      choices: [{ id: 1, text: 'Retry Link' }],
-      quest: 'Recover from Neural Link failure.',
+      story: 'CRITICAL_ERROR: Neural Uplink Failed. Attempting sub-system recovery...',
+      choices: [{ id: 1, text: 'Force Reconnect' }],
+      quest: 'System Recovery',
       inventory: [],
-      imagePrompt: 'Static and noise on a tactical display.',
+      imagePrompt: 'Static',
       shouldGenerateNewImage: true,
       outcome: 'failure',
       inCombat: false,
-      codexEntries: [],
       phase: 'Diagnostics'
     };
   }

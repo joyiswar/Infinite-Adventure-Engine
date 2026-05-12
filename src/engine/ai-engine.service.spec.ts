@@ -1,8 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GeminiService } from './ai-engine.service';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
-import { SupabaseService } from '../systems/supabase-system.service';
+import { of, throwError } from 'rxjs';
 
 describe('GeminiService', () => {
   let service: GeminiService;
@@ -18,29 +16,28 @@ describe('GeminiService', () => {
       anonKey: 'test-key',
       client: {
         auth: {
-          getSession: vi.fn().mockResolvedValue({ data: { session: { access_token: 'test-token' } } })
+          getSession: vi.fn().mockResolvedValue({ data: { session: null } })
         }
-      }
+      },
+      currentUser: vi.fn().mockReturnValue(null)
     };
-    service = new GeminiService(mockHttp as unknown as HttpClient, mockSupabase as unknown as SupabaseService);
+
+    service = new GeminiService(mockHttp, mockSupabase);
   });
 
   it('should generate a story segment via edge function', async () => {
-    const mockResponse = { story: 'A new adventure begins.' };
+    const mockResponse = { story: 'A new tale begins.', choices: [] };
     mockHttp.post.mockReturnValue(of(mockResponse));
 
     const result = await service.generateStorySegment();
-
-    expect(mockHttp.post).toHaveBeenCalled();
-    expect(result.story).toBe('A new adventure begins.');
+    expect(result.story).toBe('A new tale begins.');
   });
 
   it('should return fallback state on error', async () => {
     mockHttp.post.mockImplementation(() => { throw new Error('Network error'); });
 
     const result = await service.generateStorySegment();
-
-    expect(result.outcome).toBe('failure');
-    expect(result.story).toContain('Neural link interrupted');
+    expect(result.story).toContain('CRITICAL_ERROR');
+    expect(result.phase).toBe('Diagnostics');
   });
 });

@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, effect, EventEmitter, OnInit, Output, signal, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, signal, effect, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameState, Choice } from '../../entities/gamestate.model';
+import { SaveData } from '../../entities/savedata.model';
 import { GeminiService } from '../../engine/ai-engine.service';
 import { AchievementService } from '../../systems/achievement-system.service';
 import { SaveGameService } from '../../systems/persistence-system.service';
-import { SaveData } from '../../entities/savedata.model';
 import { AudioService } from '../../systems/audio-system.service';
 import { TutorialService } from '../../systems/tutorial-system.service';
 import { LoreCodexService } from '../../systems/codex-system.service';
 import { DifficultyScalingService } from '../../systems/difficulty-scaling.service';
-import { LeaderboardSystem } from '../../systems/leaderboard-system.service';
+import { LeaderboardSystem, LeaderboardEntry } from '../../systems/leaderboard-system.service';
 import { PlayGamesService } from '../../systems/play-games.service';
 import { RenderingEngine } from '../../engine/rendering-engine.service';
 import { TelemetrySystem } from '../../systems/telemetry-system.service';
@@ -31,12 +31,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
   currentImage = signal<string>('');
   characterPortraitUrl = signal<string>('');
   isLoading = signal<boolean>(true);
-  loadingMessage = signal<string>('Establishing Neural Link...');
-  showVictoryBanner = signal(false);
-  showDefeatBanner = signal(false);
-  showCombatTutorial = signal(false);
-  imageError = signal<boolean>(false);
-  imageGenerationCooldown = signal(0);
+  loadingMessage = signal<string>('Initializing Neural Link...');
 
   combatEncounters = signal<number>(0);
   encountersWon = signal<number>(0);
@@ -44,16 +39,17 @@ export class AdventureComponent implements OnInit, AfterViewInit {
   isModalOpen = signal(false);
   modalMode = signal<'Save' | 'Load' | 'Leaderboard'>('Save');
   saveSlots = signal<(SaveData | null)[]>([]);
+  leaderboardData = signal<LeaderboardEntry[]>([]);
 
   private choiceCounter = 0;
   private readonly autosaveInterval = 5;
 
   private loadingMessages = [
-    'Forging your path through the ether...',
-    'Consulting the ancient scrolls...',
-    'Illustrating your next chapter...',
-    'The weaver of tales spins her thread...',
-    'Destiny is being written...'
+    'SYCHRONIZING NEURAL STREAM...',
+    'DECRYPTING ETHER FRAGMENTS...',
+    'CALIBRATING AETHER CIRCUIT...',
+    'ESTABLISHING VISUAL UPLINK...',
+    'MAPPING COGNITIVE VECTORS...'
   ];
 
   constructor(
@@ -66,13 +62,14 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     private leaderboardSystem: LeaderboardSystem,
     private playGames: PlayGamesService,
     private renderingEngine: RenderingEngine,
-    public telemetrySystem: TelemetrySystem,
+    public telemetry: TelemetrySystem,
     public difficultyService: DifficultyScalingService
   ) {
     effect(() => {
       const state = this.gameState();
       if (state) {
         this.gameStateChange.emit(state);
+        this.telemetry.updateProgression(this.encountersWon(), this.achievementService.getUnlockedAchievements().length);
       }
     });
   }
@@ -90,17 +87,8 @@ export class AdventureComponent implements OnInit, AfterViewInit {
   async startGame(): Promise<void> {
     this.isLoading.set(true);
     this.updateLoadingMessage();
-    const initialState = await this.geminiService.generateStorySegment(undefined, this.difficultyService.currentDifficulty(), this.combatEncounters());
+    const initialState = await this.geminiService.generateStorySegment();
     this.processNewState(initialState);
-
-    const initialImage = await this.geminiService.generateImage(initialState.imagePrompt);
-    if (initialImage) {
-      this.currentImage.set(initialImage);
-    } else {
-      this.imageError.set(true);
-      this.imageGenerationCooldown.set(3);
-    }
-    this.achievementService.unlock('first-step');
     this.isLoading.set(false);
   }
 
@@ -111,95 +99,30 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     this.isLoading.set(true);
     this.updateLoadingMessage();
 
-    const oldInventorySize = this.gameState()?.inventory.length ?? 0;
     const newState = await this.geminiService.generateStorySegment(choice.text, this.difficultyService.currentDifficulty(), this.combatEncounters());
-
-    const imagePromises: Promise<string | null>[] = [];
-    const wantsNewImage = newState.shouldGenerateNewImage;
-    const isOnCooldown = this.imageGenerationCooldown() > 0;
-
-    if (wantsNewImage && !isOnCooldown) {
-      this.imageError.set(false);
-      imagePromises.push(this.geminiService.generateImage(newState.imagePrompt));
-    } else {
-      if (wantsNewImage && isOnCooldown) {
-        this.imageGenerationCooldown.update(c => c - 1);
-      } else {
-        this.imageError.set(false);
-      }
-      imagePromises.push(Promise.resolve(null));
-    }
-
-    if (newState.characterPortraitPrompt) {
-      imagePromises.push(this.geminiService.generateImage(newState.characterPortraitPrompt));
-    } else {
-      imagePromises.push(Promise.resolve(null));
-    }
-
-    const [mainImageUrl, portraitUrl] = await Promise.all(imagePromises);
-
-    if (mainImageUrl) {
-      this.currentImage.set(mainImageUrl);
-    } else if (wantsNewImage && !isOnCooldown) {
-      this.imageError.set(true);
-      this.imageGenerationCooldown.set(3);
-    }
-
-    if (portraitUrl) {
-      this.characterPortraitUrl.set(portraitUrl);
-      this.portraitChange.emit(portraitUrl);
-    }
+    this.processNewState(newState);
 
     if (newState.codexEntries && newState.codexEntries.length > 0) {
       this.loreCodexService.addEntries(newState.codexEntries);
     }
 
-    this.processNewState(newState);
     this.difficultyService.update(newState.outcome);
-
-    if (newState.inCombat && !this.tutorialService.hasSeenCombatTutorial()) {
-      this.showCombatTutorial.set(true);
-    }
-
-    if (newState.unlockedAchievementId) {
-      this.achievementService.unlock(newState.unlockedAchievementId);
-    }
-    if (newState.inventory.length > oldInventorySize) {
-        this.achievementService.unlock('treasure-hunter');
-        this.audioService.playSound('item');
-    }
-
     if (newState.combatResult === 'victory') {
-      this.audioService.playSound('victory');
-      this.showVictoryBanner.set(true);
-      this.combatEncounters.update(c => c + 1);
       this.encountersWon.update(c => c + 1);
       this.syncLeaderboard();
-      setTimeout(() => this.showVictoryBanner.set(false), 3000);
-    } else if (newState.combatResult === 'defeat') {
-      this.audioService.playSound('defeat');
-      this.showDefeatBanner.set(true);
-      this.combatEncounters.update(c => c + 1);
-      setTimeout(() => this.showDefeatBanner.set(false), 4000);
     }
 
     this.isLoading.set(false);
-
     this.choiceCounter++;
-    if (this.choiceCounter % this.autosaveInterval === 0) {
-      this.handleAutosave();
-    }
+    if (this.choiceCounter % this.autosaveInterval === 0) this.handleAutosave();
   }
 
   private processNewState(newState: GameState) {
     this.gameState.set(newState);
-    console.log('Transitioned to phase:', newState.phase);
-
-    // Update telemetry if provided by AI
     if (newState.telemetry) {
-        this.telemetrySystem.neuralStability.set(newState.telemetry.neuralStability);
-        this.telemetrySystem.aetherVelocity.set(newState.telemetry.aetherVelocity);
-        this.telemetrySystem.gForce.set(newState.telemetry.gForce);
+        this.telemetry.neuralStability.set(newState.telemetry.neuralStability);
+        this.telemetry.aetherVelocity.set(newState.telemetry.aetherVelocity);
+        this.telemetry.gForce.set(newState.telemetry.gForce);
     }
   }
 
@@ -209,34 +132,31 @@ export class AdventureComponent implements OnInit, AfterViewInit {
   }
 
   private updateLoadingMessage(): void {
-    const randomIndex = Math.floor(Math.random() * this.loadingMessages.length);
-    this.loadingMessage.set(this.loadingMessages[randomIndex]);
+    this.loadingMessage.set(this.loadingMessages[Math.floor(Math.random() * this.loadingMessages.length)]);
   }
 
   async openModal(mode: 'Save' | 'Load' | 'Leaderboard'): Promise<void> {
     this.modalMode.set(mode);
-    if (mode !== 'Leaderboard') {
-        const slots = await this.saveGameService.getSaveSlots();
-        this.saveSlots.set(slots);
+    if (mode === 'Leaderboard') {
+        this.leaderboardData.set(await this.leaderboardSystem.getTopPlayers());
+    } else {
+        this.saveSlots.set(await this.saveGameService.getSaveSlots());
     }
     this.isModalOpen.set(true);
   }
 
-  closeModal(): void {
-    this.isModalOpen.set(false);
-  }
+  closeModal(): void { this.isModalOpen.set(false); }
 
-  closeCombatTutorial(): void {
-    this.showCombatTutorial.set(false);
-    this.tutorialService.markCombatTutorialAsSeen();
+  private async handleAutosave(): Promise<void> {
+    const saveData = this.getCurrentSaveData();
+    if(saveData) await this.saveGameService.save(0, saveData);
   }
 
   private getCurrentSaveData(): SaveData | null {
-    const currentState = this.gameState();
-    if (!currentState) return null;
-
+    const state = this.gameState();
+    if (!state) return null;
     return {
-      gameState: currentState,
+      gameState: state,
       currentImage: this.currentImage(),
       characterPortraitUrl: this.characterPortraitUrl(),
       storyHistory: this.geminiService.getStoryHistory(),
@@ -248,47 +168,24 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     };
   }
 
-  async handleSave(slotId: number): Promise<void> {
-    const saveData = this.getCurrentSaveData();
-    if (saveData) {
-      await this.saveGameService.save(slotId, saveData);
-      this.playGames.syncProgress(saveData);
-      this.syncLeaderboard();
-      this.closeModal();
+  async handleSave(slotId: number) {
+    const data = this.getCurrentSaveData();
+    if (data) {
+        await this.saveGameService.save(slotId, data);
+        this.syncLeaderboard();
+        this.closeModal();
     }
   }
 
-  private async handleAutosave(): Promise<void> {
-    const saveData = this.getCurrentSaveData();
-    if(saveData) {
-      await this.saveGameService.save(0, saveData);
-      console.log('Game autosaved.');
-    }
-  }
-
-  async handleLoad(slotId: number): Promise<void> {
-    const saveData = await this.saveGameService.load(slotId);
-    if (saveData) {
-      this.isLoading.set(true);
-      this.updateLoadingMessage();
-      this.imageError.set(false);
-
-      this.gameState.set(saveData.gameState);
-      this.currentImage.set(saveData.currentImage);
-      this.characterPortraitUrl.set(saveData.characterPortraitUrl ?? '');
-      this.portraitChange.emit(this.characterPortraitUrl());
-      this.geminiService.setStoryHistory(saveData.storyHistory);
-      this.achievementService.achievements.set(saveData.achievements);
-      this.difficultyService.currentDifficulty.set(saveData.difficulty);
-      this.combatEncounters.set(saveData.combatEncounters ?? 0);
-      this.loreCodexService.codex.set(saveData.codex ?? []);
-
-      setTimeout(() => this.isLoading.set(false), 200);
-      this.closeModal();
+  async handleLoad(slotId: number) {
+    const data = await this.saveGameService.load(slotId);
+    if (data) {
+        this.gameState.set(data.gameState);
+        this.closeModal();
     }
   }
 
   formatDate(timestamp: number): string {
-    return new Date(timestamp).toLocaleString();
+    return new Date(timestamp).toLocaleDateString();
   }
 }

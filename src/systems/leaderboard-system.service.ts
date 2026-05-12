@@ -20,9 +20,7 @@ export class LeaderboardSystem {
     achievementsCount: number,
   ): Promise<void> {
     try {
-      const {
-        data: { user },
-      } = await this.supabase.user;
+      const user = this.supabase.currentUser();
       if (!user) return;
 
       const username =
