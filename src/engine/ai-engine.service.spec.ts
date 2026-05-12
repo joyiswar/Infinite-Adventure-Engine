@@ -15,6 +15,7 @@ describe('GeminiService', () => {
     };
     mockSupabase = {
       url: 'https://test.supabase.co',
+      anonKey: 'test-key',
       client: {
         auth: {
           getSession: vi.fn().mockResolvedValue({ data: { session: { access_token: 'test-token' } } })
@@ -40,6 +41,6 @@ describe('GeminiService', () => {
     const result = await service.generateStorySegment();
 
     expect(result.outcome).toBe('failure');
-    expect(result.story).toContain('error has occurred');
+    expect(result.story).toContain('Neural link interrupted');
   });
 });

@@ -1,29 +1,29 @@
-# Aether Engine: Authentication Setup Guide
+# Aether Engine: Authentication Setup & Troubleshooting Guide
 
-To enable Google Authentication for the Infinite Adventure Engine, follow these steps in your Supabase Dashboard:
+## 1. Google OAuth Behavior (Expected)
+When you click **"Continue with Google"**, you will see a series of redirects:
+1.  **Google Account Picker**: You choose your Google account.
+2.  **Supabase Redirect**: You may briefly see a page on `ugedscjzlezumceczfrk.supabase.co` asking you to "Sign in to Infinite-Adventure-Engine". **This is standard Supabase behavior** and confirms the provider is correctly configured.
+3.  **Return to Game**: You will be redirected back to `http://localhost:3000` (or your production URL).
 
-## 1. Supabase Configuration
-1. Go to the [Supabase Dashboard](https://supabase.com/dashboard).
-2. Select your project: `ugedscjzlezumceczfrk` (Infinite-Adventure-Engine).
-3. Navigate to **Authentication** > **Providers**.
-4. Locate **Google** and click to expand.
-5. Toggle **Enable Google IDP** to **ON**.
+## 2. Token in URL Hash
+If you see `#access_token=...` in your browser address bar after redirecting, the authentication was **successful**.
 
-## 2. Google Cloud Console Configuration
-1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
-2. Create or select a project.
-3. Navigate to **APIs & Services** > **Credentials**.
-4. Click **Create Credentials** > **OAuth client ID**.
-5. Select **Web application** as the Application type.
-6. Add the following **Authorized redirect URIs**:
-   - `https://ugedscjzlezumceczfrk.supabase.co/auth/v1/callback`
-7. Copy the **Client ID** and **Client Secret**.
+With the latest updates (v5.0.3), the Aether Engine now automatically:
+- Detects this token in the URL.
+- Establishes a session.
+- Updates the HUD with your identity (e.g., your email prefix).
+- Cleans up the URL hash.
 
-## 3. Finalize Supabase Setup
-1. Back in the Supabase Dashboard, paste the **Client ID** and **Client Secret** into the Google Provider settings.
-2. Click **Save**.
+## 3. Manual Provider Enablement (If errors occur)
+If you encounter a `400: Unsupported Provider` error **before** reaching the Google account picker, ensure the following in your Supabase Dashboard:
 
-## 4. Local Environment
-Ensure your `.env` or `SupabaseService` configuration uses the correct URL and Anon Key. The current implementation defaults to the production project.
+1.  Navigate to **Authentication** > **Providers**.
+2.  Expand **Google**.
+3.  Ensure **Enable Google IDP** is toggled **ON**.
+4.  Verify that **Client ID** and **Client Secret** (from Google Cloud Console) are correct.
+5.  Ensure the **Redirect URI** in Google Cloud Console is set to:
+    `https://ugedscjzlezumceczfrk.supabase.co/auth/v1/callback`
 
-*Note: Without these steps, the "Continue with Google" button will return a 400 error (provider_not_enabled).*
+## 4. Local Development
+For `localhost:3000` development, ensure the "Site URL" in **Authentication** > **URL Configuration** is set to `http://localhost:3000`.

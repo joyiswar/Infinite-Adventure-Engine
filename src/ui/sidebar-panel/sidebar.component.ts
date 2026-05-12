@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InventoryItem } from '../../entities/inventory.model';
 import { Achievement } from '../../entities/achievement.model';
@@ -13,7 +13,7 @@ import { PlayGamesService } from '../../systems/play-games.service';
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent {
-  @Input() inventory: InventoryItem[] = [];
+  @Input() inventory: InventoryItem[] | null = [];
   @Input() quest: string = '';
   @Input() achievements: Achievement[] = [];
   @Input() newAchievement: boolean = false;
@@ -23,28 +23,19 @@ export class SidebarComponent {
   @Input() lastAddedCodexTitle: string | null = null;
   @Input() characterPortraitUrl: string = '';
 
-  user = signal<any>(null);
+  user = computed(() => this.supabase.currentUser());
 
   constructor(
     private supabase: SupabaseService,
     public playGames: PlayGamesService
-  ) {
-    this.checkUser();
-  }
-
-  async checkUser() {
-    const { data: { user } } = await this.supabase.user;
-    this.user.set(user);
-  }
+  ) {}
 
   async login() {
     await this.supabase.signInWithGoogle();
-    await this.checkUser();
   }
 
   async logout() {
     await this.supabase.signOut();
-    this.user.set(null);
     window.location.reload();
   }
 

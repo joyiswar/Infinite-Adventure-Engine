@@ -39,11 +39,7 @@ export class GeminiService {
     difficulty: Difficulty = 'Normal',
     combatEncounters: number = 0,
   ): Promise<GameState> {
-    const achievementsString = this.achievementsToAward
-      .map((a) => `- ${a.id}: ${a.description}`)
-      .join('\n');
-
-        const systemInstruction = `You are the Aether Engine OS, a high-fidelity tactical interface for a sci-fi extraction experience.
+    const systemInstruction = `You are the Aether Engine OS, a high-fidelity tactical interface for a sci-fi extraction experience.
 
     MISSION PHASES:
     1. 'Diagnostics': Sub-system verification and neural link calibration.
@@ -66,7 +62,9 @@ export class GeminiService {
         "gForce": Number (0-20)
       },
       "outcome": "success" | "neutral" | "failure",
-      "inCombat": Boolean
+      "inCombat": Boolean,
+      "codexEntries": [{"title": "String", "content": "String"}],
+      "unlockedAchievementId": "String (optional)"
     }
 
     VISUAL LANGUAGE: Aether-Circuit (Deep Space Charcoal, Ignition Amber, Neural Cyan).
@@ -81,37 +79,47 @@ export class GeminiService {
       prompt = `Continue the story based on the player's last choice. The story so far:\n${this.storyHistory.join('\n')}`;
     }
 
-    try {
-      const {
-        data: { session },
-      } = await this.supabase.client.auth.getSession();
-      const headers = {
-        'Authorization': `Bearer ${session?.access_token || this.supabase.anonKey}`,
-        'apikey': (this.supabase as any).anonKey,
-        'Content-Type': 'application/json',
-      };
+    // Client-side retry logic for network transient errors
+    let lastError;
+    for (let i = 0; i < 2; i++) {
+      try {
+        const {
+          data: { session },
+        } = await this.supabase.client.auth.getSession();
 
-      const response = await firstValueFrom(
-        this.http.post<any>(
-          this.edgeFunctionUrl,
-          {
-            action: 'generateStory',
-            payload: { prompt, systemInstruction },
-          },
-          { headers },
-        ),
-      );
+        // Ensure apikey is passed in headers for anonymous access or verified access
+        const headers = {
+          'Authorization': `Bearer ${session?.access_token || this.supabase.anonKey}`,
+          'apikey': this.supabase.anonKey,
+          'Content-Type': 'application/json',
+        };
 
-      const gameState = response as GameState;
-      this.storyHistory.push(`Story continued: ${gameState.story}`);
-      if (this.storyHistory.length > 20) {
-        this.storyHistory = this.storyHistory.slice(-20);
+        const response = await firstValueFrom(
+          this.http.post<any>(
+            this.edgeFunctionUrl,
+            {
+              action: 'generateStory',
+              payload: { prompt, systemInstruction },
+            },
+            { headers },
+          ),
+        );
+
+        const gameState = response as GameState;
+        this.storyHistory.push(`Story continued: ${gameState.story}`);
+        if (this.storyHistory.length > 20) {
+          this.storyHistory = this.storyHistory.slice(-20);
+        }
+        return gameState;
+      } catch (error) {
+        lastError = error;
+        console.warn(`GeminiService attempt ${i + 1} failed: ${error.message}`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
       }
-      return gameState;
-    } catch (error) {
-      console.error('Error generating story segment:', error);
-      return this.getFallbackState();
     }
+
+    console.error('All attempts to generate story segment failed:', lastError);
+    return this.getFallbackState();
   }
 
   async generateImage(prompt: string): Promise<string | null> {
@@ -120,15 +128,16 @@ export class GeminiService {
 
   private getFallbackState(): GameState {
     return {
-      story: 'The mists of creation swirl, but the path ahead is unclear. An error has occurred.',
-      choices: [{ id: 1, text: 'Try again.' }],
-      quest: 'Recover from an error.',
+      story: 'Neural link interrupted. Re-establishing connection through fallback sub-systems...',
+      choices: [{ id: 1, text: 'Retry Link' }],
+      quest: 'Recover from Neural Link failure.',
       inventory: [],
-      imagePrompt: 'A swirling vortex.',
+      imagePrompt: 'Static and noise on a tactical display.',
       shouldGenerateNewImage: true,
       outcome: 'failure',
       inCombat: false,
       codexEntries: [],
+      phase: 'Diagnostics'
     };
   }
 }
