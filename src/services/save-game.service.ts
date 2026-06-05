@@ -19,13 +19,30 @@ export class SaveGameService {
     }
   }
 
+  private isValidSaveData(data: any): data is SaveData {
+    return (
+      data &&
+      typeof data === 'object' &&
+      data.gameState &&
+      Array.isArray(data.storyHistory) &&
+      typeof data.timestamp === 'number' &&
+      !Object.prototype.hasOwnProperty.call(data, '__proto__')
+    );
+  }
+
   load(slotId: number): SaveData | null {
     try {
       const key = `${this.savePrefix}${slotId}`;
       const savedData = localStorage.getItem(key);
       if (savedData) {
-        console.log(`Game loaded from slot ${slotId}`);
-        return JSON.parse(savedData) as SaveData;
+        const parsed = JSON.parse(savedData);
+        if (this.isValidSaveData(parsed)) {
+          console.log(`Game loaded from slot ${slotId}`);
+          return parsed;
+        } else {
+          console.error(`Invalid save data in slot ${slotId}`);
+          return null;
+        }
       }
       return null;
     } catch (error) {
