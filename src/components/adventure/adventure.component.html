@@ -44,8 +44,10 @@
   <div class="aspect-video w-full bg-slate-900 rounded-md mb-6 relative overflow-hidden flex items-center justify-center">
     <!-- Cooldown notification -->
     @if(imageGenerationCooldown() > 0 && !isLoading()) {
-      <div class="absolute top-0 left-0 right-0 p-2 bg-slate-900/80 text-center z-20">
-        <p class="text-amber-200 text-sm font-serif-story italic">The visual ether is stabilizing... Image generation resumes in {{ imageGenerationCooldown() }} turn(s).</p>
+      <div class="absolute top-0 left-0 right-0 p-2 bg-slate-900/90 text-center z-20 border-b border-cyan-500/30">
+        <p class="text-cyan-400 text-xs font-mono tracking-wider pulse-cyan">
+          [SYSTEM] VISUAL ETHER STABILIZING... COOLDOWN: {{ imageGenerationCooldown() }} CYCLES
+        </p>
       </div>
     }
 
@@ -81,7 +83,10 @@
     }
 
     <!-- Story Text -->
-    <div class="flex-grow mb-6 prose prose-invert max-w-none prose-p:text-slate-300">
+    <div class="flex-grow mb-6 prose prose-invert max-w-none prose-p:text-slate-300 border-l-4 transition-colors duration-500 pl-6"
+         [class.border-green-500]="state.outcome === 'success'"
+         [class.border-red-500]="state.outcome === 'failure'"
+         [class.border-slate-500/50]="state.outcome === 'neutral' || !state.outcome">
       <p class="text-xl leading-relaxed font-serif-story whitespace-pre-wrap">{{ state.story }}</p>
     </div>
 
@@ -93,8 +98,14 @@
           <button 
             (click)="handleChoice(choice)"
             [disabled]="isLoading()"
-            class="w-full text-left p-4 bg-slate-700 rounded-md border border-slate-600 hover:bg-amber-800 hover:border-amber-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-amber-400">
-            <span class="font-medium" [class.text-red-400]="state.inCombat">{{ state.inCombat ? '⚔️ ' : '' }}{{ choice.text }}</span>
+            class="w-full text-left p-4 bg-slate-700/50 rounded-md border border-slate-600 hover:bg-slate-700 hover:scale-[1.01] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-amber-400 group"
+            [class.hover:glow-cyan]="!state.inCombat"
+            [class.hover:glow-red]="state.inCombat"
+            [class.hover:border-amber-500/50]="!state.inCombat"
+            [class.hover:border-red-500/50]="state.inCombat">
+            <span class="font-medium group-hover:text-amber-300 transition-colors" [class.text-red-400]="state.inCombat">
+              {{ state.inCombat ? '⚔️ ' : '' }}{{ choice.text }}
+            </span>
           </button>
         }
       </div>
