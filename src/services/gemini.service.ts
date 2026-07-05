@@ -18,10 +18,25 @@ export class GeminiService {
   ];
 
   constructor() {
-    if (!process.env.API_KEY) {
-      throw new Error("API_KEY environment variable not set");
+    /**
+     * SECURITY WARNING:
+     * Using the Gemini API key directly in the client-side code exposes it to anyone who visits the site.
+     * In a production environment, this key can be extracted and used by unauthorized parties.
+     *
+     * RECOMMENDED REMEDIATION:
+     * 1. Implement a backend proxy (e.g., using Supabase Edge Functions or a Node.js server).
+     * 2. The client should call the proxy, which then calls Gemini using a securely stored secret.
+     * 3. Implement Auth and Rate Limiting on the proxy.
+     * 4. Restrict the API key to specific bundle IDs or Referrers in the Google Cloud Console.
+     */
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (process.env as any).API_KEY;
+
+    if (!apiKey) {
+      console.error("Gemini API Key is missing. Please set VITE_GEMINI_API_KEY in your environment.");
+      this.ai = null as any;
+    } else {
+      this.ai = new GoogleGenAI({ apiKey });
     }
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   }
 
   private readonly responseSchema = {
@@ -96,6 +111,11 @@ export class GeminiService {
   }
 
   async generateStorySegment(playerChoice?: string, difficulty: Difficulty = 'Normal', combatEncounters: number = 0): Promise<GameState> {
+    // Basic input sanitization and length limits to mitigate prompt injection
+    if (playerChoice) {
+      playerChoice = playerChoice.substring(0, 200).replace(/[<>]/g, '');
+    }
+
     const achievementsString = this.achievementsToAward.map(a => `- ${a.id}: ${a.description}`).join('\n');
     const systemInstruction = `You are a master storyteller and game master for an infinite choose-your-own-adventure game. 
     Your goal is to create a rich, engaging, and ever-evolving fantasy narrative. The story should be immersive and adapt dynamically to the player's choices.

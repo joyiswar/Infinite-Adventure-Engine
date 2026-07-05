@@ -1,23 +1,26 @@
-
 {
   "name": "infinite-adventure-engine",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "serve": "vite preview"
   },
   "dependencies": {
-    "@angular/common": "~18.0.0",
-    "@angular/compiler": "~18.0.0",
-    "@angular/core": "~18.0.0",
-    "@angular/platform-browser": "~18.0.0",
+    "@angular/common": "22.0.5",
+    "@angular/compiler": "22.0.5",
+    "@angular/core": "22.0.5",
+    "@angular/platform-browser": "22.0.5",
     "@google/genai": "^1.36.0",
+    "nanoid": "^5.1.16",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "^1.3.1",
-    "typescript": "~5.4.5",
-    "vite": "^5.2.0"
+    "@angular/build": "22.0.5",
+    "@angular/compiler-cli": "22.0.5",
+    "typescript": "6.0.3",
+    "vite": "8.1.3"
   }
 }
